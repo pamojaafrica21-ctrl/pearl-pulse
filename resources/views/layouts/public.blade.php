@@ -58,7 +58,7 @@
         <div class="mx-auto max-w-7xl px-5 py-14 lg:px-8 grid gap-10 md:grid-cols-3">
             <div>
                 <p class="font-display text-3xl">Pearl Pulse Safaris</p>
-                <p class="mt-3 text-sand/70 text-sm leading-relaxed max-w-xs">Curated journeys through East Africa’s wildest landscapes.</p>
+                <p class="mt-3 text-sand/70 text-sm leading-relaxed max-w-xs">{{ $footerBlurb ?? 'Curated journeys through East Africa’s wildest landscapes.' }}</p>
             </div>
             <div>
                 <p class="text-xs tracking-[0.2em] uppercase text-sand/50 mb-4">Contact</p>

@@ -18,6 +18,8 @@ class Form extends Component
 
     public string $name = '';
 
+    public string $subtitle = '';
+
     public string $slug = '';
 
     public string $region = '';
@@ -25,6 +27,14 @@ class Form extends Component
     public string $country = '';
 
     public string $teaser = '';
+
+    public string $duration = '';
+
+    public string $best_time = '';
+
+    public string $activities = '';
+
+    public string $price_from = '';
 
     public string $description = '';
 
@@ -51,10 +61,15 @@ class Form extends Component
         if ($destination?->exists) {
             $this->destination = $destination;
             $this->name = $destination->name;
+            $this->subtitle = (string) $destination->subtitle;
             $this->slug = $destination->slug;
             $this->region = (string) $destination->region;
             $this->country = $destination->country;
             $this->teaser = (string) $destination->teaser;
+            $this->duration = (string) $destination->duration;
+            $this->best_time = (string) $destination->best_time;
+            $this->activities = (string) $destination->activities;
+            $this->price_from = (string) $destination->price_from;
             $this->description = (string) $destination->description;
             $this->highlights = $destination->highlights ?: [];
             $this->meta_title = (string) $destination->meta_title;
@@ -124,6 +139,7 @@ class Form extends Component
     {
         return [
             'name' => ['required', 'string', 'max:160'],
+            'subtitle' => ['nullable', 'string', 'max:255'],
             'slug' => [
                 'required',
                 'string',
@@ -133,6 +149,10 @@ class Form extends Component
             'region' => ['nullable', 'string', 'max:120'],
             'country' => ['required', 'string', 'max:120'],
             'teaser' => ['nullable', 'string', 'max:500'],
+            'duration' => ['nullable', 'string', 'max:120'],
+            'best_time' => ['nullable', 'string', 'max:180'],
+            'activities' => ['nullable', 'string', 'max:500'],
+            'price_from' => ['nullable', 'string', 'max:120'],
             'description' => ['nullable', 'string'],
             'highlights' => ['array'],
             'highlights.*.label' => ['nullable', 'string', 'max:120'],
@@ -162,10 +182,15 @@ class Form extends Component
 
         $data = [
             'name' => $this->name,
+            'subtitle' => $this->subtitle ?: null,
             'slug' => $this->slug,
             'region' => $this->region ?: null,
             'country' => $this->country,
             'teaser' => $this->teaser ?: null,
+            'duration' => $this->duration ?: null,
+            'best_time' => $this->best_time ?: null,
+            'activities' => $this->activities ?: null,
+            'price_from' => $this->price_from ?: null,
             'description' => $this->description ?: null,
             'highlights' => $highlights,
             'meta_title' => $this->meta_title ?: null,

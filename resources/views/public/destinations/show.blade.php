@@ -5,8 +5,7 @@
 
 @section('content')
 @php
-    $uploader = app(\App\Services\ImageUploader::class);
-    $cover = $uploader->url($destination->cover_path);
+    $cover = $destination->coverUrl();
 @endphp
 
 <section class="relative min-h-[70svh] flex items-end overflow-hidden bg-forest">
@@ -19,6 +18,9 @@
             {{ $destination->country }}@if($destination->region) · {{ $destination->region }}@endif
         </p>
         <h1 class="font-display text-5xl md:text-7xl text-sand mt-3 fade-up" style="animation-delay:0.1s">{{ $destination->name }}</h1>
+        @if($destination->subtitle)
+            <p class="mt-3 text-lg text-sand/80 font-light fade-up" style="animation-delay:0.15s">{{ $destination->subtitle }}</p>
+        @endif
     </div>
 </section>
 
@@ -34,19 +36,43 @@
         </div>
 
         <aside class="lg:col-span-5 lg:pl-8">
-            @if(!empty($destination->highlights))
-                <div class="border-t border-sand-deep/40 pt-8">
-                    <h2 class="text-xs tracking-[0.2em] uppercase text-gold mb-6">Highlights</h2>
-                    <dl class="space-y-5">
-                        @foreach($destination->highlights as $item)
+            <div class="border-t border-sand-deep/40 pt-8">
+                <h2 class="text-xs tracking-[0.2em] uppercase text-gold mb-6">At a glance</h2>
+                <dl class="space-y-5">
+                    @if($destination->duration)
+                        <div>
+                            <dt class="text-xs tracking-[0.15em] uppercase text-muted">Duration</dt>
+                            <dd class="mt-1 text-forest">{{ $destination->duration }}</dd>
+                        </div>
+                    @endif
+                    @if($destination->best_time)
+                        <div>
+                            <dt class="text-xs tracking-[0.15em] uppercase text-muted">Best time to visit</dt>
+                            <dd class="mt-1 text-forest">{{ $destination->best_time }}</dd>
+                        </div>
+                    @endif
+                    @if($destination->activities)
+                        <div>
+                            <dt class="text-xs tracking-[0.15em] uppercase text-muted">Activities</dt>
+                            <dd class="mt-1 text-forest">{{ $destination->activities }}</dd>
+                        </div>
+                    @endif
+                    @if($destination->price_from)
+                        <div>
+                            <dt class="text-xs tracking-[0.15em] uppercase text-muted">From</dt>
+                            <dd class="mt-1 text-forest">{{ $destination->price_from }}</dd>
+                        </div>
+                    @endif
+                    @foreach($destination->highlights ?? [] as $item)
+                        @if(!empty($item['label']) || !empty($item['value']))
                             <div>
                                 <dt class="text-xs tracking-[0.15em] uppercase text-muted">{{ $item['label'] ?? '' }}</dt>
                                 <dd class="mt-1 text-forest">{{ $item['value'] ?? '' }}</dd>
                             </div>
-                        @endforeach
-                    </dl>
-                </div>
-            @endif
+                        @endif
+                    @endforeach
+                </dl>
+            </div>
         </aside>
     </div>
 </section>

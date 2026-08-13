@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
 
 class DestinationImage extends Model
 {
@@ -22,6 +21,6 @@ class DestinationImage extends Model
 
     public function url(): string
     {
-        return Storage::disk(config('filesystems.uploads', 'public'))->url($this->path);
+        return app(\App\Services\ImageUploader::class)->url($this->path) ?? '';
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Setting;
-use Illuminate\Support\Facades\Storage;
 
 class SettingService
 {
@@ -40,7 +39,7 @@ class SettingService
             return null;
         }
 
-        return Storage::disk(config('filesystems.uploads', 'public'))->url($path);
+        return app(ImageUploader::class)->url($path);
     }
 
     public function contact(): array

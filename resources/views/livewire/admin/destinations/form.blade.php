@@ -6,6 +6,11 @@
                 <input type="text" wire:model.live="name" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
                 @error('name') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
             </div>
+            <div class="md:col-span-2">
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Subtitle</label>
+                <input type="text" wire:model="subtitle" placeholder="Short line under the name" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                @error('subtitle') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+            </div>
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Slug</label>
                 <input type="text" wire:model.blur="slug" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
@@ -33,6 +38,22 @@
             <div class="md:col-span-2">
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Teaser</label>
                 <textarea rows="2" wire:model="teaser" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Duration</label>
+                <input type="text" wire:model="duration" placeholder="e.g. 2–3 nights" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Best time to visit</label>
+                <input type="text" wire:model="best_time" placeholder="e.g. June–August" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Activities</label>
+                <input type="text" wire:model="activities" placeholder="e.g. Gorilla trekking, nature walks" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">From price</label>
+                <input type="text" wire:model="price_from" placeholder="e.g. From $2,400 pp" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
             </div>
         </div>
 

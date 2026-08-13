@@ -63,6 +63,11 @@ class ImageUploader
             return null;
         }
 
+        // Root-relative URLs work on both localhost and 127.0.0.1
+        if ($this->disk === 'public' || config('filesystems.disks.'.$this->disk.'.driver') === 'local') {
+            return '/storage/'.ltrim($path, '/');
+        }
+
         return Storage::disk($this->disk)->url($path);
     }
 
@@ -75,10 +80,33 @@ class ImageUploader
         $thumb = preg_replace('/(\.[a-zA-Z0-9]+)$/', '_thumb$1', $path);
 
         if ($thumb && Storage::disk($this->disk)->exists($thumb)) {
+            if ($this->disk === 'public' || config('filesystems.disks.'.$this->disk.'.driver') === 'local') {
+                return '/storage/'.ltrim($thumb, '/');
+            }
+
             return Storage::disk($this->disk)->url($thumb);
         }
 
         return $this->url($path);
+    }
+
+    /**
+     * Store an existing local image file (e.g. for seeders) with web + thumb variants.
+     */
+    public function storeFromPath(string $sourcePath, string $directory = 'uploads', string $extension = 'jpg'): string
+    {
+        $directory = trim($directory, '/');
+        $basename = Str::uuid()->toString();
+        $webRelative = "{$directory}/{$basename}.{$extension}";
+        $thumbRelative = "{$directory}/{$basename}_thumb.{$extension}";
+
+        $webBinary = $this->resizeToMax($sourcePath, 1600, $extension);
+        $thumbBinary = $this->resizeToMax($sourcePath, 600, $extension);
+
+        Storage::disk($this->disk)->put($webRelative, $webBinary);
+        Storage::disk($this->disk)->put($thumbRelative, $thumbBinary);
+
+        return $webRelative;
     }
 
     protected function normalizeExtension(UploadedFile $file): string

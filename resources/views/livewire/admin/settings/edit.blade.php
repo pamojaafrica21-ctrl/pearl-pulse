@@ -26,6 +26,46 @@
         </section>
 
         <section class="space-y-5">
+            <h2 class="font-display text-2xl text-forest">Homepage featured section</h2>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Eyebrow</label>
+                <input type="text" wire:model="featured_eyebrow" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Heading</label>
+                <input type="text" wire:model="featured_heading" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Intro</label>
+                <textarea rows="2" wire:model="featured_intro" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+        </section>
+
+        <section class="space-y-5">
+            <h2 class="font-display text-2xl text-forest">Destinations listing page</h2>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Eyebrow</label>
+                <input type="text" wire:model="destinations_eyebrow" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Heading</label>
+                <input type="text" wire:model="destinations_heading" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Intro</label>
+                <textarea rows="2" wire:model="destinations_intro" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+        </section>
+
+        <section class="space-y-5">
+            <h2 class="font-display text-2xl text-forest">Footer</h2>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Blurb</label>
+                <textarea rows="2" wire:model="footer_blurb" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+        </section>
+
+        <section class="space-y-5">
             <h2 class="font-display text-2xl text-forest">About page</h2>
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Title</label>

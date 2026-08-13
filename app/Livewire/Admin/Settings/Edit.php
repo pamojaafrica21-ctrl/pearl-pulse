@@ -15,6 +15,20 @@ class Edit extends Component
 
     public string $hero_video_url = '';
 
+    public string $featured_eyebrow = '';
+
+    public string $featured_heading = '';
+
+    public string $featured_intro = '';
+
+    public string $destinations_eyebrow = '';
+
+    public string $destinations_heading = '';
+
+    public string $destinations_intro = '';
+
+    public string $footer_blurb = '';
+
     public string $about_title = '';
 
     public string $about_content = '';
@@ -41,6 +55,13 @@ class Edit extends Component
     {
         $this->hero_tagline = (string) $settings->get('hero_tagline', '');
         $this->hero_video_url = (string) $settings->get('hero_video_url', '');
+        $this->featured_eyebrow = (string) $settings->get('featured_eyebrow', 'Featured journeys');
+        $this->featured_heading = (string) $settings->get('featured_heading', 'Destinations worth the voyage');
+        $this->featured_intro = (string) $settings->get('featured_intro', '');
+        $this->destinations_eyebrow = (string) $settings->get('destinations_eyebrow', 'East Africa');
+        $this->destinations_heading = (string) $settings->get('destinations_heading', 'Destinations');
+        $this->destinations_intro = (string) $settings->get('destinations_intro', '');
+        $this->footer_blurb = (string) $settings->get('footer_blurb', '');
         $this->about_title = (string) $settings->get('about_title', 'About Pearl Pulse Safaris');
         $this->about_content = (string) $settings->get('about_content', '');
         $this->contact_address = (string) $settings->get('contact_address', '');
@@ -58,6 +79,13 @@ class Edit extends Component
         return [
             'hero_tagline' => ['nullable', 'string', 'max:255'],
             'hero_video_url' => ['nullable', 'url', 'max:500'],
+            'featured_eyebrow' => ['nullable', 'string', 'max:120'],
+            'featured_heading' => ['nullable', 'string', 'max:180'],
+            'featured_intro' => ['nullable', 'string', 'max:500'],
+            'destinations_eyebrow' => ['nullable', 'string', 'max:120'],
+            'destinations_heading' => ['nullable', 'string', 'max:180'],
+            'destinations_intro' => ['nullable', 'string', 'max:500'],
+            'footer_blurb' => ['nullable', 'string', 'max:500'],
             'about_title' => ['nullable', 'string', 'max:180'],
             'about_content' => ['nullable', 'string'],
             'contact_address' => ['nullable', 'string', 'max:500'],
@@ -84,6 +112,13 @@ class Edit extends Component
 
         $settings->set('hero_tagline', $this->hero_tagline);
         $settings->set('hero_video_url', $this->hero_video_url);
+        $settings->set('featured_eyebrow', $this->featured_eyebrow);
+        $settings->set('featured_heading', $this->featured_heading);
+        $settings->set('featured_intro', $this->featured_intro);
+        $settings->set('destinations_eyebrow', $this->destinations_eyebrow);
+        $settings->set('destinations_heading', $this->destinations_heading);
+        $settings->set('destinations_intro', $this->destinations_intro);
+        $settings->set('footer_blurb', $this->footer_blurb);
         $settings->set('about_title', $this->about_title);
         $settings->set('about_content', $this->about_content);
         $settings->set('contact_address', $this->contact_address);

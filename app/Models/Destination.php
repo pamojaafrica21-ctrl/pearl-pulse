@@ -5,16 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Storage;
+use App\Services\ImageUploader;
 
 class Destination extends Model
 {
     protected $fillable = [
         'name',
+        'subtitle',
         'slug',
         'region',
         'country',
         'teaser',
+        'duration',
+        'best_time',
+        'activities',
+        'price_from',
         'description',
         'highlights',
         'cover_path',
@@ -60,11 +65,7 @@ class Destination extends Model
 
     public function coverUrl(): ?string
     {
-        if (! $this->cover_path) {
-            return null;
-        }
-
-        return Storage::disk(config('filesystems.uploads', 'public'))->url($this->cover_path);
+        return app(ImageUploader::class)->url($this->cover_path);
     }
 
     public function getRouteKeyName(): string

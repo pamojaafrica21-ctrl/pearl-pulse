@@ -21,11 +21,13 @@ class AppServiceProvider extends ServiceProvider
                 $view->with([
                     'siteContact' => $settings->contact(),
                     'siteSocial' => $settings->social(),
+                    'footerBlurb' => $settings->get('footer_blurb', 'Curated journeys through East Africa’s wildest landscapes.'),
                 ]);
             } catch (\Throwable) {
                 $view->with([
                     'siteContact' => ['address' => '', 'phone' => '', 'email' => '', 'admin_email' => ''],
                     'siteSocial' => ['instagram' => '', 'facebook' => '', 'twitter' => ''],
+                    'footerBlurb' => 'Curated journeys through East Africa’s wildest landscapes.',
                 ]);
             }
         });

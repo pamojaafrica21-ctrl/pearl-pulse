@@ -32,8 +32,11 @@
 <section class="bg-cream py-20 lg:py-28">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="max-w-2xl">
-            <p class="text-xs tracking-[0.22em] uppercase text-gold mb-3">Featured journeys</p>
-            <h2 class="font-display text-4xl md:text-5xl text-forest">Destinations worth the voyage</h2>
+            <p class="text-xs tracking-[0.22em] uppercase text-gold mb-3">{{ $featuredEyebrow }}</p>
+            <h2 class="font-display text-4xl md:text-5xl text-forest">{{ $featuredHeading }}</h2>
+            @if($featuredIntro)
+                <p class="mt-4 text-muted leading-relaxed">{{ $featuredIntro }}</p>
+            @endif
         </div>
 
         <div class="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
