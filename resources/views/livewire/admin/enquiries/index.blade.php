@@ -1,0 +1,69 @@
+<div>
+    <div class="flex gap-2 mb-6">
+        @foreach(['' => 'All', 'new' => 'New', 'read' => 'Read', 'responded' => 'Responded'] as $value => $label)
+            <button
+                type="button"
+                wire:click="$set('status', '{{ $value }}')"
+                class="px-3 py-1.5 text-xs tracking-[0.12em] uppercase border {{ $status === $value ? 'bg-forest text-sand border-forest' : 'border-sand-deep text-forest' }}"
+            >{{ $label }}</button>
+        @endforeach
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-5">
+        <div class="lg:col-span-3 bg-white border border-sand-deep/30 overflow-hidden">
+            <table class="min-w-full text-sm">
+                <thead class="bg-cream text-left text-xs tracking-wider uppercase text-muted">
+                    <tr>
+                        <th class="px-4 py-3">From</th>
+                        <th class="px-4 py-3">Destination</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Date</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-sand-deep/20">
+                    @forelse($enquiries as $enquiry)
+                        <tr
+                            wire:key="enq-{{ $enquiry->id }}"
+                            wire:click="view({{ $enquiry->id }})"
+                            class="cursor-pointer hover:bg-cream/80 {{ $viewing === $enquiry->id ? 'bg-cream' : '' }} {{ $enquiry->status === 'new' ? 'font-medium' : '' }}"
+                        >
+                            <td class="px-4 py-3">
+                                <div>{{ $enquiry->name }}</div>
+                                <div class="text-xs text-muted font-normal">{{ $enquiry->email }}</div>
+                            </td>
+                            <td class="px-4 py-3">{{ $enquiry->destination?->name ?? 'General' }}</td>
+                            <td class="px-4 py-3 capitalize">{{ $enquiry->status }}</td>
+                            <td class="px-4 py-3 text-muted">{{ $enquiry->created_at->format('d M Y H:i') }}</td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="4" class="px-4 py-6 text-muted">No enquiries.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+            <div class="p-4">{{ $enquiries->links() }}</div>
+        </div>
+
+        <div class="lg:col-span-2 bg-white border border-sand-deep/30 p-5">
+            @if($viewingEnquiry)
+                <h3 class="font-display text-2xl text-forest">{{ $viewingEnquiry->name }}</h3>
+                <p class="text-sm text-muted mt-1">
+                    <a href="mailto:{{ $viewingEnquiry->email }}" class="hover:underline">{{ $viewingEnquiry->email }}</a>
+                    @if($viewingEnquiry->phone)
+                        · {{ $viewingEnquiry->phone }}
+                    @endif
+                </p>
+                <p class="text-xs tracking-[0.12em] uppercase text-gold mt-4">
+                    {{ $viewingEnquiry->destination?->name ?? 'General enquiry' }}
+                </p>
+                <p class="mt-4 text-sm leading-relaxed whitespace-pre-wrap">{{ $viewingEnquiry->message }}</p>
+                <div class="mt-6 flex flex-wrap gap-2">
+                    <button type="button" wire:click="mark({{ $viewingEnquiry->id }}, 'read')" class="px-3 py-1.5 text-xs border border-sand-deep">Mark read</button>
+                    <button type="button" wire:click="mark({{ $viewingEnquiry->id }}, 'responded')" class="px-3 py-1.5 text-xs bg-forest text-sand">Mark responded</button>
+                    <button type="button" wire:click="mark({{ $viewingEnquiry->id }}, 'new')" class="px-3 py-1.5 text-xs border border-sand-deep">Mark new</button>
+                </div>
+            @else
+                <p class="text-muted text-sm">Select an enquiry to read it.</p>
+            @endif
+        </div>
+    </div>
+</div>
