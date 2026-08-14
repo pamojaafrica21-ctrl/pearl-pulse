@@ -74,12 +74,16 @@ class SettingsSeeder extends Seeder
         $existing = Setting::getValue('hero_image');
         $source = storage_path('app/seed-downloads/hero.jpg');
 
-        if ($existing && Storage::disk('public')->exists($existing)) {
-            return $existing;
+        if (is_file($source)) {
+            if ($existing) {
+                $uploader->delete($existing);
+            }
+
+            return $uploader->storeFromPath($source, 'site');
         }
 
-        if (is_file($source)) {
-            return $uploader->storeFromPath($source, 'site');
+        if ($existing && Storage::disk('public')->exists($existing)) {
+            return $existing;
         }
 
         $path = 'site/hero.jpg';
