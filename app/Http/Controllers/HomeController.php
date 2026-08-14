@@ -32,9 +32,16 @@ class HomeController extends Controller
             'heroTagline' => $settings->get('hero_tagline', 'East Africa, beautifully paced.'),
             'heroImageUrl' => $settings->heroImageUrl(),
             'heroVideoUrl' => $settings->get('hero_video_url'),
+            'homeIntroEyebrow' => $settings->get('home_intro_eyebrow', ''),
+            'homeIntroHeading' => $settings->get('home_intro_heading', ''),
+            'homeIntroBody' => $settings->get('home_intro_body', ''),
+            'homePillars' => $settings->listItems('home_pillars'),
             'featuredEyebrow' => $settings->get('featured_eyebrow', 'Featured journeys'),
             'featuredHeading' => $settings->get('featured_heading', 'Destinations worth the voyage'),
             'featuredIntro' => $settings->get('featured_intro', ''),
+            'homeCtaHeading' => $settings->get('home_cta_heading', ''),
+            'homeCtaText' => $settings->get('home_cta_text', ''),
+            'homeCtaButton' => $settings->get('home_cta_button', 'Plan your journey'),
         ]);
     }
 }

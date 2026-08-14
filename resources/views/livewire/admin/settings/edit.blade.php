@@ -26,6 +26,35 @@
         </section>
 
         <section class="space-y-5">
+            <h2 class="font-display text-2xl text-forest">Homepage intro</h2>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Eyebrow</label>
+                <input type="text" wire:model="home_intro_eyebrow" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Heading</label>
+                <input type="text" wire:model="home_intro_heading" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Body</label>
+                <textarea rows="4" wire:model="home_intro_body" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+        </section>
+
+        <section class="space-y-5">
+            <h2 class="font-display text-2xl text-forest">Homepage pillars</h2>
+            <p class="text-sm text-muted">Three short points shown under the intro.</p>
+            @foreach($home_pillars as $index => $pillar)
+                <div class="space-y-3 border-t border-sand-deep/30 pt-4" wire:key="home-pillar-{{ $index }}">
+                    <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Pillar {{ $index + 1 }} title</label>
+                    <input type="text" wire:model="home_pillars.{{ $index }}.title" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                    <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Pillar {{ $index + 1 }} text</label>
+                    <textarea rows="2" wire:model="home_pillars.{{ $index }}.text" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+                </div>
+            @endforeach
+        </section>
+
+        <section class="space-y-5">
             <h2 class="font-display text-2xl text-forest">Homepage featured section</h2>
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Eyebrow</label>
@@ -38,6 +67,22 @@
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Intro</label>
                 <textarea rows="2" wire:model="featured_intro" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+        </section>
+
+        <section class="space-y-5">
+            <h2 class="font-display text-2xl text-forest">Homepage CTA</h2>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Heading</label>
+                <input type="text" wire:model="home_cta_heading" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Text</label>
+                <textarea rows="2" wire:model="home_cta_text" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Button label</label>
+                <input type="text" wire:model="home_cta_button" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
             </div>
         </section>
 
@@ -55,6 +100,70 @@
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Intro</label>
                 <textarea rows="2" wire:model="destinations_intro" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
             </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Note heading</label>
+                <input type="text" wire:model="destinations_note_heading" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Note body</label>
+                <textarea rows="4" wire:model="destinations_note_body" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">CTA heading</label>
+                <input type="text" wire:model="destinations_cta_heading" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">CTA text</label>
+                <textarea rows="2" wire:model="destinations_cta_text" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+        </section>
+
+        <section class="space-y-5">
+            <h2 class="font-display text-2xl text-forest">About page</h2>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Eyebrow</label>
+                <input type="text" wire:model="about_eyebrow" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Title</label>
+                <input type="text" wire:model="about_title" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Lead</label>
+                <textarea rows="2" wire:model="about_lead" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Main content</label>
+                <div wire:ignore>
+                    <input id="about_content" type="hidden" value="{{ $about_content }}">
+                    <trix-editor input="about_content"></trix-editor>
+                </div>
+            </div>
+            <p class="text-sm text-muted pt-2">Three values shown below the main story.</p>
+            @foreach($about_values as $index => $value)
+                <div class="space-y-3 border-t border-sand-deep/30 pt-4" wire:key="about-value-{{ $index }}">
+                    <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Value {{ $index + 1 }} title</label>
+                    <input type="text" wire:model="about_values.{{ $index }}.title" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                    <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Value {{ $index + 1 }} text</label>
+                    <textarea rows="2" wire:model="about_values.{{ $index }}.text" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+                </div>
+            @endforeach
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Approach heading</label>
+                <input type="text" wire:model="about_approach_heading" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Approach body</label>
+                <textarea rows="4" wire:model="about_approach_body" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">CTA heading</label>
+                <input type="text" wire:model="about_cta_heading" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">CTA text</label>
+                <textarea rows="2" wire:model="about_cta_text" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
         </section>
 
         <section class="space-y-5">
@@ -62,21 +171,6 @@
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Blurb</label>
                 <textarea rows="2" wire:model="footer_blurb" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
-            </div>
-        </section>
-
-        <section class="space-y-5">
-            <h2 class="font-display text-2xl text-forest">About page</h2>
-            <div>
-                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Title</label>
-                <input type="text" wire:model="about_title" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
-            </div>
-            <div>
-                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Content</label>
-                <div wire:ignore>
-                    <input id="about_content" type="hidden" value="{{ $about_content }}">
-                    <trix-editor input="about_content"></trix-editor>
-                </div>
             </div>
         </section>
 

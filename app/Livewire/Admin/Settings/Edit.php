@@ -15,11 +15,25 @@ class Edit extends Component
 
     public string $hero_video_url = '';
 
+    public string $home_intro_eyebrow = '';
+
+    public string $home_intro_heading = '';
+
+    public string $home_intro_body = '';
+
+    public array $home_pillars = [];
+
     public string $featured_eyebrow = '';
 
     public string $featured_heading = '';
 
     public string $featured_intro = '';
+
+    public string $home_cta_heading = '';
+
+    public string $home_cta_text = '';
+
+    public string $home_cta_button = '';
 
     public string $destinations_eyebrow = '';
 
@@ -27,11 +41,33 @@ class Edit extends Component
 
     public string $destinations_intro = '';
 
-    public string $footer_blurb = '';
+    public string $destinations_note_heading = '';
+
+    public string $destinations_note_body = '';
+
+    public string $destinations_cta_heading = '';
+
+    public string $destinations_cta_text = '';
+
+    public string $about_eyebrow = '';
 
     public string $about_title = '';
 
+    public string $about_lead = '';
+
     public string $about_content = '';
+
+    public array $about_values = [];
+
+    public string $about_approach_heading = '';
+
+    public string $about_approach_body = '';
+
+    public string $about_cta_heading = '';
+
+    public string $about_cta_text = '';
+
+    public string $footer_blurb = '';
 
     public string $contact_address = '';
 
@@ -55,15 +91,33 @@ class Edit extends Component
     {
         $this->hero_tagline = (string) $settings->get('hero_tagline', '');
         $this->hero_video_url = (string) $settings->get('hero_video_url', '');
+        $this->home_intro_eyebrow = (string) $settings->get('home_intro_eyebrow', '');
+        $this->home_intro_heading = (string) $settings->get('home_intro_heading', '');
+        $this->home_intro_body = (string) $settings->get('home_intro_body', '');
+        $this->home_pillars = $this->decodeList($settings->get('home_pillars'), 3);
         $this->featured_eyebrow = (string) $settings->get('featured_eyebrow', 'Featured journeys');
         $this->featured_heading = (string) $settings->get('featured_heading', 'Destinations worth the voyage');
         $this->featured_intro = (string) $settings->get('featured_intro', '');
+        $this->home_cta_heading = (string) $settings->get('home_cta_heading', '');
+        $this->home_cta_text = (string) $settings->get('home_cta_text', '');
+        $this->home_cta_button = (string) $settings->get('home_cta_button', 'Plan your journey');
         $this->destinations_eyebrow = (string) $settings->get('destinations_eyebrow', 'East Africa');
         $this->destinations_heading = (string) $settings->get('destinations_heading', 'Destinations');
         $this->destinations_intro = (string) $settings->get('destinations_intro', '');
-        $this->footer_blurb = (string) $settings->get('footer_blurb', '');
+        $this->destinations_note_heading = (string) $settings->get('destinations_note_heading', '');
+        $this->destinations_note_body = (string) $settings->get('destinations_note_body', '');
+        $this->destinations_cta_heading = (string) $settings->get('destinations_cta_heading', '');
+        $this->destinations_cta_text = (string) $settings->get('destinations_cta_text', '');
+        $this->about_eyebrow = (string) $settings->get('about_eyebrow', 'Our story');
         $this->about_title = (string) $settings->get('about_title', 'About Pearl Pulse Safaris');
+        $this->about_lead = (string) $settings->get('about_lead', '');
         $this->about_content = (string) $settings->get('about_content', '');
+        $this->about_values = $this->decodeList($settings->get('about_values'), 3);
+        $this->about_approach_heading = (string) $settings->get('about_approach_heading', '');
+        $this->about_approach_body = (string) $settings->get('about_approach_body', '');
+        $this->about_cta_heading = (string) $settings->get('about_cta_heading', '');
+        $this->about_cta_text = (string) $settings->get('about_cta_text', '');
+        $this->footer_blurb = (string) $settings->get('footer_blurb', '');
         $this->contact_address = (string) $settings->get('contact_address', '');
         $this->contact_phone = (string) $settings->get('contact_phone', '');
         $this->contact_email = (string) $settings->get('contact_email', '');
@@ -74,20 +128,66 @@ class Edit extends Component
         $this->currentHeroPath = $settings->get('hero_image');
     }
 
+    protected function decodeList(mixed $value, int $count): array
+    {
+        $items = [];
+
+        if (is_string($value) && $value !== '') {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) {
+                $items = $decoded;
+            }
+        } elseif (is_array($value)) {
+            $items = $value;
+        }
+
+        $normalized = [];
+        for ($i = 0; $i < $count; $i++) {
+            $normalized[] = [
+                'title' => (string) ($items[$i]['title'] ?? ''),
+                'text' => (string) ($items[$i]['text'] ?? ''),
+            ];
+        }
+
+        return $normalized;
+    }
+
     protected function rules(): array
     {
         return [
             'hero_tagline' => ['nullable', 'string', 'max:255'],
             'hero_video_url' => ['nullable', 'url', 'max:500'],
+            'home_intro_eyebrow' => ['nullable', 'string', 'max:120'],
+            'home_intro_heading' => ['nullable', 'string', 'max:180'],
+            'home_intro_body' => ['nullable', 'string', 'max:2000'],
+            'home_pillars' => ['array'],
+            'home_pillars.*.title' => ['nullable', 'string', 'max:120'],
+            'home_pillars.*.text' => ['nullable', 'string', 'max:500'],
             'featured_eyebrow' => ['nullable', 'string', 'max:120'],
             'featured_heading' => ['nullable', 'string', 'max:180'],
             'featured_intro' => ['nullable', 'string', 'max:500'],
+            'home_cta_heading' => ['nullable', 'string', 'max:180'],
+            'home_cta_text' => ['nullable', 'string', 'max:500'],
+            'home_cta_button' => ['nullable', 'string', 'max:80'],
             'destinations_eyebrow' => ['nullable', 'string', 'max:120'],
             'destinations_heading' => ['nullable', 'string', 'max:180'],
             'destinations_intro' => ['nullable', 'string', 'max:500'],
-            'footer_blurb' => ['nullable', 'string', 'max:500'],
+            'destinations_note_heading' => ['nullable', 'string', 'max:180'],
+            'destinations_note_body' => ['nullable', 'string', 'max:2000'],
+            'destinations_cta_heading' => ['nullable', 'string', 'max:180'],
+            'destinations_cta_text' => ['nullable', 'string', 'max:500'],
+            'about_eyebrow' => ['nullable', 'string', 'max:120'],
             'about_title' => ['nullable', 'string', 'max:180'],
+            'about_lead' => ['nullable', 'string', 'max:500'],
             'about_content' => ['nullable', 'string'],
+            'about_values' => ['array'],
+            'about_values.*.title' => ['nullable', 'string', 'max:120'],
+            'about_values.*.text' => ['nullable', 'string', 'max:500'],
+            'about_approach_heading' => ['nullable', 'string', 'max:180'],
+            'about_approach_body' => ['nullable', 'string', 'max:2000'],
+            'about_cta_heading' => ['nullable', 'string', 'max:180'],
+            'about_cta_text' => ['nullable', 'string', 'max:500'],
+            'footer_blurb' => ['nullable', 'string', 'max:500'],
             'contact_address' => ['nullable', 'string', 'max:500'],
             'contact_phone' => ['nullable', 'string', 'max:60'],
             'contact_email' => ['nullable', 'email', 'max:255'],
@@ -110,24 +210,28 @@ class Edit extends Component
             $this->hero_image = null;
         }
 
-        $settings->set('hero_tagline', $this->hero_tagline);
-        $settings->set('hero_video_url', $this->hero_video_url);
-        $settings->set('featured_eyebrow', $this->featured_eyebrow);
-        $settings->set('featured_heading', $this->featured_heading);
-        $settings->set('featured_intro', $this->featured_intro);
-        $settings->set('destinations_eyebrow', $this->destinations_eyebrow);
-        $settings->set('destinations_heading', $this->destinations_heading);
-        $settings->set('destinations_intro', $this->destinations_intro);
-        $settings->set('footer_blurb', $this->footer_blurb);
-        $settings->set('about_title', $this->about_title);
-        $settings->set('about_content', $this->about_content);
-        $settings->set('contact_address', $this->contact_address);
-        $settings->set('contact_phone', $this->contact_phone);
-        $settings->set('contact_email', $this->contact_email);
-        $settings->set('admin_email', $this->admin_email);
-        $settings->set('social_instagram', $this->social_instagram);
-        $settings->set('social_facebook', $this->social_facebook);
-        $settings->set('social_twitter', $this->social_twitter);
+        $map = [
+            'hero_tagline', 'hero_video_url',
+            'home_intro_eyebrow', 'home_intro_heading', 'home_intro_body',
+            'featured_eyebrow', 'featured_heading', 'featured_intro',
+            'home_cta_heading', 'home_cta_text', 'home_cta_button',
+            'destinations_eyebrow', 'destinations_heading', 'destinations_intro',
+            'destinations_note_heading', 'destinations_note_body',
+            'destinations_cta_heading', 'destinations_cta_text',
+            'about_eyebrow', 'about_title', 'about_lead', 'about_content',
+            'about_approach_heading', 'about_approach_body',
+            'about_cta_heading', 'about_cta_text',
+            'footer_blurb',
+            'contact_address', 'contact_phone', 'contact_email', 'admin_email',
+            'social_instagram', 'social_facebook', 'social_twitter',
+        ];
+
+        foreach ($map as $key) {
+            $settings->set($key, $this->{$key});
+        }
+
+        $settings->set('home_pillars', json_encode(array_values($this->home_pillars)));
+        $settings->set('about_values', json_encode(array_values($this->about_values)));
 
         session()->flash('status', 'Settings saved.');
     }

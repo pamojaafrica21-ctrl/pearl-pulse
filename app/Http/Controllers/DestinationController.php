@@ -14,6 +14,10 @@ class DestinationController extends Controller
             'eyebrow' => $settings->get('destinations_eyebrow', 'East Africa'),
             'heading' => $settings->get('destinations_heading', 'Destinations'),
             'intro' => $settings->get('destinations_intro', 'From misty gorilla forests to endless savannah — choose your next chapter.'),
+            'noteHeading' => $settings->get('destinations_note_heading', ''),
+            'noteBody' => $settings->get('destinations_note_body', ''),
+            'ctaHeading' => $settings->get('destinations_cta_heading', ''),
+            'ctaText' => $settings->get('destinations_cta_text', ''),
         ]);
     }
 

@@ -60,4 +60,25 @@ class SettingService
             'twitter' => $this->get('social_twitter', ''),
         ];
     }
+
+    /**
+     * @return list<array{title: string, text: string}>
+     */
+    public function listItems(string $key, int $count = 3): array
+    {
+        $raw = $this->get($key, '[]');
+        $items = is_array($raw) ? $raw : (json_decode((string) $raw, true) ?: []);
+        $normalized = [];
+
+        for ($i = 0; $i < $count; $i++) {
+            $title = trim((string) ($items[$i]['title'] ?? ''));
+            $text = trim((string) ($items[$i]['text'] ?? ''));
+            if ($title === '' && $text === '') {
+                continue;
+            }
+            $normalized[] = ['title' => $title, 'text' => $text];
+        }
+
+        return $normalized;
+    }
 }

@@ -29,6 +29,37 @@
     </div>
 </section>
 
+@if($homeIntroHeading || $homeIntroBody || count($homePillars))
+<section class="bg-cream py-20 lg:py-28 border-b border-sand-deep/20">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="max-w-3xl">
+            @if($homeIntroEyebrow)
+                <p class="text-xs tracking-[0.22em] uppercase text-gold mb-3">{{ $homeIntroEyebrow }}</p>
+            @endif
+            @if($homeIntroHeading)
+                <h2 class="font-display text-4xl md:text-5xl text-forest">{{ $homeIntroHeading }}</h2>
+            @endif
+            @if($homeIntroBody)
+                <p class="mt-6 text-muted text-lg leading-relaxed whitespace-pre-line">{{ $homeIntroBody }}</p>
+            @endif
+        </div>
+
+        @if(count($homePillars))
+            <div class="mt-14 grid gap-10 md:grid-cols-3">
+                @foreach($homePillars as $pillar)
+                    <div>
+                        <h3 class="font-display text-2xl text-forest">{{ $pillar['title'] }}</h3>
+                        @if($pillar['text'])
+                            <p class="mt-3 text-sm text-muted leading-relaxed">{{ $pillar['text'] }}</p>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+</section>
+@endif
+
 <section class="bg-cream py-20 lg:py-28">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="max-w-2xl">
@@ -54,4 +85,20 @@
         @endif
     </div>
 </section>
+
+@if($homeCtaHeading || $homeCtaText)
+<section class="bg-forest text-sand py-20 lg:py-24">
+    <div class="mx-auto max-w-3xl px-5 lg:px-8 text-center">
+        @if($homeCtaHeading)
+            <h2 class="font-display text-4xl md:text-5xl">{{ $homeCtaHeading }}</h2>
+        @endif
+        @if($homeCtaText)
+            <p class="mt-4 text-sand/75 leading-relaxed">{{ $homeCtaText }}</p>
+        @endif
+        <div class="mt-10">
+            <a href="{{ route('contact') }}" class="btn-outline">{{ $homeCtaButton ?: 'Plan your journey' }}</a>
+        </div>
+    </div>
+</section>
+@endif
 @endsection
