@@ -60,6 +60,8 @@ class SettingsSeeder extends Seeder
             'social_facebook' => 'https://facebook.com/',
             'social_twitter' => '',
             'footer_blurb' => 'Curated journeys through East Africa’s wildest landscapes.',
+            'site_public' => '1',
+            'maintenance_message' => 'We are preparing something special. Please check back soon.',
         ];
 
         foreach ($defaults as $key => $value) {

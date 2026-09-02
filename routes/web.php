@@ -12,17 +12,19 @@ use App\Livewire\Admin\Enquiries\Index as EnquiriesIndex;
 use App\Livewire\Admin\Settings\Edit as SettingsEdit;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', HomeController::class)->name('home');
-Route::get('/destinations', [DestinationController::class, 'index'])->name('destinations.index');
-Route::get('/destinations/{destination:slug}', [DestinationController::class, 'show'])->name('destinations.show');
-Route::get('/about', [PageController::class, 'about'])->name('about');
-Route::get('/contact', [PageController::class, 'contact'])->name('contact');
-Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+Route::middleware('site.public')->group(function () {
+    Route::get('/', HomeController::class)->name('home');
+    Route::get('/destinations', [DestinationController::class, 'index'])->name('destinations.index');
+    Route::get('/destinations/{destination:slug}', [DestinationController::class, 'show'])->name('destinations.show');
+    Route::get('/about', [PageController::class, 'about'])->name('about');
+    Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+    Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+});
 
 Route::post('/logout', function (Logout $logout) {
     $logout();
 
-    return redirect()->route('home');
+    return redirect()->route('login');
 })->middleware('auth')->name('logout');
 
 Route::redirect('/dashboard', '/admin')->middleware(['auth', 'verified'])->name('dashboard');

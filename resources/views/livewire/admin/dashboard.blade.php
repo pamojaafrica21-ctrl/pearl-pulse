@@ -1,4 +1,66 @@
 <div>
+    {{-- Site visibility --}}
+    <div class="mb-10 bg-white border border-sand-deep/30 p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div>
+            <p class="text-xs tracking-[0.15em] uppercase text-muted">Public site</p>
+            <p class="font-display text-2xl text-forest mt-1">
+                {{ $sitePublic ? 'Live' : 'Hidden' }}
+            </p>
+            <p class="text-sm text-muted mt-1">
+                @if($sitePublic)
+                    Visitors can browse the website. Admin remains accessible.
+                @else
+                    Visitors see a coming-soon page. Login and admin still work.
+                @endif
+            </p>
+        </div>
+        <button
+            type="button"
+            wire:click="toggleSiteVisibility"
+            class="shrink-0 px-6 py-3 text-xs tracking-[0.14em] uppercase transition {{ $sitePublic ? 'bg-red-800 text-white hover:bg-red-900' : 'btn-primary' }}"
+        >
+            {{ $sitePublic ? 'Hide public site' : 'Make site live' }}
+        </button>
+    </div>
+
+    @if(! $sitePublic)
+        <div class="mb-10 bg-white border border-sand-deep/30 p-6">
+            <p class="text-xs tracking-[0.15em] uppercase text-muted mb-2">Maintenance message</p>
+            <form wire:submit="saveMaintenanceMessage" class="flex flex-col sm:flex-row gap-3">
+                <input
+                    type="text"
+                    wire:model="maintenanceMessage"
+                    placeholder="We are preparing something special…"
+                    class="flex-1 border-sand-deep/40 focus:border-forest focus:ring-forest text-sm"
+                >
+                <button type="submit" class="btn-primary text-xs shrink-0">Save message</button>
+            </form>
+        </div>
+    @endif
+
+    {{-- Stats --}}
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
+        <div class="bg-white border border-sand-deep/30 p-5">
+            <p class="text-xs tracking-[0.15em] uppercase text-muted">Total page views</p>
+            <p class="font-display text-4xl text-forest mt-2">{{ number_format($visitStats['total_views']) }}</p>
+        </div>
+        <div class="bg-white border border-sand-deep/30 p-5">
+            <p class="text-xs tracking-[0.15em] uppercase text-muted">Today</p>
+            <p class="font-display text-4xl text-forest mt-2">{{ number_format($visitStats['today_views']) }}</p>
+            <p class="text-sm text-muted mt-1">{{ number_format($visitStats['today_unique']) }} unique visitors</p>
+        </div>
+        <div class="bg-white border border-sand-deep/30 p-5">
+            <p class="text-xs tracking-[0.15em] uppercase text-muted">Last 7 days</p>
+            <p class="font-display text-4xl text-forest mt-2">{{ number_format($visitStats['week_views']) }}</p>
+            <p class="text-sm text-muted mt-1">{{ number_format($visitStats['week_unique']) }} unique visitors</p>
+        </div>
+        <div class="bg-white border border-sand-deep/30 p-5">
+            <p class="text-xs tracking-[0.15em] uppercase text-muted">Last 30 days</p>
+            <p class="font-display text-4xl text-forest mt-2">{{ number_format($visitStats['month_views']) }}</p>
+            <p class="text-sm text-muted mt-1">{{ number_format($visitStats['month_unique']) }} unique visitors</p>
+        </div>
+    </div>
+
     <div class="grid gap-4 sm:grid-cols-3 mb-10">
         <div class="bg-white border border-sand-deep/30 p-5">
             <p class="text-xs tracking-[0.15em] uppercase text-muted">Destinations</p>
@@ -12,7 +74,7 @@
         </div>
         <div class="bg-white border border-sand-deep/30 p-5">
             <p class="text-xs tracking-[0.15em] uppercase text-muted">Quick actions</p>
-            <a href="{{ route('admin.destinations.create') }}" class="btn-primary mt-4 text-xs" wire:navigate>New destination</a>
+            <a href="{{ route('admin.destinations.create') }}" class="btn-primary mt-4 text-xs inline-block" wire:navigate>New destination</a>
         </div>
     </div>
 

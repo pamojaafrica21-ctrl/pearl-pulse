@@ -61,6 +61,16 @@ class SettingService
         ];
     }
 
+    public function isSitePublic(): bool
+    {
+        return $this->get('site_public', '1') === '1';
+    }
+
+    public function setSitePublic(bool $public): void
+    {
+        $this->set('site_public', $public ? '1' : '0');
+    }
+
     /**
      * @return list<array{title: string, text: string}>
      */

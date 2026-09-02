@@ -14,6 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => \App\Http\Middleware\EnsureAdmin::class,
+            'site.public' => \App\Http\Middleware\EnsureSiteIsPublic::class,
+        ]);
+
+        $middleware->appendToGroup('web', [
+            \App\Http\Middleware\TrackSiteVisit::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
