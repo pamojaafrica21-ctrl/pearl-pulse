@@ -1,51 +1,22 @@
 @extends('layouts.public')
 
-@section('title', $heading.' — '.config('app.name'))
-@section('meta_description', $intro ?: 'Explore safari destinations across Uganda, Kenya, Tanzania, and Rwanda with Pearl Pulse Safaris.')
+@section('title', 'Destinations | Pearl Pulse Safaris')
+@section('meta_description', 'Explore Uganda, Rwanda, Kenya, and Tanzania — parks and places we know from the ground.')
 
 @section('content')
-<div class="pt-28 pb-6 bg-cream">
+<section class="bg-cream pt-16 pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <p class="text-xs tracking-[0.22em] uppercase text-gold mb-3">{{ $eyebrow }}</p>
-        <h1 class="font-display text-5xl md:text-6xl text-forest">{{ $heading }}</h1>
-        @if($intro)
-            <p class="mt-4 max-w-2xl text-muted text-lg leading-relaxed">{{ $intro }}</p>
-        @endif
-    </div>
-</div>
-
-<div class="pb-16 bg-cream">
-    <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <livewire:destinations-index />
-    </div>
-</div>
-
-@if($noteHeading || $noteBody)
-<section class="bg-sand/40 py-16 lg:py-20">
-    <div class="mx-auto max-w-3xl px-5 lg:px-8">
-        @if($noteHeading)
-            <h2 class="font-display text-3xl md:text-4xl text-forest">{{ $noteHeading }}</h2>
-        @endif
-        @if($noteBody)
-            <p class="mt-5 text-muted leading-relaxed whitespace-pre-line">{{ $noteBody }}</p>
-        @endif
+        <p class="text-xs tracking-[0.22em] uppercase text-gold mb-3">Destinations</p>
+        <h1 class="font-display text-5xl md:text-6xl text-forest">Where do you want to go?</h1>
+        <p class="mt-4 max-w-2xl text-muted leading-relaxed">Four countries. Open a country for why we travel there, then a park for seasons, how long to stay, and how a day actually unfolds. These pages are the map — journeys are how we put the nights together.</p>
     </div>
 </section>
-@endif
-
-@if($ctaHeading || $ctaText)
-<section class="bg-forest text-sand py-16 lg:py-20">
-    <div class="mx-auto max-w-3xl px-5 lg:px-8 text-center">
-        @if($ctaHeading)
-            <h2 class="font-display text-3xl md:text-4xl">{{ $ctaHeading }}</h2>
-        @endif
-        @if($ctaText)
-            <p class="mt-4 text-sand/75 leading-relaxed">{{ $ctaText }}</p>
-        @endif
-        <div class="mt-8">
-            <a href="{{ route('contact') }}" class="btn-outline">Enquire now</a>
-        </div>
+<section class="bg-cream pb-20">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        @foreach($countries as $country)
+            <x-country-card :country="$country" />
+        @endforeach
     </div>
 </section>
-@endif
+<x-page-cta heading="Not sure where to begin?" text="The Journey Finder can help — or write to us." button="Find your journey" :href="route('journeys.finder')" />
 @endsection

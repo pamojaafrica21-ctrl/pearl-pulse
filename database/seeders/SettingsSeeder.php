@@ -3,35 +3,37 @@
 namespace Database\Seeders;
 
 use App\Models\Setting;
-use App\Services\ImageUploader;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Storage;
 
 class SettingsSeeder extends Seeder
 {
     public function run(): void
     {
-        $uploader = app(ImageUploader::class);
-        $heroPath = $this->storeHero($uploader);
+        $heroPath = $this->storeHero();
 
         $defaults = [
-            'hero_tagline' => 'East Africa, beautifully paced.',
+            'hero_headline' => "Private journeys into Africa’s wild heart",
+            'hero_tagline' => 'Private, tailor-made journeys shaped around how you want to experience Africa.',
+            'hero_kicker' => 'Uganda · Rwanda · Kenya · Tanzania',
             'hero_image' => $heroPath,
             'hero_video_url' => '',
-            'home_intro_eyebrow' => 'Our approach',
-            'home_intro_heading' => 'Travel that feels considered',
-            'home_intro_body' => "We design safaris around pace, place, and the people who know the land best. Fewer transfers, deeper stays, and guiding that leaves room for wonder.\n\nWhether you are drawn to gorilla forests or migration plains, we shape each journey to match how you want to move through East Africa.",
+            'home_intro_eyebrow' => 'Africa, deeply personal',
+            'home_intro_heading' => 'Local African specialists. Private journeys.',
+            'home_intro_body' => "Pearl Pulse is a Uganda-based safari company. We design private journeys across Uganda, Rwanda, Kenya, and Tanzania — gorilla forests, chimpanzee country, the Nile, and the open plains.\n\nThe homepage is an introduction. Country hubs, park pages, and named journeys hold the detail: seasons, permits, how a day actually unfolds.",
             'home_pillars' => json_encode([
-                ['title' => 'Local expertise', 'text' => 'Guides and partners rooted in Uganda, Kenya, Tanzania, and Rwanda.'],
-                ['title' => 'Unhurried days', 'text' => 'Itineraries with breathing room — dawn game drives, quiet afternoons, long views.'],
-                ['title' => 'Light footprint', 'text' => 'Lodges and operators chosen for care of community and wilderness.'],
+                ['title' => 'Local knowledge', 'text' => 'We know the places, people, and experiences beyond the standard itinerary.'],
+                ['title' => 'Private by design', 'text' => 'Our journeys are created around the traveller — pace, place, and how you want to move.'],
+                ['title' => 'Authentic experiences', 'text' => 'Africa experienced beyond simply checking destinations off a list.'],
+                ['title' => 'Travel with a reason', 'text' => 'Our journeys connect conservation, communities, and local people.'],
+                ['title' => 'Personal service', 'text' => 'From the first conversation to the end of the journey.'],
             ]),
-            'featured_eyebrow' => 'Featured journeys',
-            'featured_heading' => 'Destinations worth the voyage',
-            'featured_intro' => 'Handpicked parks and wildernesses across Uganda, Kenya, Tanzania, and Rwanda.',
-            'home_cta_heading' => 'Ready when you are',
-            'home_cta_text' => 'Share a few dates and ideas — we will sketch a thoughtful itinerary for your East African chapter.',
+            'featured_eyebrow' => 'Journeys worth taking',
+            'featured_heading' => 'Signature journeys',
+            'featured_intro' => 'Three starting points. Open a journey for the full day-by-day — or tell us how you want it rewritten.',
+            'home_cta_heading' => 'Where will Africa take you?',
+            'home_cta_text' => 'Tell us what you are dreaming about. We will design the journey around you.',
             'home_cta_button' => 'Plan your journey',
+            'contact_whatsapp' => '+256700000000',
             'destinations_eyebrow' => 'East Africa',
             'destinations_heading' => 'Destinations',
             'destinations_intro' => 'From misty gorilla forests to endless savannah — choose your next chapter.',
@@ -59,7 +61,7 @@ class SettingsSeeder extends Seeder
             'social_instagram' => 'https://instagram.com/',
             'social_facebook' => 'https://facebook.com/',
             'social_twitter' => '',
-            'footer_blurb' => 'Curated journeys through East Africa’s wildest landscapes.',
+            'footer_blurb' => 'A local African safari company with world-class presentation. Private journeys across Uganda, Rwanda, Kenya, and Tanzania.',
             'site_public' => '1',
             'maintenance_message' => 'We are preparing something special. Please check back soon.',
         ];
@@ -71,39 +73,8 @@ class SettingsSeeder extends Seeder
         Setting::flushCache();
     }
 
-    protected function storeHero(ImageUploader $uploader): string
+    protected function storeHero(): string
     {
-        $existing = Setting::getValue('hero_image');
-        $source = storage_path('app/seed-downloads/hero.jpg');
-
-        if (is_file($source)) {
-            if ($existing) {
-                $uploader->delete($existing);
-            }
-
-            return $uploader->storeFromPath($source, 'site');
-        }
-
-        if ($existing && Storage::disk('public')->exists($existing)) {
-            return $existing;
-        }
-
-        $path = 'site/hero.jpg';
-        $disk = Storage::disk('public');
-        if (! $disk->exists($path)) {
-            $img = imagecreatetruecolor(1920, 1080);
-            for ($y = 0; $y < 1080; $y++) {
-                $ratio = $y / 1080;
-                $color = imagecolorallocate($img, (int) (28 + 17 * $ratio), (int) (43 + 27 * $ratio), (int) (31 + 9 * $ratio));
-                imageline($img, 0, $y, 1920, $y, $color);
-            }
-            ob_start();
-            imagejpeg($img, null, 85);
-            $binary = ob_get_clean();
-            imagedestroy($img);
-            $disk->put($path, $binary);
-        }
-
-        return $path;
+        return SeedImage::photo('hero', 'site/hero-safari.jpg', 2000, 1200);
     }
 }

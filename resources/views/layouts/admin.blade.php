@@ -21,7 +21,17 @@
             </div>
             <nav class="px-4 py-6 space-y-1 text-sm flex-1">
                 <a href="{{ route('admin.dashboard') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.dashboard') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Dashboard</a>
+                <a href="{{ route('admin.journeys.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.journeys.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Journeys</a>
+                <a href="{{ route('admin.countries.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.countries.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Countries</a>
                 <a href="{{ route('admin.destinations.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.destinations.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Destinations</a>
+                <a href="{{ route('admin.experiences.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.experiences.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Experiences</a>
+                <a href="{{ route('admin.stays.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.stays.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Selected stays</a>
+                <a href="{{ route('admin.team.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.team.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Team</a>
+                <a href="{{ route('admin.reviews.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.reviews.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Reviews</a>
+                <a href="{{ route('admin.articles.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.articles.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Insiders</a>
+                <a href="{{ route('admin.pulse.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.pulse.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">True Pulse</a>
+                <a href="{{ route('admin.faqs.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.faqs.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">FAQs</a>
+                <a href="{{ route('admin.pages.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.pages.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Pages</a>
                 <a href="{{ route('admin.enquiries.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.enquiries.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Enquiries</a>
                 <a href="{{ route('admin.settings.edit') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.settings.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Settings</a>
                 <a href="{{ route('home') }}" class="block px-3 py-2 rounded-sm text-sand/50 hover:text-sand mt-6" target="_blank">View site →</a>

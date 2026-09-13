@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Destinations;
 
+use App\Models\Country;
 use App\Models\Destination;
 use App\Models\DestinationImage;
 use App\Services\ImageUploader;
@@ -24,7 +25,11 @@ class Form extends Component
 
     public string $region = '';
 
-    public string $country = '';
+    public ?int $country_id = null;
+
+    public string $why = '';
+
+    public string $practical = '';
 
     public string $teaser = '';
 
@@ -64,7 +69,9 @@ class Form extends Component
             $this->subtitle = (string) $destination->subtitle;
             $this->slug = $destination->slug;
             $this->region = (string) $destination->region;
-            $this->country = $destination->country;
+            $this->country_id = $destination->country_id;
+            $this->why = (string) $destination->why;
+            $this->practical = (string) $destination->practical;
             $this->teaser = (string) $destination->teaser;
             $this->duration = (string) $destination->duration;
             $this->best_time = (string) $destination->best_time;
@@ -147,7 +154,9 @@ class Form extends Component
                 Rule::unique('destinations', 'slug')->ignore($this->destination?->id),
             ],
             'region' => ['nullable', 'string', 'max:120'],
-            'country' => ['required', 'string', 'max:120'],
+            'country_id' => ['required', 'exists:countries,id'],
+            'why' => ['nullable', 'string'],
+            'practical' => ['nullable', 'string'],
             'teaser' => ['nullable', 'string', 'max:500'],
             'duration' => ['nullable', 'string', 'max:120'],
             'best_time' => ['nullable', 'string', 'max:180'],
@@ -185,7 +194,9 @@ class Form extends Component
             'subtitle' => $this->subtitle ?: null,
             'slug' => $this->slug,
             'region' => $this->region ?: null,
-            'country' => $this->country,
+            'country_id' => $this->country_id,
+            'why' => $this->why ?: null,
+            'practical' => $this->practical ?: null,
             'teaser' => $this->teaser ?: null,
             'duration' => $this->duration ?: null,
             'best_time' => $this->best_time ?: null,
@@ -240,6 +251,7 @@ class Form extends Component
 
         return view('livewire.admin.destinations.form', [
             'uploader' => app(ImageUploader::class),
+            'countries' => Country::query()->orderBy('sort_order')->get(),
         ])->layout('layouts.admin', ['heading' => $heading]);
     }
 }

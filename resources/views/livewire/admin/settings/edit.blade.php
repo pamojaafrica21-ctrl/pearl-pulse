@@ -3,6 +3,14 @@
         <section class="space-y-5">
             <h2 class="font-display text-2xl text-forest">Homepage hero</h2>
             <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Headline</label>
+                <input type="text" wire:model="hero_headline" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Countries line</label>
+                <input type="text" wire:model="hero_kicker" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Tagline</label>
                 <input type="text" wire:model="hero_tagline" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
             </div>
@@ -43,7 +51,7 @@
 
         <section class="space-y-5">
             <h2 class="font-display text-2xl text-forest">Homepage pillars</h2>
-            <p class="text-sm text-muted">Three short points shown under the intro.</p>
+            <p class="text-sm text-muted">Why Pearl Pulse points on the homepage.</p>
             @foreach($home_pillars as $index => $pillar)
                 <div class="space-y-3 border-t border-sand-deep/30 pt-4" wire:key="home-pillar-{{ $index }}">
                     <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Pillar {{ $index + 1 }} title</label>
@@ -184,6 +192,10 @@
                 <div>
                     <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Phone</label>
                     <input type="text" wire:model="contact_phone" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                </div>
+                <div>
+                    <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">WhatsApp</label>
+                    <input type="text" wire:model="contact_whatsapp" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
                 </div>
                 <div>
                     <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Public email</label>

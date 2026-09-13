@@ -31,7 +31,7 @@
                                 <div>{{ $enquiry->name }}</div>
                                 <div class="text-xs text-muted font-normal">{{ $enquiry->email }}</div>
                             </td>
-                            <td class="px-4 py-3">{{ $enquiry->destination?->name ?? 'General' }}</td>
+                            <td class="px-4 py-3">{{ $enquiry->journey?->name ?? $enquiry->destination?->name ?? 'General' }}</td>
                             <td class="px-4 py-3 capitalize">{{ $enquiry->status }}</td>
                             <td class="px-4 py-3 text-muted">{{ $enquiry->created_at->format('d M Y H:i') }}</td>
                         </tr>
@@ -53,8 +53,29 @@
                     @endif
                 </p>
                 <p class="text-xs tracking-[0.12em] uppercase text-gold mt-4">
-                    {{ $viewingEnquiry->destination?->name ?? 'General enquiry' }}
+                    {{ $viewingEnquiry->journey?->name ?? $viewingEnquiry->destination?->name ?? 'General enquiry' }}
                 </p>
+                @if($viewingEnquiry->whatsapp)
+                    <p class="mt-2 text-sm">WhatsApp: {{ $viewingEnquiry->whatsapp }}</p>
+                @endif
+                @if($viewingEnquiry->preferred_destinations)
+                    <p class="mt-2 text-sm">Countries: {{ implode(', ', $viewingEnquiry->preferred_destinations) }}</p>
+                @endif
+                @if($viewingEnquiry->days)
+                    <p class="mt-2 text-sm">Days: {{ $viewingEnquiry->days }} · Travellers: {{ $viewingEnquiry->travellers }}</p>
+                @endif
+                @if($viewingEnquiry->preferred_experiences)
+                    <p class="mt-2 text-sm">Experiences: {{ implode(', ', $viewingEnquiry->preferred_experiences) }}</p>
+                @endif
+                @if($viewingEnquiry->accommodation)
+                    <p class="mt-2 text-sm">Stay: {{ $viewingEnquiry->accommodation }} · {{ $viewingEnquiry->investment }}</p>
+                @endif
+                @if($viewingEnquiry->travel_dates)
+                    <p class="mt-2 text-sm">Dates: {{ $viewingEnquiry->travel_dates }}</p>
+                @endif
+                @if($viewingEnquiry->preferences)
+                    <p class="mt-2 text-sm">Preferences: {{ $viewingEnquiry->preferences }}</p>
+                @endif
                 <p class="mt-4 text-sm leading-relaxed whitespace-pre-wrap">{{ $viewingEnquiry->message }}</p>
                 <div class="mt-6 flex flex-wrap gap-2">
                     <button type="button" wire:click="mark({{ $viewingEnquiry->id }}, 'read')" class="px-3 py-1.5 text-xs border border-sand-deep">Mark read</button>

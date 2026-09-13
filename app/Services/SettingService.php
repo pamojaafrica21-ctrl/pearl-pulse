@@ -49,6 +49,7 @@ class SettingService
             'phone' => $this->get('contact_phone', ''),
             'email' => $this->get('contact_email', ''),
             'admin_email' => $this->get('admin_email', config('mail.from.address')),
+            'whatsapp' => $this->get('contact_whatsapp', ''),
         ];
     }
 
@@ -71,10 +72,27 @@ class SettingService
         $this->set('site_public', $public ? '1' : '0');
     }
 
+    public function whatsapp(): string
+    {
+        return preg_replace('/\D+/', '', (string) $this->get('contact_whatsapp', $this->get('contact_phone', ''))) ?: '';
+    }
+
+    public function whatsappUrl(?string $message = null): ?string
+    {
+        $number = $this->whatsapp();
+        if ($number === '') {
+            return null;
+        }
+
+        $url = 'https://wa.me/'.$number;
+
+        return $message ? $url.'?text='.rawurlencode($message) : $url;
+    }
+
     /**
      * @return list<array{title: string, text: string}>
      */
-    public function listItems(string $key, int $count = 3): array
+    public function listItems(string $key, int $count = 6): array
     {
         $raw = $this->get($key, '[]');
         $items = is_array($raw) ? $raw : (json_decode((string) $raw, true) ?: []);

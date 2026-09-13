@@ -42,13 +42,13 @@ class Index extends Component
     public function render()
     {
         $enquiries = Enquiry::query()
-            ->with('destination')
+            ->with(['destination', 'journey'])
             ->when($this->status !== '', fn ($q) => $q->where('status', $this->status))
             ->latest()
             ->paginate(15);
 
         $viewingEnquiry = $this->viewing
-            ? Enquiry::query()->with('destination')->find($this->viewing)
+            ? Enquiry::query()->with(['destination', 'journey'])->find($this->viewing)
             : null;
 
         return view('livewire.admin.enquiries.index', [

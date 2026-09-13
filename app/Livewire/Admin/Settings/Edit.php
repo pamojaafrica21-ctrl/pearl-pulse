@@ -11,7 +11,13 @@ class Edit extends Component
 {
     use WithFileUploads;
 
+    public string $hero_headline = '';
+
     public string $hero_tagline = '';
+
+    public string $hero_kicker = '';
+
+    public string $contact_whatsapp = '';
 
     public string $hero_video_url = '';
 
@@ -89,12 +95,14 @@ class Edit extends Component
 
     public function mount(SettingService $settings): void
     {
+        $this->hero_headline = (string) $settings->get('hero_headline', '');
         $this->hero_tagline = (string) $settings->get('hero_tagline', '');
+        $this->hero_kicker = (string) $settings->get('hero_kicker', '');
         $this->hero_video_url = (string) $settings->get('hero_video_url', '');
         $this->home_intro_eyebrow = (string) $settings->get('home_intro_eyebrow', '');
         $this->home_intro_heading = (string) $settings->get('home_intro_heading', '');
         $this->home_intro_body = (string) $settings->get('home_intro_body', '');
-        $this->home_pillars = $this->decodeList($settings->get('home_pillars'), 3);
+        $this->home_pillars = $this->decodeList($settings->get('home_pillars'), 5);
         $this->featured_eyebrow = (string) $settings->get('featured_eyebrow', 'Featured journeys');
         $this->featured_heading = (string) $settings->get('featured_heading', 'Destinations worth the voyage');
         $this->featured_intro = (string) $settings->get('featured_intro', '');
@@ -120,6 +128,7 @@ class Edit extends Component
         $this->footer_blurb = (string) $settings->get('footer_blurb', '');
         $this->contact_address = (string) $settings->get('contact_address', '');
         $this->contact_phone = (string) $settings->get('contact_phone', '');
+        $this->contact_whatsapp = (string) $settings->get('contact_whatsapp', '');
         $this->contact_email = (string) $settings->get('contact_email', '');
         $this->admin_email = (string) $settings->get('admin_email', '');
         $this->social_instagram = (string) $settings->get('social_instagram', '');
@@ -155,7 +164,10 @@ class Edit extends Component
     protected function rules(): array
     {
         return [
+            'hero_headline' => ['nullable', 'string', 'max:255'],
             'hero_tagline' => ['nullable', 'string', 'max:255'],
+            'hero_kicker' => ['nullable', 'string', 'max:180'],
+            'contact_whatsapp' => ['nullable', 'string', 'max:60'],
             'hero_video_url' => ['nullable', 'url', 'max:500'],
             'home_intro_eyebrow' => ['nullable', 'string', 'max:120'],
             'home_intro_heading' => ['nullable', 'string', 'max:180'],
@@ -211,7 +223,7 @@ class Edit extends Component
         }
 
         $map = [
-            'hero_tagline', 'hero_video_url',
+            'hero_headline', 'hero_tagline', 'hero_kicker', 'hero_video_url',
             'home_intro_eyebrow', 'home_intro_heading', 'home_intro_body',
             'featured_eyebrow', 'featured_heading', 'featured_intro',
             'home_cta_heading', 'home_cta_text', 'home_cta_button',
@@ -222,7 +234,7 @@ class Edit extends Component
             'about_approach_heading', 'about_approach_body',
             'about_cta_heading', 'about_cta_text',
             'footer_blurb',
-            'contact_address', 'contact_phone', 'contact_email', 'admin_email',
+            'contact_address', 'contact_phone', 'contact_whatsapp', 'contact_email', 'admin_email',
             'social_instagram', 'social_facebook', 'social_twitter',
         ];
 

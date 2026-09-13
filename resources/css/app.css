@@ -59,6 +59,13 @@
             hover:bg-[var(--color-sand)] hover:text-[var(--color-forest)];
     }
 
+    .btn-outline-dark {
+        @apply inline-flex items-center justify-center px-7 py-3 text-sm tracking-[0.12em] uppercase
+            border border-[var(--color-forest)] text-[var(--color-forest)]
+            transition duration-300 ease-out
+            hover:bg-[var(--color-forest)] hover:text-[var(--color-sand)];
+    }
+
     .nav-link {
         @apply text-sm tracking-[0.14em] uppercase text-charcoal/80
             transition-colors duration-200 hover:text-forest;

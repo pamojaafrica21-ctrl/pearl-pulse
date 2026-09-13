@@ -18,14 +18,13 @@
             </div>
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Country</label>
-                <input type="text" wire:model="country" list="countries" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
-                <datalist id="countries">
-                    <option value="Uganda">
-                    <option value="Kenya">
-                    <option value="Tanzania">
-                    <option value="Rwanda">
-                </datalist>
-                @error('country') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                <select wire:model="country_id" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                    <option value="">Select</option>
+                    @foreach($countries as $country)
+                        <option value="{{ $country->id }}">{{ $country->name }}</option>
+                    @endforeach
+                </select>
+                @error('country_id') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Region</label>

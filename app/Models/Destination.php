@@ -2,25 +2,33 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasCover;
+use App\Models\Concerns\HasSeo;
+use App\Models\Concerns\Publishable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Services\ImageUploader;
 
 class Destination extends Model
 {
+    use HasCover, HasSeo, Publishable;
+
     protected $fillable = [
         'name',
         'subtitle',
         'slug',
         'region',
-        'country',
+        'country_id',
         'teaser',
         'duration',
         'best_time',
         'activities',
         'price_from',
         'description',
+        'why',
+        'practical',
         'highlights',
         'cover_path',
         'meta_title',
@@ -38,6 +46,11 @@ class Destination extends Model
         ];
     }
 
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
     public function images(): HasMany
     {
         return $this->hasMany(DestinationImage::class)->orderBy('sort_order');
@@ -48,9 +61,29 @@ class Destination extends Model
         return $this->hasMany(Enquiry::class);
     }
 
-    public function scopePublished(Builder $query): Builder
+    public function experiences(): BelongsToMany
     {
-        return $query->where('status', 'published');
+        return $this->belongsToMany(Experience::class);
+    }
+
+    public function journeys(): BelongsToMany
+    {
+        return $this->belongsToMany(Journey::class, 'journey_destination');
+    }
+
+    public function stays(): BelongsToMany
+    {
+        return $this->belongsToMany(Stay::class);
+    }
+
+    public function pulseItems(): BelongsToMany
+    {
+        return $this->belongsToMany(PulseItem::class);
+    }
+
+    public function primaryStays(): HasMany
+    {
+        return $this->hasMany(Stay::class);
     }
 
     public function scopeFeatured(Builder $query): Builder
@@ -58,28 +91,10 @@ class Destination extends Model
         return $query->where('is_featured', true);
     }
 
-    public function isPublished(): bool
+    public function publicUrl(): string
     {
-        return $this->status === 'published';
-    }
+        $countrySlug = $this->country?->slug ?? 'east-africa';
 
-    public function coverUrl(): ?string
-    {
-        return app(ImageUploader::class)->url($this->cover_path);
-    }
-
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
-
-    public function seoTitle(): string
-    {
-        return $this->meta_title ?: $this->name.' | '.config('app.name');
-    }
-
-    public function seoDescription(): string
-    {
-        return $this->meta_description ?: ($this->teaser ?: strip_tags((string) $this->description));
+        return route('destinations.show', [$countrySlug, $this->slug]);
     }
 }

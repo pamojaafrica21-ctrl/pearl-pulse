@@ -1,6 +1,9 @@
 <x-mail::message>
 # New enquiry
 
+@if($enquiry->journey)
+**Journey:** {{ $enquiry->journey->name }}
+@endif
 @if($enquiry->destination)
 **Destination:** {{ $enquiry->destination->name }}
 @endif
@@ -9,6 +12,33 @@
 **Email:** {{ $enquiry->email }}  
 @if($enquiry->phone)
 **Phone:** {{ $enquiry->phone }}  
+@endif
+@if($enquiry->whatsapp)
+**WhatsApp:** {{ $enquiry->whatsapp }}  
+@endif
+@if($enquiry->preferred_destinations)
+**Countries:** {{ implode(', ', $enquiry->preferred_destinations) }}  
+@endif
+@if($enquiry->days)
+**Days:** {{ $enquiry->days }}  
+@endif
+@if($enquiry->travellers)
+**Travellers:** {{ $enquiry->travellers }}  
+@endif
+@if($enquiry->preferred_experiences)
+**Experiences:** {{ implode(', ', $enquiry->preferred_experiences) }}  
+@endif
+@if($enquiry->accommodation)
+**Accommodation:** {{ $enquiry->accommodation }}  
+@endif
+@if($enquiry->investment)
+**Investment:** {{ $enquiry->investment }}  
+@endif
+@if($enquiry->travel_dates)
+**Dates:** {{ $enquiry->travel_dates }}  
+@endif
+@if($enquiry->preferences)
+**Preferences:** {{ $enquiry->preferences }}  
 @endif
 
 **Message:**

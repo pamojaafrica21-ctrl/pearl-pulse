@@ -4,22 +4,24 @@
 @section('meta_description', \Illuminate\Support\Str::limit($destination->seoDescription(), 160))
 
 @section('content')
-@php
-    $cover = $destination->coverUrl();
-@endphp
-
+@php $cover = $destination->coverUrl(); @endphp
 <section class="relative min-h-[70svh] flex items-end overflow-hidden bg-forest">
     @if($cover)
         <img src="{{ $cover }}" alt="{{ $destination->name }}" class="absolute inset-0 h-full w-full object-cover fade-in">
     @endif
     <div class="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/30 to-transparent"></div>
-    <div class="relative z-10 mx-auto w-full max-w-7xl px-5 pb-16 pt-36 lg:px-8">
-        <p class="text-xs tracking-[0.2em] uppercase text-sand/70 fade-up">
-            {{ $destination->country }}@if($destination->region) · {{ $destination->region }}@endif
+    <div class="relative z-10 mx-auto w-full max-w-7xl px-5 pb-16 pt-12 lg:px-8">
+        <x-breadcrumbs :items="[
+            ['label' => 'Destinations', 'href' => route('destinations.index')],
+            ['label' => $country->name, 'href' => route('destinations.country', $country)],
+            ['label' => $destination->name],
+        ]" />
+        <p class="text-xs tracking-[0.2em] uppercase text-sand/70 mt-4">
+            {{ $country->name }}@if($destination->region) · {{ $destination->region }}@endif
         </p>
-        <h1 class="font-display text-5xl md:text-7xl text-sand mt-3 fade-up" style="animation-delay:0.1s">{{ $destination->name }}</h1>
+        <h1 class="font-display text-5xl md:text-7xl text-sand mt-3">{{ $destination->name }}</h1>
         @if($destination->subtitle)
-            <p class="mt-3 text-lg text-sand/80 font-light fade-up" style="animation-delay:0.15s">{{ $destination->subtitle }}</p>
+            <p class="mt-3 text-lg text-sand/80 font-light">{{ $destination->subtitle }}</p>
         @endif
     </div>
 </section>
@@ -30,45 +32,28 @@
             @if($destination->teaser)
                 <p class="font-display text-2xl md:text-3xl text-forest leading-snug">{{ $destination->teaser }}</p>
             @endif
-            <div class="prose-safari mt-8">
-                {!! $destination->description !!}
-            </div>
+            <div class="prose-safari mt-8">{!! $destination->description !!}</div>
+            @if($destination->why)
+                <h2 class="font-display text-3xl text-forest mt-12">Why here</h2>
+                <div class="prose-safari mt-4">{!! $destination->why !!}</div>
+            @endif
         </div>
-
         <aside class="lg:col-span-5 lg:pl-8">
             <div class="border-t border-sand-deep/40 pt-8">
                 <h2 class="text-xs tracking-[0.2em] uppercase text-gold mb-6">At a glance</h2>
                 <dl class="space-y-5">
                     @if($destination->duration)
-                        <div>
-                            <dt class="text-xs tracking-[0.15em] uppercase text-muted">Duration</dt>
-                            <dd class="mt-1 text-forest">{{ $destination->duration }}</dd>
-                        </div>
+                        <div><dt class="text-xs tracking-[0.15em] uppercase text-muted">Suggested stay</dt><dd class="mt-1 text-forest">{{ $destination->duration }}</dd></div>
                     @endif
                     @if($destination->best_time)
-                        <div>
-                            <dt class="text-xs tracking-[0.15em] uppercase text-muted">Best time to visit</dt>
-                            <dd class="mt-1 text-forest">{{ $destination->best_time }}</dd>
-                        </div>
+                        <div><dt class="text-xs tracking-[0.15em] uppercase text-muted">Best time</dt><dd class="mt-1 text-forest">{{ $destination->best_time }}</dd></div>
                     @endif
                     @if($destination->activities)
-                        <div>
-                            <dt class="text-xs tracking-[0.15em] uppercase text-muted">Activities</dt>
-                            <dd class="mt-1 text-forest">{{ $destination->activities }}</dd>
-                        </div>
-                    @endif
-                    @if($destination->price_from)
-                        <div>
-                            <dt class="text-xs tracking-[0.15em] uppercase text-muted">From</dt>
-                            <dd class="mt-1 text-forest">{{ $destination->price_from }}</dd>
-                        </div>
+                        <div><dt class="text-xs tracking-[0.15em] uppercase text-muted">Experiences</dt><dd class="mt-1 text-forest">{{ $destination->activities }}</dd></div>
                     @endif
                     @foreach($destination->highlights ?? [] as $item)
                         @if(!empty($item['label']) || !empty($item['value']))
-                            <div>
-                                <dt class="text-xs tracking-[0.15em] uppercase text-muted">{{ $item['label'] ?? '' }}</dt>
-                                <dd class="mt-1 text-forest">{{ $item['value'] ?? '' }}</dd>
-                            </div>
+                            <div><dt class="text-xs tracking-[0.15em] uppercase text-muted">{{ $item['label'] ?? '' }}</dt><dd class="mt-1 text-forest">{{ $item['value'] ?? '' }}</dd></div>
                         @endif
                     @endforeach
                 </dl>
@@ -77,43 +62,75 @@
     </div>
 </section>
 
-@if($destination->images->isNotEmpty())
-<section class="bg-cream pb-16 lg:pb-24" x-data="{ active: 0 }">
+@if($destination->experiences->isNotEmpty())
+<section class="bg-cream pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <h2 class="font-display text-4xl text-forest mb-8">Gallery</h2>
-        <div class="relative overflow-hidden bg-forest/5 aspect-[16/10]">
-            @foreach($destination->images as $index => $image)
-                <img
-                    src="{{ $image->url() }}"
-                    alt="{{ $image->alt ?: $destination->name }}"
-                    class="absolute inset-0 h-full w-full object-cover transition-opacity duration-500"
-                    x-show="active === {{ $index }}"
-                    x-transition.opacity
-                >
+        <h2 class="font-display text-4xl text-forest mb-8">Experiences</h2>
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            @foreach($destination->experiences as $experience)
+                <x-experience-card :experience="$experience" />
             @endforeach
         </div>
-        @if($destination->images->count() > 1)
-            <div class="mt-4 flex items-center justify-between gap-4">
-                <button type="button" class="text-xs tracking-[0.15em] uppercase text-forest" @click="active = (active - 1 + {{ $destination->images->count() }}) % {{ $destination->images->count() }}">Prev</button>
-                <div class="flex gap-2">
-                    @foreach($destination->images as $index => $image)
-                        <button type="button" class="h-1.5 w-6 transition-colors" :class="active === {{ $index }} ? 'bg-forest' : 'bg-sand-deep'" @click="active = {{ $index }}" aria-label="Image {{ $index + 1 }}"></button>
-                    @endforeach
-                </div>
-                <button type="button" class="text-xs tracking-[0.15em] uppercase text-forest" @click="active = (active + 1) % {{ $destination->images->count() }}">Next</button>
-            </div>
-        @endif
     </div>
 </section>
 @endif
 
-<section class="bg-forest text-sand py-16 lg:py-24">
-    <div class="mx-auto max-w-3xl px-5 lg:px-8">
-        <h2 class="font-display text-4xl md:text-5xl">Enquire about this destination</h2>
-        <p class="mt-3 text-sand/70">Tell us when you’d like to travel — we’ll craft a thoughtful itinerary.</p>
-        <div class="mt-10">
-            <livewire:enquiry-form :destination-id="$destination->id" />
+@if($destination->journeys->isNotEmpty())
+<section class="bg-cream pb-16">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <h2 class="font-display text-4xl text-forest mb-8">Journeys here</h2>
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            @foreach($destination->journeys as $journey)
+                <x-journey-card :journey="$journey" />
+            @endforeach
         </div>
     </div>
 </section>
+@endif
+
+@php
+    $stays = $destination->stays->merge($destination->primaryStays)->unique('id');
+@endphp
+@if($stays->isNotEmpty())
+<section class="bg-cream pb-16">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <h2 class="font-display text-4xl text-forest mb-3">Selected stays</h2>
+        <p class="text-muted mb-8">We do not own these properties.</p>
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            @foreach($stays as $stay)
+                <x-stay-card :stay="$stay" />
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+@if($destination->practical)
+<section class="bg-cream pb-16">
+    <div class="mx-auto max-w-3xl px-5 lg:px-8">
+        <h2 class="font-display text-3xl text-forest mb-4">Practical information</h2>
+        <div class="prose-safari">{!! $destination->practical !!}</div>
+    </div>
+</section>
+@endif
+
+@if($destination->images->isNotEmpty())
+<section class="bg-cream pb-16" x-data="{ active: 0 }">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <h2 class="font-display text-4xl text-forest mb-8">Gallery</h2>
+        <div class="relative overflow-hidden bg-forest/5 aspect-[16/10]">
+            @foreach($destination->images as $index => $image)
+                <img src="{{ $image->url() }}" alt="{{ $image->alt ?: $destination->name }}" class="absolute inset-0 h-full w-full object-cover" x-show="active === {{ $index }}" x-transition.opacity>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+<x-page-cta
+    heading="Ready to experience {{ $destination->name }}?"
+    text="Explore journeys that include this place — or ask us to design one."
+    button="Explore journeys"
+    :href="route('journeys.country', $country)"
+/>
 @endsection

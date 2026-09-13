@@ -21,13 +21,19 @@ class AppServiceProvider extends ServiceProvider
                 $view->with([
                     'siteContact' => $settings->contact(),
                     'siteSocial' => $settings->social(),
-                    'footerBlurb' => $settings->get('footer_blurb', 'Curated journeys through East Africa’s wildest landscapes.'),
+                    'footerBlurb' => $settings->get('footer_blurb', 'Private journeys through East Africa.'),
+                    'whatsappUrl' => $settings->whatsappUrl('Hello Pearl Pulse — I would like to plan a journey.'),
+                    'navCountries' => \App\Models\Country::query()->published()->orderBy('sort_order')->get(),
+                    'navExperiences' => \App\Models\Experience::query()->published()->orderBy('sort_order')->get(),
                 ]);
             } catch (\Throwable) {
                 $view->with([
-                    'siteContact' => ['address' => '', 'phone' => '', 'email' => '', 'admin_email' => ''],
+                    'siteContact' => ['address' => '', 'phone' => '', 'email' => '', 'admin_email' => '', 'whatsapp' => ''],
                     'siteSocial' => ['instagram' => '', 'facebook' => '', 'twitter' => ''],
-                    'footerBlurb' => 'Curated journeys through East Africa’s wildest landscapes.',
+                    'footerBlurb' => 'Private journeys through East Africa.',
+                    'whatsappUrl' => null,
+                    'navCountries' => collect(),
+                    'navExperiences' => collect(),
                 ]);
             }
         });

@@ -37,7 +37,7 @@
                             <div class="font-medium text-forest">{{ $destination->name }}</div>
                             <div class="text-xs text-muted">{{ $destination->slug }}</div>
                         </td>
-                        <td class="px-4 py-3">{{ $destination->country }}</td>
+                        <td class="px-4 py-3">{{ $destination->country?->name }}</td>
                         <td class="px-4 py-3">
                             <span class="inline-block px-2 py-0.5 text-xs uppercase tracking-wide {{ $destination->status === 'published' ? 'bg-forest/10 text-forest' : 'bg-sand text-muted' }}">
                                 {{ $destination->status }}

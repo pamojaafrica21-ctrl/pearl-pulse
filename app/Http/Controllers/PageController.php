@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Page;
+use App\Models\Review;
+use App\Models\TeamMember;
 use App\Services\SettingService;
 use Illuminate\View\View;
 
@@ -19,13 +22,32 @@ class PageController extends Controller
             'approachBody' => $settings->get('about_approach_body', ''),
             'ctaHeading' => $settings->get('about_cta_heading', ''),
             'ctaText' => $settings->get('about_cta_text', ''),
+            'team' => TeamMember::query()->published()->orderBy('sort_order')->take(3)->get(),
+            'reviews' => Review::query()->published()->orderBy('sort_order')->take(3)->get(),
         ]);
     }
 
-    public function contact(SettingService $settings): View
+    public function people(): View
     {
-        return view('public.contact', [
-            'contact' => $settings->contact(),
-        ]);
+        $team = TeamMember::query()->published()->orderBy('sort_order')->get();
+
+        return view('public.about-people', compact('team'));
+    }
+
+    public function reason(): View
+    {
+        return view('public.about-reason');
+    }
+
+    public function plan(): View
+    {
+        return view('public.plan');
+    }
+
+    public function legal(string $page): View
+    {
+        $page = Page::query()->where('slug', $page)->published()->firstOrFail();
+
+        return view('public.legal', compact('page'));
     }
 }

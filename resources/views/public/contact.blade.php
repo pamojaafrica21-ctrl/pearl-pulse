@@ -4,7 +4,7 @@
 @section('meta_description', 'Get in touch with Pearl Pulse Safaris to plan your East African journey.')
 
 @section('content')
-<div class="pt-28 pb-20 bg-cream">
+<div class="pt-16 pb-20 bg-cream">
     <div class="mx-auto max-w-7xl px-5 lg:px-8 grid gap-14 lg:grid-cols-12">
         <div class="lg:col-span-5">
             <p class="text-xs tracking-[0.22em] uppercase text-gold mb-3">Contact</p>

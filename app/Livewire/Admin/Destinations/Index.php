@@ -51,17 +51,18 @@ class Index extends Component
 
     public function render()
     {
-        $sort = in_array($this->sort, ['name', 'country', 'status', 'updated_at'], true)
+        $sort = in_array($this->sort, ['name', 'status', 'updated_at'], true)
             ? $this->sort
             : 'name';
 
         $destinations = Destination::query()
+            ->with('country')
             ->when($this->search !== '', function ($q) {
                 $term = '%'.$this->search.'%';
                 $q->where(function ($inner) use ($term) {
                     $inner->where('name', 'like', $term)
-                        ->orWhere('country', 'like', $term)
-                        ->orWhere('slug', 'like', $term);
+                        ->orWhere('slug', 'like', $term)
+                        ->orWhereHas('country', fn ($c) => $c->where('name', 'like', $term));
                 });
             })
             ->orderBy($sort)
