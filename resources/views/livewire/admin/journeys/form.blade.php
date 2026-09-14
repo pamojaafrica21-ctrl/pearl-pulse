@@ -53,6 +53,9 @@
                 <input type="file" wire:model="cover" accept="image/*">
             </div>
         </div>
+        <div>
+            @include('livewire.admin.partials.video-field', ['record' => $journey ?? null, 'uploader' => $videoUploader])
+        </div>
         <div class="grid gap-6 md:grid-cols-2">
             <div>
                 <p class="text-xs tracking-[0.14em] uppercase text-muted mb-2">Countries</p>

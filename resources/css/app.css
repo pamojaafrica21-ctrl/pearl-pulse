@@ -75,6 +75,108 @@
         @apply text-[var(--color-forest)];
     }
 
+    .nav-mega {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        z-index: 50;
+        min-width: 16rem;
+        padding: 1.35rem 1.6rem 1.45rem;
+        margin-top: 0.75rem;
+        background: #fff;
+        border: 1px solid rgb(212 196 168 / 0.7);
+        box-shadow: 0 22px 48px -18px rgb(28 43 31 / 0.28), 0 8px 18px -8px rgb(28 43 31 / 0.12);
+        transform: translateX(-50%);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.15s ease, visibility 0.15s ease;
+    }
+
+    .group\/nav:hover .nav-mega,
+    .group\/nav:focus-within .nav-mega {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .nav-mega::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -0.75rem;
+        height: 0.75rem;
+    }
+
+    .nav-mega-md {
+        min-width: 18rem;
+    }
+
+    .nav-mega-lg {
+        min-width: 20rem;
+    }
+
+    .nav-mega-wide {
+        min-width: 28rem;
+        width: max-content;
+        max-width: min(34rem, calc(100vw - 2rem));
+    }
+
+    .nav-mega-label {
+        margin-bottom: 0.95rem;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #8f7640;
+    }
+
+    .nav-mega-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(10rem, 1fr));
+        column-gap: 2rem;
+        row-gap: 0.2rem;
+    }
+
+    .nav-mega-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .nav-mega-link {
+        display: block;
+        padding: 0.55rem 0.5rem;
+        margin: 0 -0.5rem;
+        color: var(--color-forest);
+        font-size: 0.9375rem;
+        line-height: 1.35;
+        white-space: nowrap;
+        transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .nav-mega-link:hover,
+    .nav-mega-link:focus-visible {
+        color: var(--color-gold);
+        background-color: rgb(247 243 235 / 0.85);
+        outline: none;
+    }
+
+    .nav-mega-link-muted {
+        color: rgb(28 43 31 / 0.78);
+    }
+
+    .nav-mega-sub {
+        display: block;
+        margin-top: 0.15rem;
+        font-size: 0.75rem;
+        line-height: 1.35;
+        letter-spacing: normal;
+        text-transform: none;
+        color: var(--color-muted);
+        white-space: normal;
+    }
+
     .destination-card {
         display: block;
         position: relative;

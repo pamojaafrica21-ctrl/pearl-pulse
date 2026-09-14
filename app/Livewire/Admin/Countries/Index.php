@@ -24,11 +24,18 @@ class Index extends Component
     public function render()
     {
         return view('livewire.admin.simple-index', [
-            'rows' => Country::query()->orderBy('sort_order')->paginate(20),
+            'rows' => Country::query()->withCount('destinations')->orderBy('sort_order')->paginate(20),
             'createRoute' => route('admin.countries.create'),
             'editRoute' => 'admin.countries.edit',
             'label' => 'country',
-            'columns' => ['name', 'slug', 'status'],
+            'columns' => [
+                ['key' => 'cover_path', 'label' => 'Cover', 'type' => 'cover'],
+                ['key' => 'name', 'label' => 'Name', 'type' => 'primary', 'meta' => 'slug'],
+                ['key' => 'subtitle', 'label' => 'Subtitle'],
+                ['key' => 'destinations_count', 'label' => 'Destinations'],
+                ['key' => 'status', 'label' => 'Status', 'type' => 'status'],
+                ['key' => 'updated_at', 'label' => 'Updated', 'type' => 'date'],
+            ],
         ])->layout('layouts.admin', ['heading' => 'Countries']);
     }
 }

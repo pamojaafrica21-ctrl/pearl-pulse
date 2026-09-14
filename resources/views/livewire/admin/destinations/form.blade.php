@@ -95,6 +95,9 @@
                 @error('cover') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
+                @include('livewire.admin.partials.video-field', ['record' => $destination, 'uploader' => $videoUploader])
+            </div>
+            <div class="md:col-span-2">
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Gallery images</label>
                 <input type="file" wire:model="gallery" accept="image/*" multiple class="text-sm">
                 <div wire:loading wire:target="gallery" class="text-xs text-muted mt-1">Uploading…</div>

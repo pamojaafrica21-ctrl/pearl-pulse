@@ -28,7 +28,16 @@ class Index extends Component
             'createRoute' => route('admin.experiences.create'),
             'editRoute' => 'admin.experiences.edit',
             'label' => 'experience',
-            'columns' => ['name', 'slug', 'status'],
+            'columns' => [
+                ['key' => 'cover_path', 'label' => 'Cover', 'type' => 'cover'],
+                ['key' => 'name', 'label' => 'Name', 'type' => 'primary', 'meta' => 'slug'],
+                ['key' => 'subtitle', 'label' => 'Subtitle'],
+                ['key' => 'video', 'label' => 'Video', 'type' => 'video'],
+                ['key' => 'status', 'label' => 'Status', 'type' => 'status', 'badges' => [
+                    ['key' => 'is_featured', 'label' => 'Featured'],
+                ]],
+                ['key' => 'updated_at', 'label' => 'Updated', 'type' => 'date'],
+            ],
         ])->layout('layouts.admin', ['heading' => 'Experiences']);
     }
 }

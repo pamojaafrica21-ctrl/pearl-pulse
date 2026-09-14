@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Concerns\HasCover;
 use App\Models\Concerns\HasGallery;
 use App\Models\Concerns\HasSeo;
+use App\Models\Concerns\HasVideo;
 use App\Models\Concerns\Publishable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Stay extends Model
 {
-    use HasCover, HasGallery, HasSeo, Publishable;
+    use HasCover, HasGallery, HasSeo, HasVideo, Publishable;
 
     protected $fillable = [
         'name',
@@ -25,6 +26,8 @@ class Stay extends Model
         'destination_id',
         'style',
         'cover_path',
+        'video_path',
+        'video_url',
         'meta_title',
         'meta_description',
         'is_featured',

@@ -4,11 +4,12 @@
 @section('meta_description', \Illuminate\Support\Str::limit($journey->seoDescription(), 160))
 
 @section('content')
-@php $cover = $journey->coverUrl(); @endphp
+@php
+    $cover = $journey->coverUrl();
+    $video = $journey->videoPlaybackUrl();
+@endphp
 <section class="relative min-h-[70svh] flex items-end overflow-hidden bg-forest">
-    @if($cover)
-        <img src="{{ $cover }}" alt="{{ $journey->name }}" class="absolute inset-0 h-full w-full object-cover fade-in">
-    @endif
+    <x-hero-media :video="$video" :image="$cover" :alt="$journey->name" />
     <div class="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/30 to-transparent"></div>
     <div class="relative z-10 mx-auto w-full max-w-7xl px-5 pb-16 pt-12 lg:px-8">
         <x-breadcrumbs :items="[
@@ -159,21 +160,30 @@
 </section>
 @endif
 
-@if($journey->reviews->isNotEmpty())
 <section class="bg-cream pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <h2 class="font-display text-4xl text-forest mb-8">Guest reviews</h2>
-        <div class="grid gap-8 md:grid-cols-2">
-            @foreach($journey->reviews as $review)
-                <blockquote>
-                    <p class="font-display text-2xl text-forest">“{{ $review->quote }}”</p>
-                    <footer class="mt-3 text-sm text-muted">{{ $review->guest_name }}</footer>
-                </blockquote>
-            @endforeach
+
+        @if($journey->reviews->isNotEmpty())
+            <div class="grid gap-8 md:grid-cols-2 mb-12">
+                @foreach($journey->reviews as $review)
+                    <blockquote>
+                        <p class="font-display text-2xl text-forest">“{{ $review->quote }}”</p>
+                        <footer class="mt-3 text-sm text-muted">
+                            {{ $review->guest_name }}@if($review->guest_country)<span> · {{ $review->guest_country }}</span>@endif
+                        </footer>
+                    </blockquote>
+                @endforeach
+            </div>
+        @else
+            <p class="text-muted mb-10 max-w-xl">Travellers who have taken this journey will share their experiences here once reviews are approved.</p>
+        @endif
+
+        <div class="max-w-2xl">
+            <livewire:review-form :journey="$journey" :key="'review-form-'.$journey->id" />
         </div>
     </div>
 </section>
-@endif
 
 @if($related->isNotEmpty())
 <section class="bg-cream pb-16">

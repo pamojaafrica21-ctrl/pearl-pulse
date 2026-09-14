@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Admin\Journeys;
 
+use App\Livewire\Admin\Support\ManagesVideoUpload;
 use App\Models\Country;
 use App\Models\Destination;
 use App\Models\Experience;
 use App\Models\Journey;
 use App\Models\Stay;
 use App\Services\ImageUploader;
+use App\Services\VideoUploader;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -15,7 +17,7 @@ use Livewire\WithFileUploads;
 
 class Form extends Component
 {
-    use WithFileUploads;
+    use ManagesVideoUpload, WithFileUploads;
 
     public ?Journey $journey = null;
 
@@ -100,6 +102,7 @@ class Form extends Component
             $this->destinationIds = $journey->destinations()->pluck('destinations.id')->all();
             $this->experienceIds = $journey->experiences()->pluck('experiences.id')->all();
             $this->stayIds = $journey->stays()->pluck('stays.id')->all();
+            $this->loadVideoState($journey);
         }
     }
 
@@ -110,7 +113,7 @@ class Form extends Component
         }
     }
 
-    public function save(ImageUploader $uploader)
+    public function save(ImageUploader $uploader, VideoUploader $videos)
     {
         $this->validate([
             'name' => ['required', 'max:180'],
@@ -118,6 +121,7 @@ class Form extends Component
             'price_mode' => ['required', Rule::in(['from', 'tailored', 'proposal'])],
             'status' => ['required', Rule::in(['draft', 'published'])],
             'cover' => ['nullable', 'image', 'max:5120'],
+            ...$this->videoValidationRules(),
         ]);
 
         $data = [
@@ -159,6 +163,8 @@ class Form extends Component
             $this->cover = null;
         }
 
+        $this->persistVideo($this->journey, $videos, 'journeys/'.$this->journey->id.'/video');
+
         session()->flash('status', 'Journey saved.');
 
         return $this->redirect(route('admin.journeys.edit', $this->journey), navigate: true);
@@ -168,6 +174,7 @@ class Form extends Component
     {
         return view('livewire.admin.journeys.form', [
             'uploader' => app(ImageUploader::class),
+            'videoUploader' => app(VideoUploader::class),
             'countries' => Country::query()->orderBy('name')->get(),
             'destinations' => Destination::query()->orderBy('name')->get(),
             'experiences' => Experience::query()->orderBy('name')->get(),

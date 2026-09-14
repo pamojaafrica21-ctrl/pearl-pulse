@@ -26,7 +26,12 @@ class Index extends Component
             'createRoute' => route('admin.faqs.create'),
             'editRoute' => 'admin.faqs.edit',
             'label' => 'FAQ',
-            'columns' => ['question', 'group', 'status'],
+            'columns' => [
+                ['key' => 'question', 'label' => 'Question', 'type' => 'primary'],
+                ['key' => 'group', 'label' => 'Group'],
+                ['key' => 'status', 'label' => 'Status', 'type' => 'status'],
+                ['key' => 'updated_at', 'label' => 'Updated', 'type' => 'date'],
+            ],
         ])->layout('layouts.admin', ['heading' => 'FAQs']);
     }
 }

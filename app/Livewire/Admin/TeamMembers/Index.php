@@ -28,7 +28,13 @@ class Index extends Component
             'createRoute' => route('admin.team.create'),
             'editRoute' => 'admin.team.edit',
             'label' => 'team member',
-            'columns' => ['name', 'role', 'status'],
+            'columns' => [
+                ['key' => 'cover_path', 'label' => 'Photo', 'type' => 'cover'],
+                ['key' => 'name', 'label' => 'Name', 'type' => 'primary'],
+                ['key' => 'role', 'label' => 'Role'],
+                ['key' => 'status', 'label' => 'Status', 'type' => 'status'],
+                ['key' => 'updated_at', 'label' => 'Updated', 'type' => 'date'],
+            ],
         ])->layout('layouts.admin', ['heading' => 'Team']);
     }
 }

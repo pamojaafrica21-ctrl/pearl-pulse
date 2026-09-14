@@ -19,12 +19,16 @@
                     <th class="px-4 py-3">Cover</th>
                     <th class="px-4 py-3">Name</th>
                     <th class="px-4 py-3">Country</th>
+                    <th class="px-4 py-3">Region</th>
+                    <th class="px-4 py-3">Duration</th>
+                    <th class="px-4 py-3">Video</th>
                     <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3">Updated</th>
                     <th class="px-4 py-3"></th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-sand-deep/20">
-                @foreach($destinations as $destination)
+                @forelse($destinations as $destination)
                     <tr wire:key="dest-{{ $destination->id }}">
                         <td class="px-4 py-3">
                             @if($destination->cover_path)
@@ -37,7 +41,16 @@
                             <div class="font-medium text-forest">{{ $destination->name }}</div>
                             <div class="text-xs text-muted">{{ $destination->slug }}</div>
                         </td>
-                        <td class="px-4 py-3">{{ $destination->country?->name }}</td>
+                        <td class="px-4 py-3">{{ $destination->country?->name ?: '—' }}</td>
+                        <td class="px-4 py-3 text-muted">{{ $destination->region ?: '—' }}</td>
+                        <td class="px-4 py-3 text-muted whitespace-nowrap">{{ $destination->duration ?: '—' }}</td>
+                        <td class="px-4 py-3">
+                            @if($destination->hasVideo())
+                                <span class="inline-block px-2 py-0.5 text-xs uppercase tracking-wide bg-gold/15 text-gold">Video</span>
+                            @else
+                                <span class="text-muted">—</span>
+                            @endif
+                        </td>
                         <td class="px-4 py-3">
                             <span class="inline-block px-2 py-0.5 text-xs uppercase tracking-wide {{ $destination->status === 'published' ? 'bg-forest/10 text-forest' : 'bg-sand text-muted' }}">
                                 {{ $destination->status }}
@@ -46,12 +59,17 @@
                                 <span class="ml-1 text-xs text-gold">Featured</span>
                             @endif
                         </td>
+                        <td class="px-4 py-3 text-muted whitespace-nowrap">{{ $destination->updated_at?->format('d M Y') }}</td>
                         <td class="px-4 py-3 text-right space-x-3 whitespace-nowrap">
                             <a href="{{ route('admin.destinations.edit', $destination) }}" wire:navigate class="text-forest hover:underline">Edit</a>
                             <button type="button" wire:click="confirmDelete({{ $destination->id }})" class="text-red-700 hover:underline">Delete</button>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="9" class="px-4 py-8 text-center text-muted">No destinations yet.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
@@ -62,7 +80,7 @@
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
             <div class="bg-white p-6 max-w-md w-full border border-sand-deep/30">
                 <h3 class="font-display text-2xl text-forest">Delete destination?</h3>
-                <p class="mt-2 text-sm text-muted">This cannot be undone. Cover and gallery images will be removed.</p>
+                <p class="mt-2 text-sm text-muted">This cannot be undone. Cover, gallery, and video files will be removed.</p>
                 <div class="mt-6 flex gap-3 justify-end">
                     <button type="button" wire:click="cancelDelete" class="px-4 py-2 text-sm border border-sand-deep">Cancel</button>
                     <button type="button" wire:click="delete" class="px-4 py-2 text-sm bg-red-700 text-white">Delete</button>

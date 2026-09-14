@@ -28,7 +28,21 @@ class Index extends Component
             'createRoute' => route('admin.journeys.create'),
             'editRoute' => 'admin.journeys.edit',
             'label' => 'journey',
-            'columns' => ['name', 'days', 'price_mode', 'status'],
+            'columns' => [
+                ['key' => 'cover_path', 'label' => 'Cover', 'type' => 'cover'],
+                ['key' => 'name', 'label' => 'Name', 'type' => 'primary', 'meta' => 'slug'],
+                ['key' => 'duration_label', 'label' => 'Duration'],
+                ['key' => 'days', 'label' => 'Days'],
+                ['key' => 'price_from', 'label' => 'From'],
+                ['key' => 'price_mode', 'label' => 'Pricing'],
+                ['key' => 'video', 'label' => 'Video', 'type' => 'video'],
+                ['key' => 'status', 'label' => 'Status', 'type' => 'status', 'badges' => [
+                    ['key' => 'is_signature', 'label' => 'Signature'],
+                    ['key' => 'is_featured', 'label' => 'Featured'],
+                    ['key' => 'is_multi_country', 'label' => 'Multi'],
+                ]],
+                ['key' => 'updated_at', 'label' => 'Updated', 'type' => 'date'],
+            ],
         ])->layout('layouts.admin', ['heading' => 'Journeys']);
     }
 }

@@ -16,51 +16,51 @@
     @stack('head')
 </head>
 <body class="min-h-screen flex flex-col">
-    <header class="sticky top-0 z-50 border-b border-sand-deep/30 bg-cream/95 backdrop-blur" x-data="{ open: false, mega: null }">
+    <header class="sticky top-0 z-50 border-b border-sand-deep/30 bg-cream/95 backdrop-blur" x-data="{ open: false }">
         <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
             <a href="{{ route('home') }}" class="font-display text-2xl md:text-3xl tracking-wide text-forest transition-opacity hover:opacity-80">
                 Pearl Pulse <span class="font-sans text-[0.55em] tracking-[0.2em] uppercase text-forest/60">Safaris</span>
             </a>
 
             <nav class="hidden items-center gap-5 xl:gap-7 lg:flex" aria-label="Primary">
-                <div class="relative" @mouseenter="mega = 'journeys'" @mouseleave="mega = null">
+                <div class="relative group/nav">
                     <a href="{{ route('journeys.index') }}" class="{{ request()->routeIs('journeys.*') ? 'nav-link-active font-medium' : 'nav-link' }}">Journeys</a>
-                    <div x-show="mega === 'journeys'" x-cloak class="absolute left-1/2 top-full z-50 mt-3 w-[30rem] -translate-x-1/2 border border-sand-deep/30 bg-cream p-6 shadow-xl">
-                        <p class="text-[11px] tracking-[0.18em] uppercase text-gold mb-3">Explore journeys</p>
-                        <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
-                            <a href="{{ route('journeys.index') }}" class="text-forest hover:text-gold">All journeys</a>
-                            <a href="{{ route('journeys.finder') }}" class="text-forest hover:text-gold">Journey Finder</a>
+                    <div class="nav-mega nav-mega-wide">
+                        <p class="nav-mega-label">Explore journeys</p>
+                        <div class="nav-mega-grid">
+                            <a href="{{ route('journeys.index') }}" class="nav-mega-link">All journeys</a>
+                            <a href="{{ route('journeys.finder') }}" class="nav-mega-link">Journey Finder</a>
                             @foreach($navCountries as $country)
-                                <a href="{{ route('journeys.country', $country) }}" class="text-forest/80 hover:text-gold">{{ $country->name }}</a>
+                                <a href="{{ route('journeys.country', $country) }}" class="nav-mega-link nav-mega-link-muted">{{ $country->name }}</a>
                             @endforeach
-                            <a href="{{ route('journeys.index') }}?type=multi" class="text-forest/80 hover:text-gold">Multi-country</a>
-                            <a href="{{ route('journeys.index') }}?type=signature" class="text-forest/80 hover:text-gold">Signature</a>
+                            <a href="{{ route('journeys.index') }}?type=multi" class="nav-mega-link nav-mega-link-muted">Multi-country</a>
+                            <a href="{{ route('journeys.index') }}?type=signature" class="nav-mega-link nav-mega-link-muted">Signature</a>
                         </div>
                     </div>
                 </div>
-                <div class="relative" @mouseenter="mega = 'destinations'" @mouseleave="mega = null">
+                <div class="relative group/nav">
                     <a href="{{ route('destinations.index') }}" class="{{ request()->routeIs('destinations.*') ? 'nav-link-active font-medium' : 'nav-link' }}">Destinations</a>
-                    <div x-show="mega === 'destinations'" x-cloak class="absolute left-1/2 top-full z-50 mt-3 w-72 -translate-x-1/2 border border-sand-deep/30 bg-cream p-6 shadow-xl">
-                        <p class="text-[11px] tracking-[0.18em] uppercase text-gold mb-3">Countries</p>
-                        <div class="space-y-3 text-sm">
+                    <div class="nav-mega nav-mega-md">
+                        <p class="nav-mega-label">Countries</p>
+                        <div class="nav-mega-list">
                             @foreach($navCountries as $country)
-                                <a href="{{ route('destinations.country', $country) }}" class="block text-forest hover:text-gold">
+                                <a href="{{ route('destinations.country', $country) }}" class="nav-mega-link">
                                     {{ $country->name }}
                                     @if($country->subtitle)
-                                        <span class="block text-xs text-muted mt-0.5 normal-case tracking-normal">{{ $country->subtitle }}</span>
+                                        <span class="nav-mega-sub">{{ $country->subtitle }}</span>
                                     @endif
                                 </a>
                             @endforeach
                         </div>
                     </div>
                 </div>
-                <div class="relative" @mouseenter="mega = 'experiences'" @mouseleave="mega = null">
+                <div class="relative group/nav">
                     <a href="{{ route('experiences.index') }}" class="{{ request()->routeIs('experiences.*') ? 'nav-link-active font-medium' : 'nav-link' }}">Experiences</a>
-                    <div x-show="mega === 'experiences'" x-cloak class="absolute left-1/2 top-full z-50 mt-3 w-80 -translate-x-1/2 border border-sand-deep/30 bg-cream p-6 shadow-xl">
-                        <p class="text-[11px] tracking-[0.18em] uppercase text-gold mb-3">How you travel</p>
-                        <div class="space-y-2.5 text-sm">
+                    <div class="nav-mega nav-mega-lg">
+                        <p class="nav-mega-label">How you travel</p>
+                        <div class="nav-mega-list">
                             @foreach($navExperiences as $experience)
-                                <a href="{{ route('experiences.show', $experience) }}" class="block text-forest hover:text-gold">{{ $experience->name }}</a>
+                                <a href="{{ route('experiences.show', $experience) }}" class="nav-mega-link">{{ $experience->name }}</a>
                             @endforeach
                         </div>
                     </div>

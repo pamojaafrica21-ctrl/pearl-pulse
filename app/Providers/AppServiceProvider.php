@@ -15,6 +15,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        config([
+            'livewire.temporary_file_upload.rules' => ['required', 'file', 'max:102400'],
+        ]);
+
         View::composer('layouts.public', function ($view) {
             try {
                 $settings = app(SettingService::class);

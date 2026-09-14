@@ -22,11 +22,15 @@ class Index extends Component
     public function render()
     {
         return view('livewire.admin.simple-index', [
-            'rows' => Page::query()->orderBy('sort_order')->paginate(20),
+            'rows' => Page::query()->orderBy('title')->paginate(20),
             'createRoute' => route('admin.pages.create'),
             'editRoute' => 'admin.pages.edit',
             'label' => 'page',
-            'columns' => ['title', 'slug', 'status'],
+            'columns' => [
+                ['key' => 'title', 'label' => 'Title', 'type' => 'primary', 'meta' => 'slug'],
+                ['key' => 'status', 'label' => 'Status', 'type' => 'status'],
+                ['key' => 'updated_at', 'label' => 'Updated', 'type' => 'date'],
+            ],
         ])->layout('layouts.admin', ['heading' => 'Pages']);
     }
 }

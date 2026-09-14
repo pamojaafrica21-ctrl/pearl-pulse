@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Destinations;
 
 use App\Models\Destination;
 use App\Services\ImageUploader;
+use App\Services\VideoUploader;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -35,11 +36,12 @@ class Index extends Component
         $this->confirmingDelete = null;
     }
 
-    public function delete(ImageUploader $uploader): void
+    public function delete(ImageUploader $uploader, VideoUploader $videos): void
     {
         $destination = Destination::query()->with('images')->findOrFail($this->confirmingDelete);
 
         $uploader->delete($destination->cover_path);
+        $videos->delete($destination->video_path);
         foreach ($destination->images as $image) {
             $uploader->delete($image->path);
         }
@@ -51,25 +53,30 @@ class Index extends Component
 
     public function render()
     {
-        $sort = in_array($this->sort, ['name', 'status', 'updated_at'], true)
-            ? $this->sort
-            : 'name';
+        $query = Destination::query()->with('country');
 
-        $destinations = Destination::query()
-            ->with('country')
-            ->when($this->search !== '', function ($q) {
-                $term = '%'.$this->search.'%';
-                $q->where(function ($inner) use ($term) {
-                    $inner->where('name', 'like', $term)
-                        ->orWhere('slug', 'like', $term)
-                        ->orWhereHas('country', fn ($c) => $c->where('name', 'like', $term));
-                });
-            })
-            ->orderBy($sort)
-            ->paginate(10);
+        if ($this->search !== '') {
+            $term = '%'.$this->search.'%';
+            $query->where(function ($inner) use ($term) {
+                $inner->where('name', 'like', $term)
+                    ->orWhere('slug', 'like', $term)
+                    ->orWhere('region', 'like', $term)
+                    ->orWhereHas('country', fn ($c) => $c->where('name', 'like', $term));
+            });
+        }
+
+        if ($this->sort === 'country') {
+            $query->leftJoin('countries', 'destinations.country_id', '=', 'countries.id')
+                ->orderBy('countries.name')
+                ->select('destinations.*');
+        } elseif (in_array($this->sort, ['name', 'status', 'updated_at'], true)) {
+            $query->orderBy($this->sort);
+        } else {
+            $query->orderBy('name');
+        }
 
         return view('livewire.admin.destinations.index', [
-            'destinations' => $destinations,
+            'destinations' => $query->paginate(10),
             'uploader' => app(ImageUploader::class),
         ])->layout('layouts.admin', ['heading' => 'Destinations']);
     }

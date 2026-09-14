@@ -2,10 +2,12 @@
 
 namespace App\Livewire\Admin\Destinations;
 
+use App\Livewire\Admin\Support\ManagesVideoUpload;
 use App\Models\Country;
 use App\Models\Destination;
 use App\Models\DestinationImage;
 use App\Services\ImageUploader;
+use App\Services\VideoUploader;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -13,7 +15,7 @@ use Livewire\WithFileUploads;
 
 class Form extends Component
 {
-    use WithFileUploads;
+    use ManagesVideoUpload, WithFileUploads;
 
     public ?Destination $destination = null;
 
@@ -85,6 +87,7 @@ class Form extends Component
             $this->status = $destination->status;
             $this->sort_order = (int) $destination->sort_order;
             $this->slugManual = true;
+            $this->loadVideoState($destination);
         }
 
         if (empty($this->highlights)) {
@@ -173,10 +176,11 @@ class Form extends Component
             'sort_order' => ['integer', 'min:0'],
             'cover' => ['nullable', 'image', 'max:5120'],
             'gallery.*' => ['nullable', 'image', 'max:5120'],
+            ...$this->videoValidationRules(),
         ];
     }
 
-    public function save(ImageUploader $uploader)
+    public function save(ImageUploader $uploader, VideoUploader $videos)
     {
         $this->validate();
 
@@ -238,6 +242,7 @@ class Form extends Component
             $this->gallery = [];
         }
 
+        $this->persistVideo($this->destination, $videos, 'destinations/'.$this->destination->id.'/video');
         $this->destination->refresh();
 
         session()->flash('status', 'Destination saved.');
@@ -251,6 +256,7 @@ class Form extends Component
 
         return view('livewire.admin.destinations.form', [
             'uploader' => app(ImageUploader::class),
+            'videoUploader' => app(VideoUploader::class),
             'countries' => Country::query()->orderBy('sort_order')->get(),
         ])->layout('layouts.admin', ['heading' => $heading]);
     }

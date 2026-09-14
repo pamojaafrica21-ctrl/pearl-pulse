@@ -24,11 +24,20 @@ class Index extends Component
     public function render()
     {
         return view('livewire.admin.simple-index', [
-            'rows' => Article::query()->orderBy('sort_order')->paginate(20),
+            'rows' => Article::query()->orderByDesc('updated_at')->paginate(20),
             'createRoute' => route('admin.articles.create'),
             'editRoute' => 'admin.articles.edit',
             'label' => 'article',
-            'columns' => ['title', 'type', 'status'],
+            'columns' => [
+                ['key' => 'cover_path', 'label' => 'Cover', 'type' => 'cover'],
+                ['key' => 'title', 'label' => 'Title', 'type' => 'primary', 'meta' => 'slug'],
+                ['key' => 'type', 'label' => 'Type'],
+                ['key' => 'excerpt', 'label' => 'Excerpt'],
+                ['key' => 'status', 'label' => 'Status', 'type' => 'status', 'badges' => [
+                    ['key' => 'is_featured', 'label' => 'Featured'],
+                ]],
+                ['key' => 'updated_at', 'label' => 'Updated', 'type' => 'date'],
+            ],
         ])->layout('layouts.admin', ['heading' => 'Insiders']);
     }
 }

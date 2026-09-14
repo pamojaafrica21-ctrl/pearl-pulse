@@ -39,6 +39,11 @@
                 <input type="file" wire:model="cover" accept="image/*">
             </div>
         </div>
+        @isset($videoUploader)
+            <div>
+                @include('livewire.admin.partials.video-field', ['record' => $record ?? $stay ?? null, 'uploader' => $videoUploader])
+            </div>
+        @endisset
         <label class="text-sm"><input type="checkbox" wire:model="is_featured" class="rounded text-forest"> Featured</label>
         <div>
             <button type="submit" class="btn-primary text-xs">Save {{ $label }}</button>

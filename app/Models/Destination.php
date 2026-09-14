@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\HasCover;
 use App\Models\Concerns\HasSeo;
+use App\Models\Concerns\HasVideo;
 use App\Models\Concerns\Publishable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Destination extends Model
 {
-    use HasCover, HasSeo, Publishable;
+    use HasCover, HasSeo, HasVideo, Publishable;
 
     protected $fillable = [
         'name',
@@ -31,6 +32,8 @@ class Destination extends Model
         'practical',
         'highlights',
         'cover_path',
+        'video_path',
+        'video_url',
         'meta_title',
         'meta_description',
         'is_featured',

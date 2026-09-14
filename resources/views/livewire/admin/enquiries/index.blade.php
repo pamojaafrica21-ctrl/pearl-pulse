@@ -74,9 +74,14 @@
                     <p class="mt-2 text-sm">Dates: {{ $viewingEnquiry->travel_dates }}</p>
                 @endif
                 @if($viewingEnquiry->preferences)
-                    <p class="mt-2 text-sm">Preferences: {{ $viewingEnquiry->preferences }}</p>
+                    <div class="mt-2 text-sm prose prose-sm max-w-none prose-p:my-1">
+                        <span class="text-muted">Preferences:</span>
+                        {!! $viewingEnquiry->preferences !!}
+                    </div>
                 @endif
-                <p class="mt-4 text-sm leading-relaxed whitespace-pre-wrap">{{ $viewingEnquiry->message }}</p>
+                <div class="mt-4 text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-2">
+                    {!! $viewingEnquiry->message !!}
+                </div>
                 <div class="mt-6 flex flex-wrap gap-2">
                     <button type="button" wire:click="mark({{ $viewingEnquiry->id }}, 'read')" class="px-3 py-1.5 text-xs border border-sand-deep">Mark read</button>
                     <button type="button" wire:click="mark({{ $viewingEnquiry->id }}, 'responded')" class="px-3 py-1.5 text-xs bg-forest text-sand">Mark responded</button>

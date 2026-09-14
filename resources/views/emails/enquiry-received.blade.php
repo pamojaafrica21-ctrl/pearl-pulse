@@ -38,12 +38,12 @@
 **Dates:** {{ $enquiry->travel_dates }}  
 @endif
 @if($enquiry->preferences)
-**Preferences:** {{ $enquiry->preferences }}  
+**Preferences:** {{ trim(preg_replace('/\s+/', ' ', strip_tags(str_replace(['</p>', '<br>', '<br/>', '<br />'], "\n", $enquiry->preferences)))) }}  
 @endif
 
 **Message:**
 
-{{ $enquiry->message }}
+{{ trim(preg_replace('/\s+/', ' ', strip_tags(str_replace(['</p>', '<br>', '<br/>', '<br />'], "\n", $enquiry->message)))) }}
 
 Thanks,<br>
 {{ config('app.name') }}

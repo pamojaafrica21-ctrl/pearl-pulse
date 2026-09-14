@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Admin\Experiences;
 
+use App\Livewire\Admin\Support\ManagesVideoUpload;
 use App\Models\Experience;
 use App\Services\ImageUploader;
+use App\Services\VideoUploader;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -11,7 +13,7 @@ use Livewire\WithFileUploads;
 
 class Form extends Component
 {
-    use WithFileUploads;
+    use ManagesVideoUpload, WithFileUploads;
 
     public ?Experience $experience = null;
 
@@ -45,6 +47,7 @@ class Form extends Component
             $this->status = (string) $experience->status;
             $this->sort_order = (int) $experience->sort_order;
             $this->is_featured = (bool) $experience->is_featured;
+            $this->loadVideoState($experience);
         }
     }
 
@@ -55,12 +58,13 @@ class Form extends Component
         }
     }
 
-    public function save(ImageUploader $uploader)
+    public function save(ImageUploader $uploader, VideoUploader $videos)
     {
         $this->validate([
             'name' => ['required', 'max:160'],
             'slug' => ['required', Rule::unique('experiences', 'slug')->ignore($this->experience?->id)],
             'cover' => ['nullable', 'image', 'max:5120'],
+            ...$this->videoValidationRules(),
         ]);
 
         $data = [
@@ -85,6 +89,8 @@ class Form extends Component
             $this->experience->update(['cover_path' => $uploader->store($this->cover, 'experiences/'.$this->experience->id)]);
         }
 
+        $this->persistVideo($this->experience, $videos, 'experiences/'.$this->experience->id.'/video');
+
         session()->flash('status', 'Experience saved.');
 
         return $this->redirect(route('admin.experiences.edit', $this->experience), navigate: true);
@@ -95,6 +101,7 @@ class Form extends Component
         return view('livewire.admin.named-form', [
             'record' => $this->experience,
             'label' => 'experience',
+            'videoUploader' => app(VideoUploader::class),
         ])->layout('layouts.admin', ['heading' => $this->experience?->exists ? 'Edit experience' : 'New experience']);
     }
 }

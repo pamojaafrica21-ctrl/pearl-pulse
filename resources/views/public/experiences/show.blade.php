@@ -4,11 +4,12 @@
 @section('meta_description', \Illuminate\Support\Str::limit($experience->seoDescription(), 160))
 
 @section('content')
-@php $cover = $experience->coverUrl(); @endphp
+@php
+    $cover = $experience->coverUrl();
+    $video = $experience->videoPlaybackUrl();
+@endphp
 <section class="relative min-h-[60svh] flex items-end overflow-hidden bg-forest">
-    @if($cover)
-        <img src="{{ $cover }}" alt="{{ $experience->name }}" class="absolute inset-0 h-full w-full object-cover">
-    @endif
+    <x-hero-media :video="$video" :image="$cover" :alt="$experience->name" />
     <div class="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/30 to-transparent"></div>
     <div class="relative z-10 mx-auto w-full max-w-7xl px-5 pb-16 pt-12 lg:px-8">
         <x-breadcrumbs :items="[

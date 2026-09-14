@@ -15,7 +15,11 @@
     <div class="mx-auto max-w-7xl px-5 lg:px-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         @foreach($items as $item)
             <figure>
-                @if($item->coverUrl())
+                @if($item->videoPlaybackUrl())
+                    <video class="aspect-[4/5] w-full object-cover bg-forest" controls playsinline poster="{{ $item->coverUrl() }}">
+                        <source src="{{ $item->videoPlaybackUrl() }}" type="video/mp4">
+                    </video>
+                @elseif($item->coverUrl())
                     <img src="{{ $item->coverUrl() }}" alt="{{ $item->title ?: 'True Pulse' }}" class="aspect-[4/5] w-full object-cover" loading="lazy">
                 @endif
                 <figcaption class="mt-3">

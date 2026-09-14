@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Admin\Stays;
 
+use App\Livewire\Admin\Support\ManagesVideoUpload;
 use App\Models\Destination;
 use App\Models\Stay;
 use App\Services\ImageUploader;
+use App\Services\VideoUploader;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -12,7 +14,7 @@ use Livewire\WithFileUploads;
 
 class Form extends Component
 {
-    use WithFileUploads;
+    use ManagesVideoUpload, WithFileUploads;
 
     public ?Stay $stay = null;
 
@@ -55,6 +57,7 @@ class Form extends Component
             $this->status = (string) $stay->status;
             $this->sort_order = (int) $stay->sort_order;
             $this->is_featured = (bool) $stay->is_featured;
+            $this->loadVideoState($stay);
         }
     }
 
@@ -65,12 +68,13 @@ class Form extends Component
         }
     }
 
-    public function save(ImageUploader $uploader)
+    public function save(ImageUploader $uploader, VideoUploader $videos)
     {
         $this->validate([
             'name' => ['required', 'max:160'],
             'slug' => ['required', Rule::unique('stays', 'slug')->ignore($this->stay?->id)],
             'cover' => ['nullable', 'image', 'max:5120'],
+            ...$this->videoValidationRules(),
         ]);
 
         $data = [
@@ -94,6 +98,8 @@ class Form extends Component
             $this->stay->update(['cover_path' => $uploader->store($this->cover, 'stays/'.$this->stay->id)]);
         }
 
+        $this->persistVideo($this->stay, $videos, 'stays/'.$this->stay->id.'/video');
+
         session()->flash('status', 'Stay saved.');
 
         return $this->redirect(route('admin.stays.edit', $this->stay), navigate: true);
@@ -103,6 +109,7 @@ class Form extends Component
     {
         return view('livewire.admin.stays.form', [
             'destinations' => Destination::query()->orderBy('name')->get(),
+            'videoUploader' => app(VideoUploader::class),
         ])->layout('layouts.admin', ['heading' => $this->stay?->exists ? 'Edit stay' : 'New stay']);
     }
 }

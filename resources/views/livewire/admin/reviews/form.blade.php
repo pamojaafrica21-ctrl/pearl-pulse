@@ -10,9 +10,10 @@
             @endforeach
         </select>
         <select wire:model="status" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
-            <option value="draft">Draft</option>
-            <option value="published">Published</option>
+            <option value="draft">Pending / hidden</option>
+            <option value="published">Published on website</option>
         </select>
+        <p class="text-xs text-muted -mt-3">Guest-submitted reviews arrive as pending until you publish them.</p>
         <button type="submit" class="btn-primary text-xs">Save review</button>
     </form>
 </div>
