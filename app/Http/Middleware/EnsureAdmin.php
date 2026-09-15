@@ -13,7 +13,11 @@ class EnsureAdmin
         $user = $request->user();
 
         if (! $user || ! $user->isAdmin()) {
-            abort(403);
+            if ($user && ! $user->isAdmin()) {
+                return redirect()->route('account.favorites');
+            }
+
+            return redirect()->route('login');
         }
 
         return $next($request);

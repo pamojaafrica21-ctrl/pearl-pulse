@@ -22,9 +22,10 @@ export default {
                     DEFAULT: '#e8dfd0',
                     deep: '#d4c4a8',
                 },
-                cream: '#f7f3eb',
+                cream: '#fafafa',
+                surface: '#ffffff',
                 charcoal: '#1a1a18',
-                gold: '#a68b4b',
+                gold: '#8a7a5c',
                 muted: '#6b6b63',
             },
             fontFamily: {

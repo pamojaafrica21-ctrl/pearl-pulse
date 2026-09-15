@@ -22,18 +22,18 @@
         @endif
     </div>
 </section>
-<section class="bg-cream py-16 lg:py-24">
+<section class="bg-white py-16 lg:py-24">
     <div class="mx-auto max-w-3xl px-5 lg:px-8">
         @if($experience->teaser)
-            <p class="font-display text-2xl md:text-3xl text-forest leading-snug">{{ $experience->teaser }}</p>
+            <p class="font-display text-2xl md:text-3xl text-charcoal leading-snug">{{ $experience->teaser }}</p>
         @endif
         <div class="prose-safari mt-8">{!! $experience->description !!}</div>
     </div>
 </section>
 @if($experience->destinations->isNotEmpty())
-<section class="bg-cream pb-16">
+<section class="bg-white pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <h2 class="font-display text-4xl text-forest mb-8">Where</h2>
+        <h2 class="font-display text-4xl text-charcoal mb-8">Where</h2>
         <div class="grid gap-8 sm:grid-cols-3">
             @foreach($experience->destinations as $destination)
                 <x-destination-card :destination="$destination" />
@@ -43,9 +43,9 @@
 </section>
 @endif
 @if($experience->journeys->isNotEmpty())
-<section class="bg-cream pb-16">
+<section class="bg-white pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <h2 class="font-display text-4xl text-forest mb-8">Journeys</h2>
+        <h2 class="font-display text-4xl text-charcoal mb-8">Journeys</h2>
         <div class="grid gap-8 sm:grid-cols-3">
             @foreach($experience->journeys as $journey)
                 <x-journey-card :journey="$journey" />

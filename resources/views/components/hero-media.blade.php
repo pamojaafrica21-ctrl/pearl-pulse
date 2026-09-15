@@ -5,9 +5,9 @@
 ])
 
 @if($video)
-    <video class="absolute inset-0 h-full w-full object-cover fade-in" autoplay muted loop playsinline @if($image) poster="{{ $image }}" @endif>
+    <video class="absolute inset-0 h-full w-full object-cover fade-in" autoplay muted loop playsinline preload="metadata" @if($image) poster="{{ $image }}" @endif>
         <source src="{{ $video }}" type="video/mp4">
     </video>
 @elseif($image)
-    <img src="{{ $image }}" alt="{{ $alt }}" class="absolute inset-0 h-full w-full object-cover fade-in">
+    <img src="{{ $image }}" alt="{{ $alt }}" class="absolute inset-0 h-full w-full object-cover fade-in" loading="eager" fetchpriority="high">
 @endif

@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
                 $view->with([
                     'siteContact' => $settings->contact(),
                     'siteSocial' => $settings->social(),
+                    'reviewLinks' => $settings->reviewLinks(),
                     'footerBlurb' => $settings->get('footer_blurb', 'Private journeys through East Africa.'),
                     'whatsappUrl' => $settings->whatsappUrl('Hello Pearl Pulse — I would like to plan a journey.'),
                     'navCountries' => \App\Models\Country::query()->published()->orderBy('sort_order')->get(),
@@ -34,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
                 $view->with([
                     'siteContact' => ['address' => '', 'phone' => '', 'email' => '', 'admin_email' => '', 'whatsapp' => ''],
                     'siteSocial' => ['instagram' => '', 'facebook' => '', 'twitter' => ''],
+                    'reviewLinks' => ['google' => '', 'tripadvisor' => ''],
                     'footerBlurb' => 'Private journeys through East Africa.',
                     'whatsappUrl' => null,
                     'navCountries' => collect(),

@@ -27,10 +27,25 @@
                 @error('hero_image') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
-                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Hero video URL (optional)</label>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Hero video URL (optional fallback)</label>
                 <input type="url" wire:model="hero_video_url" placeholder="https://…" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
                 @error('hero_video_url') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                <p class="mt-2 text-xs text-muted">Used when rotating slides below are empty.</p>
             </div>
+        </section>
+
+        <section class="space-y-5">
+            <h2 class="font-display text-2xl text-forest">Rotating hero slides</h2>
+            <p class="text-sm text-muted">Up to four cinematic slides (destination label, headline, tagline, optional video). Leave blank to use the single hero above.</p>
+            @foreach($hero_slides as $index => $slide)
+                <div class="space-y-3 border border-sand-deep/30 p-4" wire:key="hero-slide-{{ $index }}">
+                    <p class="text-xs tracking-[0.14em] uppercase text-muted">Slide {{ $index + 1 }}</p>
+                    <input type="text" wire:model="hero_slides.{{ $index }}.label" placeholder="Destination label (e.g. Kenya)" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                    <input type="text" wire:model="hero_slides.{{ $index }}.headline" placeholder="Headline" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                    <input type="text" wire:model="hero_slides.{{ $index }}.tagline" placeholder="Tagline" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                    <input type="url" wire:model="hero_slides.{{ $index }}.video_url" placeholder="Video URL (optional)" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                </div>
+            @endforeach
         </section>
 
         <section class="space-y-5">
@@ -46,6 +61,34 @@
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Body</label>
                 <textarea rows="4" wire:model="home_intro_body" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+        </section>
+
+        <section class="space-y-5">
+            <h2 class="font-display text-2xl text-forest">Homepage destinations &amp; experiences copy</h2>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Destinations eyebrow</label>
+                <input type="text" wire:model="home_destinations_eyebrow" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Destinations heading</label>
+                <input type="text" wire:model="home_destinations_heading" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Destinations intro</label>
+                <textarea rows="2" wire:model="home_destinations_intro" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Experiences eyebrow</label>
+                <input type="text" wire:model="home_experiences_eyebrow" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Experiences heading</label>
+                <input type="text" wire:model="home_experiences_heading" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Experiences intro</label>
+                <textarea rows="2" wire:model="home_experiences_intro" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
             </div>
         </section>
 
@@ -221,6 +264,19 @@
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">X / Twitter</label>
                 <input type="url" wire:model="social_twitter" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+        </section>
+
+        <section class="space-y-5">
+            <h2 class="font-display text-2xl text-forest">Review links</h2>
+            <p class="text-sm text-muted">Shown in the site header utility bar and homepage trust section.</p>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Google reviews URL</label>
+                <input type="url" wire:model="review_google_url" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Tripadvisor URL</label>
+                <input type="url" wire:model="review_tripadvisor_url" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
             </div>
         </section>
 

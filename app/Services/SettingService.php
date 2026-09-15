@@ -62,6 +62,63 @@ class SettingService
         ];
     }
 
+    public function reviewLinks(): array
+    {
+        return [
+            'google' => $this->get('review_google_url', ''),
+            'tripadvisor' => $this->get('review_tripadvisor_url', ''),
+        ];
+    }
+
+    /**
+     * Homepage rotating hero slides. Falls back to legacy single hero fields.
+     *
+     * @return list<array{label: string, headline: string, tagline: string, video_url: string, image_url: ?string}>
+     */
+    public function heroSlides(): array
+    {
+        $raw = $this->get('hero_slides', '[]');
+        $items = is_array($raw) ? $raw : (json_decode((string) $raw, true) ?: []);
+        $uploader = app(ImageUploader::class);
+        $slides = [];
+
+        foreach ($items as $item) {
+            if (! is_array($item)) {
+                continue;
+            }
+
+            $label = trim((string) ($item['label'] ?? ''));
+            $headline = trim((string) ($item['headline'] ?? ''));
+            $tagline = trim((string) ($item['tagline'] ?? ''));
+            $videoUrl = trim((string) ($item['video_url'] ?? ''));
+            $imagePath = trim((string) ($item['image_path'] ?? ''));
+
+            if ($label === '' && $headline === '' && $videoUrl === '' && $imagePath === '') {
+                continue;
+            }
+
+            $slides[] = [
+                'label' => $label,
+                'headline' => $headline,
+                'tagline' => $tagline,
+                'video_url' => $videoUrl,
+                'image_url' => $imagePath !== '' ? $uploader->url($imagePath) : null,
+            ];
+        }
+
+        if ($slides !== []) {
+            return $slides;
+        }
+
+        return [[
+            'label' => (string) $this->get('hero_kicker', ''),
+            'headline' => (string) $this->get('hero_headline', 'Private journeys into Africa’s wild heart'),
+            'tagline' => (string) $this->get('hero_tagline', 'Private, tailor-made journeys shaped around how you want to experience Africa.'),
+            'video_url' => (string) $this->get('hero_video_url', ''),
+            'image_url' => $this->heroImageUrl(),
+        ]];
+    }
+
     public function isSitePublic(): bool
     {
         return $this->get('site_public', '1') === '1';

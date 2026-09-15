@@ -27,34 +27,34 @@
     </div>
 </section>
 
-<section class="bg-cream py-16 lg:py-24">
+<section class="bg-white py-16 lg:py-24">
     <div class="mx-auto max-w-7xl px-5 lg:px-8 grid gap-14 lg:grid-cols-12">
         <div class="lg:col-span-7">
             @if($destination->teaser)
-                <p class="font-display text-2xl md:text-3xl text-forest leading-snug">{{ $destination->teaser }}</p>
+                <p class="font-display text-2xl md:text-3xl text-charcoal leading-snug">{{ $destination->teaser }}</p>
             @endif
             <div class="prose-safari mt-8">{!! $destination->description !!}</div>
             @if($destination->why)
-                <h2 class="font-display text-3xl text-forest mt-12">Why here</h2>
+                <h2 class="font-display text-3xl text-charcoal mt-12">Why here</h2>
                 <div class="prose-safari mt-4">{!! $destination->why !!}</div>
             @endif
         </div>
         <aside class="lg:col-span-5 lg:pl-8">
-            <div class="border-t border-sand-deep/40 pt-8">
-                <h2 class="text-xs tracking-[0.2em] uppercase text-gold mb-6">At a glance</h2>
+            <div class="border-t border-charcoal/10 pt-8">
+                <h2 class="text-xs tracking-[0.2em] uppercase text-muted mb-6">At a glance</h2>
                 <dl class="space-y-5">
                     @if($destination->duration)
-                        <div><dt class="text-xs tracking-[0.15em] uppercase text-muted">Suggested stay</dt><dd class="mt-1 text-forest">{{ $destination->duration }}</dd></div>
+                        <div><dt class="text-xs tracking-[0.15em] uppercase text-muted">Suggested stay</dt><dd class="mt-1 text-charcoal">{{ $destination->duration }}</dd></div>
                     @endif
                     @if($destination->best_time)
-                        <div><dt class="text-xs tracking-[0.15em] uppercase text-muted">Best time</dt><dd class="mt-1 text-forest">{{ $destination->best_time }}</dd></div>
+                        <div><dt class="text-xs tracking-[0.15em] uppercase text-muted">Best time</dt><dd class="mt-1 text-charcoal">{{ $destination->best_time }}</dd></div>
                     @endif
                     @if($destination->activities)
-                        <div><dt class="text-xs tracking-[0.15em] uppercase text-muted">Experiences</dt><dd class="mt-1 text-forest">{{ $destination->activities }}</dd></div>
+                        <div><dt class="text-xs tracking-[0.15em] uppercase text-muted">Experiences</dt><dd class="mt-1 text-charcoal">{{ $destination->activities }}</dd></div>
                     @endif
                     @foreach($destination->highlights ?? [] as $item)
                         @if(!empty($item['label']) || !empty($item['value']))
-                            <div><dt class="text-xs tracking-[0.15em] uppercase text-muted">{{ $item['label'] ?? '' }}</dt><dd class="mt-1 text-forest">{{ $item['value'] ?? '' }}</dd></div>
+                            <div><dt class="text-xs tracking-[0.15em] uppercase text-muted">{{ $item['label'] ?? '' }}</dt><dd class="mt-1 text-charcoal">{{ $item['value'] ?? '' }}</dd></div>
                         @endif
                     @endforeach
                 </dl>
@@ -64,9 +64,9 @@
 </section>
 
 @if($destination->experiences->isNotEmpty())
-<section class="bg-cream pb-16">
+<section class="bg-white pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <h2 class="font-display text-4xl text-forest mb-8">Experiences</h2>
+        <h2 class="font-display text-4xl text-charcoal mb-8">Experiences</h2>
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             @foreach($destination->experiences as $experience)
                 <x-experience-card :experience="$experience" />
@@ -77,9 +77,9 @@
 @endif
 
 @if($destination->journeys->isNotEmpty())
-<section class="bg-cream pb-16">
+<section class="bg-white pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <h2 class="font-display text-4xl text-forest mb-8">Journeys here</h2>
+        <h2 class="font-display text-4xl text-charcoal mb-8">Journeys here</h2>
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             @foreach($destination->journeys as $journey)
                 <x-journey-card :journey="$journey" />
@@ -93,9 +93,9 @@
     $stays = $destination->stays->merge($destination->primaryStays)->unique('id');
 @endphp
 @if($stays->isNotEmpty())
-<section class="bg-cream pb-16">
+<section class="bg-white pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <h2 class="font-display text-4xl text-forest mb-3">Selected stays</h2>
+        <h2 class="font-display text-4xl text-charcoal mb-3">Selected stays</h2>
         <p class="text-muted mb-8">We do not own these properties.</p>
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             @foreach($stays as $stay)
@@ -107,18 +107,18 @@
 @endif
 
 @if($destination->practical)
-<section class="bg-cream pb-16">
+<section class="bg-white pb-16">
     <div class="mx-auto max-w-3xl px-5 lg:px-8">
-        <h2 class="font-display text-3xl text-forest mb-4">Practical information</h2>
+        <h2 class="font-display text-3xl text-charcoal mb-4">Practical information</h2>
         <div class="prose-safari">{!! $destination->practical !!}</div>
     </div>
 </section>
 @endif
 
 @if($destination->images->isNotEmpty())
-<section class="bg-cream pb-16" x-data="{ active: 0 }">
+<section class="bg-white pb-16" x-data="{ active: 0 }">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <h2 class="font-display text-4xl text-forest mb-8">Gallery</h2>
+        <h2 class="font-display text-4xl text-charcoal mb-8">Gallery</h2>
         <div class="relative overflow-hidden bg-forest/5 aspect-[16/10]">
             @foreach($destination->images as $index => $image)
                 <img src="{{ $image->url() }}" alt="{{ $image->alt ?: $destination->name }}" class="absolute inset-0 h-full w-full object-cover" x-show="active === {{ $index }}" x-transition.opacity>

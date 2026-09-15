@@ -28,4 +28,24 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    public function isCustomer(): bool
+    {
+        return $this->role === 'customer';
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function favoriteJourneys()
+    {
+        return $this->belongsToMany(Journey::class, 'favorites')->withTimestamps();
+    }
+
+    public function hasFavorited(Journey $journey): bool
+    {
+        return $this->favorites()->where('journey_id', $journey->id)->exists();
+    }
 }

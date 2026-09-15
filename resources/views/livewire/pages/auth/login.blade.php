@@ -17,15 +17,20 @@ new #[Layout('layouts.guest')] class extends Component
 
         Session::regenerate();
 
-        $this->redirectIntended(default: route('admin.dashboard', absolute: false), navigate: true);
+        $user = auth()->user();
+        $default = $user && $user->isAdmin()
+            ? route('admin.dashboard', absolute: false)
+            : route('account.favorites', absolute: false);
+
+        $this->redirectIntended(default: $default, navigate: true);
     }
 }; ?>
 
 <div>
     <div class="mb-10">
-        <p class="text-xs tracking-[0.22em] uppercase text-gold mb-3">Admin access</p>
-        <h1 class="font-display text-4xl text-forest">Welcome back</h1>
-        <p class="mt-2 text-sm text-muted">Sign in to manage destinations, enquiries, and site content.</p>
+        <p class="text-xs tracking-[0.22em] uppercase text-muted mb-3">Sign in</p>
+        <h1 class="font-display text-4xl text-charcoal">Welcome back</h1>
+        <p class="mt-2 text-sm text-muted">Access your saved journeys, or continue to the admin if you manage the site.</p>
     </div>
 
     <x-auth-session-status class="mb-4 text-sm text-forest" :status="session('status')" />
@@ -41,7 +46,7 @@ new #[Layout('layouts.guest')] class extends Component
                 required
                 autofocus
                 autocomplete="username"
-                class="w-full border-sand-deep/50 bg-white text-charcoal focus:border-forest focus:ring-forest"
+                class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest"
             >
             <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
         </div>
@@ -55,7 +60,7 @@ new #[Layout('layouts.guest')] class extends Component
                 name="password"
                 required
                 autocomplete="current-password"
-                class="w-full border-sand-deep/50 bg-white text-charcoal focus:border-forest focus:ring-forest"
+                class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest"
             >
             <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
         </div>
@@ -66,22 +71,23 @@ new #[Layout('layouts.guest')] class extends Component
                     wire:model="form.remember"
                     id="remember"
                     type="checkbox"
-                    class="rounded border-sand-deep text-forest focus:ring-forest"
+                    class="rounded border-charcoal/20 text-forest focus:ring-forest"
                     name="remember"
                 >
                 Remember me
             </label>
 
             @if (Route::has('password.request'))
-                <a class="text-sm text-forest hover:text-forest-light underline-offset-2 hover:underline" href="{{ route('password.request') }}" wire:navigate>
+                <a class="text-sm text-forest hover:opacity-70" href="{{ route('password.request') }}" wire:navigate>
                     Forgot password?
                 </a>
             @endif
         </div>
 
-        <button type="submit" class="btn-primary w-full text-xs mt-2">
-            Log in
-        </button>
+        <div class="flex items-center justify-between gap-4 pt-2">
+            <a class="text-sm text-forest hover:opacity-70" href="{{ route('register') }}" wire:navigate>Create an account</a>
+            <button type="submit" class="btn-primary text-xs">Sign in</button>
+        </div>
     </form>
 
     <p class="mt-10 text-center text-xs text-muted">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\HomeController;
@@ -77,10 +78,14 @@ Route::middleware('site.public')->group(function () {
 Route::post('/logout', function (Logout $logout) {
     $logout();
 
-    return redirect()->route('login');
+    return redirect()->route('home');
 })->middleware('auth')->name('logout');
 
-Route::redirect('/dashboard', '/admin')->middleware(['auth', 'verified'])->name('dashboard');
+Route::redirect('/dashboard', '/admin')->middleware(['auth', 'admin'])->name('dashboard');
+
+Route::middleware(['auth'])->prefix('account')->name('account.')->group(function () {
+    Route::get('/favorites', [AccountController::class, 'favorites'])->name('favorites');
+});
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])

@@ -89,6 +89,25 @@ class Edit extends Component
 
     public string $social_twitter = '';
 
+    public string $review_google_url = '';
+
+    public string $review_tripadvisor_url = '';
+
+    public string $home_destinations_eyebrow = '';
+
+    public string $home_destinations_heading = '';
+
+    public string $home_destinations_intro = '';
+
+    public string $home_experiences_eyebrow = '';
+
+    public string $home_experiences_heading = '';
+
+    public string $home_experiences_intro = '';
+
+    /** @var list<array{label: string, headline: string, tagline: string, video_url: string}> */
+    public array $hero_slides = [];
+
     public $hero_image;
 
     public ?string $currentHeroPath = null;
@@ -99,10 +118,17 @@ class Edit extends Component
         $this->hero_tagline = (string) $settings->get('hero_tagline', '');
         $this->hero_kicker = (string) $settings->get('hero_kicker', '');
         $this->hero_video_url = (string) $settings->get('hero_video_url', '');
+        $this->hero_slides = $this->decodeHeroSlides($settings->get('hero_slides'));
         $this->home_intro_eyebrow = (string) $settings->get('home_intro_eyebrow', '');
         $this->home_intro_heading = (string) $settings->get('home_intro_heading', '');
         $this->home_intro_body = (string) $settings->get('home_intro_body', '');
         $this->home_pillars = $this->decodeList($settings->get('home_pillars'), 5);
+        $this->home_destinations_eyebrow = (string) $settings->get('home_destinations_eyebrow', 'Destinations');
+        $this->home_destinations_heading = (string) $settings->get('home_destinations_heading', 'Where do you want to go?');
+        $this->home_destinations_intro = (string) $settings->get('home_destinations_intro', '');
+        $this->home_experiences_eyebrow = (string) $settings->get('home_experiences_eyebrow', 'Experiences');
+        $this->home_experiences_heading = (string) $settings->get('home_experiences_heading', 'What kind of trip are you looking for?');
+        $this->home_experiences_intro = (string) $settings->get('home_experiences_intro', '');
         $this->featured_eyebrow = (string) $settings->get('featured_eyebrow', 'Featured journeys');
         $this->featured_heading = (string) $settings->get('featured_heading', 'Destinations worth the voyage');
         $this->featured_intro = (string) $settings->get('featured_intro', '');
@@ -134,7 +160,35 @@ class Edit extends Component
         $this->social_instagram = (string) $settings->get('social_instagram', '');
         $this->social_facebook = (string) $settings->get('social_facebook', '');
         $this->social_twitter = (string) $settings->get('social_twitter', '');
+        $this->review_google_url = (string) $settings->get('review_google_url', '');
+        $this->review_tripadvisor_url = (string) $settings->get('review_tripadvisor_url', '');
         $this->currentHeroPath = $settings->get('hero_image');
+    }
+
+    protected function decodeHeroSlides(mixed $value): array
+    {
+        $items = [];
+
+        if (is_string($value) && $value !== '') {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) {
+                $items = $decoded;
+            }
+        } elseif (is_array($value)) {
+            $items = $value;
+        }
+
+        $normalized = [];
+        for ($i = 0; $i < 4; $i++) {
+            $normalized[] = [
+                'label' => (string) ($items[$i]['label'] ?? ''),
+                'headline' => (string) ($items[$i]['headline'] ?? ''),
+                'tagline' => (string) ($items[$i]['tagline'] ?? ''),
+                'video_url' => (string) ($items[$i]['video_url'] ?? ''),
+            ];
+        }
+
+        return $normalized;
     }
 
     protected function decodeList(mixed $value, int $count): array
@@ -169,12 +223,23 @@ class Edit extends Component
             'hero_kicker' => ['nullable', 'string', 'max:180'],
             'contact_whatsapp' => ['nullable', 'string', 'max:60'],
             'hero_video_url' => ['nullable', 'url', 'max:500'],
+            'hero_slides' => ['array'],
+            'hero_slides.*.label' => ['nullable', 'string', 'max:120'],
+            'hero_slides.*.headline' => ['nullable', 'string', 'max:255'],
+            'hero_slides.*.tagline' => ['nullable', 'string', 'max:500'],
+            'hero_slides.*.video_url' => ['nullable', 'url', 'max:500'],
             'home_intro_eyebrow' => ['nullable', 'string', 'max:120'],
             'home_intro_heading' => ['nullable', 'string', 'max:180'],
             'home_intro_body' => ['nullable', 'string', 'max:2000'],
             'home_pillars' => ['array'],
             'home_pillars.*.title' => ['nullable', 'string', 'max:120'],
             'home_pillars.*.text' => ['nullable', 'string', 'max:500'],
+            'home_destinations_eyebrow' => ['nullable', 'string', 'max:120'],
+            'home_destinations_heading' => ['nullable', 'string', 'max:180'],
+            'home_destinations_intro' => ['nullable', 'string', 'max:500'],
+            'home_experiences_eyebrow' => ['nullable', 'string', 'max:120'],
+            'home_experiences_heading' => ['nullable', 'string', 'max:180'],
+            'home_experiences_intro' => ['nullable', 'string', 'max:500'],
             'featured_eyebrow' => ['nullable', 'string', 'max:120'],
             'featured_heading' => ['nullable', 'string', 'max:180'],
             'featured_intro' => ['nullable', 'string', 'max:500'],
@@ -207,6 +272,8 @@ class Edit extends Component
             'social_instagram' => ['nullable', 'url', 'max:500'],
             'social_facebook' => ['nullable', 'url', 'max:500'],
             'social_twitter' => ['nullable', 'url', 'max:500'],
+            'review_google_url' => ['nullable', 'url', 'max:500'],
+            'review_tripadvisor_url' => ['nullable', 'url', 'max:500'],
             'hero_image' => ['nullable', 'image', 'max:8192'],
         ];
     }
@@ -225,6 +292,8 @@ class Edit extends Component
         $map = [
             'hero_headline', 'hero_tagline', 'hero_kicker', 'hero_video_url',
             'home_intro_eyebrow', 'home_intro_heading', 'home_intro_body',
+            'home_destinations_eyebrow', 'home_destinations_heading', 'home_destinations_intro',
+            'home_experiences_eyebrow', 'home_experiences_heading', 'home_experiences_intro',
             'featured_eyebrow', 'featured_heading', 'featured_intro',
             'home_cta_heading', 'home_cta_text', 'home_cta_button',
             'destinations_eyebrow', 'destinations_heading', 'destinations_intro',
@@ -236,6 +305,7 @@ class Edit extends Component
             'footer_blurb',
             'contact_address', 'contact_phone', 'contact_whatsapp', 'contact_email', 'admin_email',
             'social_instagram', 'social_facebook', 'social_twitter',
+            'review_google_url', 'review_tripadvisor_url',
         ];
 
         foreach ($map as $key) {
@@ -244,6 +314,7 @@ class Edit extends Component
 
         $settings->set('home_pillars', json_encode(array_values($this->home_pillars)));
         $settings->set('about_values', json_encode(array_values($this->about_values)));
+        $settings->set('hero_slides', json_encode(array_values($this->hero_slides)));
 
         session()->flash('status', 'Settings saved.');
     }

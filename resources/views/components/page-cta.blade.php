@@ -15,7 +15,7 @@
 <section {{ $attributes->merge(['class' => 'bg-forest text-sand py-16 lg:py-24']) }}>
     <div class="mx-auto max-w-3xl px-5 lg:px-8 text-center">
         @if($eyebrow)
-            <p class="text-xs tracking-[0.22em] uppercase text-gold mb-3">{{ $eyebrow }}</p>
+            <p class="text-[11px] tracking-[0.22em] uppercase text-sand/50 mb-3">{{ $eyebrow }}</p>
         @endif
         <h2 class="font-display text-4xl md:text-5xl">{{ $heading }}</h2>
         @if($text)

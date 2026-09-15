@@ -1,9 +1,9 @@
 @props(['items' => [], 'tone' => 'light'])
 
 @php
-    $base = $tone === 'dark' ? 'text-muted' : 'text-sand/60';
-    $link = $tone === 'dark' ? 'hover:text-forest' : 'hover:text-sand';
-    $last = $tone === 'dark' ? 'text-forest/80' : 'text-sand/80';
+    $base = $tone === 'dark' ? 'text-muted' : 'text-white/60';
+    $link = $tone === 'dark' ? 'hover:text-charcoal' : 'hover:text-white';
+    $last = $tone === 'dark' ? 'text-charcoal/80' : 'text-white/85';
 @endphp
 
 @if(count($items))

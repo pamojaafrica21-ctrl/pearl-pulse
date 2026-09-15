@@ -4,14 +4,14 @@
 @section('meta_description', \Illuminate\Support\Str::limit($article->seoDescription(), 160))
 
 @section('content')
-<article class="bg-cream pt-16 pb-20">
+<article class="bg-white pt-16 pb-20">
     <div class="mx-auto max-w-3xl px-5 lg:px-8">
         <x-breadcrumbs tone="dark" :items="[
             ['label' => 'Insiders', 'href' => route('insiders.index')],
             ['label' => $article->title],
         ]" />
-        <p class="text-xs tracking-[0.22em] uppercase text-gold mt-6">{{ $article->typeLabel() }}</p>
-        <h1 class="font-display text-4xl md:text-6xl text-forest mt-3">{{ $article->title }}</h1>
+        <p class="text-xs tracking-[0.22em] uppercase text-muted mt-6">{{ $article->typeLabel() }}</p>
+        <h1 class="font-display text-4xl md:text-6xl text-charcoal mt-3">{{ $article->title }}</h1>
         @if($article->excerpt)
             <p class="mt-4 text-lg text-muted">{{ $article->excerpt }}</p>
         @endif
@@ -22,12 +22,12 @@
     </div>
 </article>
 @if($more->isNotEmpty())
-<section class="bg-cream pb-16">
+<section class="bg-white pb-16">
     <div class="mx-auto max-w-3xl px-5 lg:px-8">
-        <h2 class="font-display text-3xl text-forest mb-6">More from Insiders</h2>
+        <h2 class="font-display text-3xl text-charcoal mb-6">More from Insiders</h2>
         <div class="space-y-4">
             @foreach($more as $item)
-                <a href="{{ route('insiders.show', $item) }}" class="block text-forest hover:text-gold">{{ $item->title }}</a>
+                <a href="{{ route('insiders.show', $item) }}" class="block text-charcoal hover:text-muted">{{ $item->title }}</a>
             @endforeach
         </div>
     </div>

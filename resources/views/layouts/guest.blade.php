@@ -31,7 +31,7 @@
             </div>
 
             {{-- Form panel --}}
-            <div class="flex-1 flex items-center justify-center bg-cream px-5 py-12 lg:px-10">
+            <div class="flex-1 flex items-center justify-center bg-white px-5 py-12 lg:px-10">
                 <div class="w-full max-w-md">
                     {{ $slot }}
                 </div>

@@ -19,18 +19,18 @@
         @endif
     </div>
 </section>
-<section class="bg-cream py-16">
+<section class="bg-white py-16">
     <div class="mx-auto max-w-3xl px-5 lg:px-8">
         <div class="prose-safari">{!! $stay->description !!}</div>
         @if($stay->destination)
-            <p class="mt-8 text-sm text-muted">Near <a href="{{ $stay->destination->publicUrl() }}" class="text-forest underline">{{ $stay->destination->name }}</a></p>
+            <p class="mt-8 text-sm text-muted">Near <a href="{{ $stay->destination->publicUrl() }}" class="text-charcoal underline">{{ $stay->destination->name }}</a></p>
         @endif
     </div>
 </section>
 @if($stay->journeys->isNotEmpty())
-<section class="bg-cream pb-16">
+<section class="bg-white pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <h2 class="font-display text-4xl text-forest mb-8">Journeys that may include this stay</h2>
+        <h2 class="font-display text-4xl text-charcoal mb-8">Journeys that may include this stay</h2>
         <div class="grid gap-8 sm:grid-cols-3">
             @foreach($stay->journeys as $journey)
                 <x-journey-card :journey="$journey" />
