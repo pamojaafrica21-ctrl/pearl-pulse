@@ -85,9 +85,10 @@ Route::redirect('/dashboard', '/admin')->middleware(['auth', 'admin'])->name('da
 
 Route::middleware(['auth'])->prefix('account')->name('account.')->group(function () {
     Route::get('/favorites', [AccountController::class, 'favorites'])->name('favorites');
+    Route::get('/profile', [AccountController::class, 'profile'])->name('profile');
 });
 
-Route::view('profile', 'profile')
+Route::redirect('/profile', '/account/profile')
     ->middleware(['auth'])
     ->name('profile');
 

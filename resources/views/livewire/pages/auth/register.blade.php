@@ -42,10 +42,12 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <div class="mb-10">
+    <div class="mb-8">
         <p class="text-xs tracking-[0.22em] uppercase text-muted mb-3">Guest account</p>
         <h1 class="font-display text-4xl text-charcoal">Create an account</h1>
-        <p class="mt-2 text-sm text-muted">Save journeys you love, then plan a private proposal when you are ready.</p>
+        <p class="mt-3 text-sm text-muted leading-relaxed">
+            Save journeys you love, compare ideas at your pace, then plan a private proposal when you are ready.
+        </p>
     </div>
 
     <form wire:submit="register" class="space-y-5">
@@ -73,9 +75,13 @@ new #[Layout('layouts.guest')] class extends Component
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-between gap-4 pt-2">
-            <a class="text-sm text-forest hover:opacity-70" href="{{ route('login') }}" wire:navigate>Already registered?</a>
-            <button type="submit" class="btn-primary text-xs">Register</button>
+        <div class="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
+            <a class="text-sm text-forest hover:opacity-70" href="{{ route('login') }}" wire:navigate>Already registered? Sign in</a>
+            <button type="submit" class="btn-primary text-xs">Create account</button>
         </div>
     </form>
+
+    <p class="mt-10 text-center text-xs text-muted">
+        <a href="{{ route('home') }}" class="hover:text-forest">← Back to website</a>
+    </p>
 </div>

@@ -16,8 +16,20 @@ class AccountController extends Controller
             ->orderByPivot('created_at', 'desc')
             ->get();
 
+        $inspire = \App\Models\Journey::query()
+            ->published()
+            ->with('countries')
+            ->orderBy('sort_order')
+            ->first();
+
         return view('public.account.favorites', [
             'journeys' => $journeys,
+            'inspireImage' => $inspire?->coverUrl() ?: app(\App\Services\SettingService::class)->heroImageUrl(),
         ]);
+    }
+
+    public function profile(): View
+    {
+        return view('public.account.profile');
     }
 }

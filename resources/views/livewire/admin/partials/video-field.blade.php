@@ -5,7 +5,7 @@
 
 <div class="space-y-3">
     <label class="block text-xs tracking-[0.14em] uppercase text-muted">Hero video</label>
-    <p class="text-xs text-muted">Upload an MP4/WebM (max ~100MB), or paste an external video URL. Uploaded file takes priority.</p>
+    <p class="text-xs text-muted">Upload an MP4/WebM (max ~100MB), or paste a YouTube / direct video URL. Uploaded file takes priority.</p>
 
     @if($record?->video_path && ! $removeVideoFile)
         <div class="flex flex-wrap items-center gap-3 text-sm">

@@ -22,6 +22,12 @@ class AppServiceProvider extends ServiceProvider
         View::composer('layouts.public', function ($view) {
             try {
                 $settings = app(SettingService::class);
+                $heroImage = $settings->heroImageUrl();
+                $team = \App\Models\TeamMember::query()->published()->orderBy('sort_order')->first();
+                $stay = \App\Models\Stay::query()->published()->orderBy('sort_order')->first();
+                $pulse = \App\Models\PulseItem::query()->published()->orderBy('sort_order')->first();
+                $article = \App\Models\Article::query()->published()->orderBy('sort_order')->first();
+
                 $view->with([
                     'siteContact' => $settings->contact(),
                     'siteSocial' => $settings->social(),
@@ -30,6 +36,47 @@ class AppServiceProvider extends ServiceProvider
                     'whatsappUrl' => $settings->whatsappUrl('Hello Pearl Pulse — I would like to plan a journey.'),
                     'navCountries' => \App\Models\Country::query()->published()->orderBy('sort_order')->get(),
                     'navExperiences' => \App\Models\Experience::query()->published()->orderBy('sort_order')->get(),
+                    'navAboutItems' => [
+                        [
+                            'label' => 'Our story',
+                            'href' => route('about'),
+                            'teaser' => 'Who we are and how we plan private journeys.',
+                            'image' => $heroImage,
+                        ],
+                        [
+                            'label' => 'Our people',
+                            'href' => route('our-people'),
+                            'teaser' => 'Guides and planners who live this work.',
+                            'image' => $team?->coverUrl() ?: $heroImage,
+                        ],
+                        [
+                            'label' => 'Travel with a reason',
+                            'href' => route('travel-with-a-reason'),
+                            'teaser' => 'Conservation, communities, and local people.',
+                            'image' => $pulse?->coverUrl() ?: $heroImage,
+                        ],
+                        [
+                            'label' => 'Selected stays',
+                            'href' => route('stays.index'),
+                            'teaser' => 'Lodges we choose. We do not own them.',
+                            'image' => $stay?->coverUrl() ?: $heroImage,
+                            'muted' => true,
+                        ],
+                        [
+                            'label' => 'True Pulse',
+                            'href' => route('true-pulse'),
+                            'teaser' => 'Guest photographs and stories we have approved.',
+                            'image' => $pulse?->coverUrl() ?: $heroImage,
+                            'muted' => true,
+                        ],
+                        [
+                            'label' => 'Insiders',
+                            'href' => route('insiders.index'),
+                            'teaser' => 'Guides from the ground — permits, seasons, packing.',
+                            'image' => $article?->coverUrl() ?: $heroImage,
+                            'muted' => true,
+                        ],
+                    ],
                 ]);
             } catch (\Throwable) {
                 $view->with([
@@ -40,6 +87,7 @@ class AppServiceProvider extends ServiceProvider
                     'whatsappUrl' => null,
                     'navCountries' => collect(),
                     'navExperiences' => collect(),
+                    'navAboutItems' => [],
                 ]);
             }
         });

@@ -8,9 +8,6 @@ new class extends Component
 {
     public string $password = '';
 
-    /**
-     * Delete the currently authenticated user.
-     */
     public function deleteUser(Logout $logout): void
     {
         $this->validate([
@@ -23,56 +20,57 @@ new class extends Component
     }
 }; ?>
 
-<section class="space-y-6">
+<section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Delete Account') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
+        <p class="text-[11px] tracking-[0.18em] uppercase text-muted">Danger zone</p>
+        <h2 class="font-display text-2xl text-charcoal mt-2">Delete account</h2>
+        <p class="mt-2 text-sm text-muted leading-relaxed">
+            This permanently removes your account and saved journeys. This cannot be undone.
         </p>
     </header>
 
-    <x-danger-button
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Delete Account') }}</x-danger-button>
+    <div class="mt-8">
+        <button
+            type="button"
+            class="inline-flex items-center justify-center px-7 py-3 text-sm tracking-[0.12em] uppercase border border-red-700 text-red-700 transition hover:bg-red-700 hover:text-white"
+            x-data=""
+            x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
+        >
+            Delete account
+        </button>
+    </div>
 
     <x-modal name="confirm-user-deletion" :show="$errors->isNotEmpty()" focusable>
-        <form wire:submit="deleteUser" class="p-6">
-
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Are you sure you want to delete your account?') }}
+        <form wire:submit="deleteUser" class="p-6 sm:p-8">
+            <p class="text-[11px] tracking-[0.18em] uppercase text-muted">Confirm</p>
+            <h2 class="font-display text-2xl text-charcoal mt-2">
+                Delete your account?
             </h2>
 
-            <p class="mt-1 text-sm text-gray-600">
-                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
+            <p class="mt-3 text-sm text-muted leading-relaxed">
+                Enter your password to permanently delete your Pearl Pulse account and saved journeys.
             </p>
 
             <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
-
-                <x-text-input
+                <label for="password" class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Password</label>
+                <input
                     wire:model="password"
                     id="password"
                     name="password"
                     type="password"
-                    class="mt-1 block w-3/4"
-                    placeholder="{{ __('Password') }}"
-                />
-
+                    class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest"
+                    placeholder="Your password"
+                >
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
 
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
-
-                <x-danger-button class="ms-3">
-                    {{ __('Delete Account') }}
-                </x-danger-button>
+            <div class="mt-8 flex flex-wrap justify-end gap-3">
+                <button type="button" class="btn-outline-dark !py-2.5" x-on:click="$dispatch('close')">
+                    Cancel
+                </button>
+                <button type="submit" class="inline-flex items-center justify-center px-7 py-2.5 text-sm tracking-[0.12em] uppercase bg-red-700 text-white transition hover:bg-red-800">
+                    Delete account
+                </button>
             </div>
         </form>
     </x-modal>

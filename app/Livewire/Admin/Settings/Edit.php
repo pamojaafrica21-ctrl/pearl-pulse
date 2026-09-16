@@ -21,6 +21,14 @@ class Edit extends Component
 
     public string $hero_video_url = '';
 
+    public string $hero_video_source = 'url';
+
+    public ?string $currentHeroVideoPath = null;
+
+    public $hero_video = null;
+
+    public bool $removeHeroVideoFile = false;
+
     public string $home_intro_eyebrow = '';
 
     public string $home_intro_heading = '';
@@ -105,8 +113,14 @@ class Edit extends Component
 
     public string $home_experiences_intro = '';
 
-    /** @var list<array{label: string, headline: string, tagline: string, video_url: string}> */
+    /** @var list<array{label: string, headline: string, tagline: string, video_url: string, video_path: string, video_source: string}> */
     public array $hero_slides = [];
+
+    /** @var array<int, mixed> */
+    public array $hero_slide_videos = [];
+
+    /** @var array<int, bool> */
+    public array $hero_slide_remove_videos = [];
 
     public $hero_image;
 
@@ -118,7 +132,15 @@ class Edit extends Component
         $this->hero_tagline = (string) $settings->get('hero_tagline', '');
         $this->hero_kicker = (string) $settings->get('hero_kicker', '');
         $this->hero_video_url = (string) $settings->get('hero_video_url', '');
+        $this->currentHeroVideoPath = $settings->get('hero_video_path') ?: null;
+        $this->hero_video_source = $this->normalizeVideoSource(
+            (string) $settings->get('hero_video_source', ''),
+            $this->currentHeroVideoPath,
+            $this->hero_video_url
+        );
         $this->hero_slides = $this->decodeHeroSlides($settings->get('hero_slides'));
+        $this->hero_slide_videos = [null, null, null, null];
+        $this->hero_slide_remove_videos = [false, false, false, false];
         $this->home_intro_eyebrow = (string) $settings->get('home_intro_eyebrow', '');
         $this->home_intro_heading = (string) $settings->get('home_intro_heading', '');
         $this->home_intro_body = (string) $settings->get('home_intro_body', '');
@@ -180,15 +202,32 @@ class Edit extends Component
 
         $normalized = [];
         for ($i = 0; $i < 4; $i++) {
+            $videoUrl = (string) ($items[$i]['video_url'] ?? '');
+            $videoPath = (string) ($items[$i]['video_path'] ?? '');
             $normalized[] = [
                 'label' => (string) ($items[$i]['label'] ?? ''),
                 'headline' => (string) ($items[$i]['headline'] ?? ''),
                 'tagline' => (string) ($items[$i]['tagline'] ?? ''),
-                'video_url' => (string) ($items[$i]['video_url'] ?? ''),
+                'video_url' => $videoUrl,
+                'video_path' => $videoPath,
+                'video_source' => $this->normalizeVideoSource(
+                    (string) ($items[$i]['video_source'] ?? ''),
+                    $videoPath !== '' ? $videoPath : null,
+                    $videoUrl
+                ),
             ];
         }
 
         return $normalized;
+    }
+
+    protected function normalizeVideoSource(string $source, ?string $path, string $url): string
+    {
+        if (in_array($source, ['upload', 'url'], true)) {
+            return $source;
+        }
+
+        return filled($path) ? 'upload' : 'url';
     }
 
     protected function decodeList(mixed $value, int $count): array
@@ -223,11 +262,20 @@ class Edit extends Component
             'hero_kicker' => ['nullable', 'string', 'max:180'],
             'contact_whatsapp' => ['nullable', 'string', 'max:60'],
             'hero_video_url' => ['nullable', 'url', 'max:500'],
+            'hero_video_source' => ['required', 'in:upload,url'],
+            'hero_video' => ['nullable', 'file', 'mimetypes:video/mp4,video/webm,video/quicktime', 'max:102400'],
+            'removeHeroVideoFile' => ['boolean'],
             'hero_slides' => ['array'],
             'hero_slides.*.label' => ['nullable', 'string', 'max:120'],
             'hero_slides.*.headline' => ['nullable', 'string', 'max:255'],
             'hero_slides.*.tagline' => ['nullable', 'string', 'max:500'],
             'hero_slides.*.video_url' => ['nullable', 'url', 'max:500'],
+            'hero_slides.*.video_path' => ['nullable', 'string', 'max:500'],
+            'hero_slides.*.video_source' => ['required', 'in:upload,url'],
+            'hero_slide_videos' => ['array'],
+            'hero_slide_videos.*' => ['nullable', 'file', 'mimetypes:video/mp4,video/webm,video/quicktime', 'max:102400'],
+            'hero_slide_remove_videos' => ['array'],
+            'hero_slide_remove_videos.*' => ['boolean'],
             'home_intro_eyebrow' => ['nullable', 'string', 'max:120'],
             'home_intro_heading' => ['nullable', 'string', 'max:180'],
             'home_intro_body' => ['nullable', 'string', 'max:2000'],
@@ -278,7 +326,7 @@ class Edit extends Component
         ];
     }
 
-    public function save(SettingService $settings, ImageUploader $uploader): void
+    public function save(SettingService $settings, ImageUploader $uploader, \App\Services\VideoUploader $videos): void
     {
         $this->validate();
 
@@ -288,6 +336,22 @@ class Edit extends Component
             $settings->set('hero_image', $this->currentHeroPath);
             $this->hero_image = null;
         }
+
+        if ($this->removeHeroVideoFile && $this->currentHeroVideoPath) {
+            $videos->delete($this->currentHeroVideoPath);
+            $this->currentHeroVideoPath = null;
+            $this->removeHeroVideoFile = false;
+        }
+
+        if ($this->hero_video) {
+            $videos->delete($this->currentHeroVideoPath);
+            $this->currentHeroVideoPath = $videos->store($this->hero_video, 'site/hero');
+            $this->hero_video = null;
+            $this->hero_video_source = 'upload';
+        }
+
+        $settings->set('hero_video_path', $this->currentHeroVideoPath ?? '');
+        $settings->set('hero_video_source', $this->hero_video_source);
 
         $map = [
             'hero_headline', 'hero_tagline', 'hero_kicker', 'hero_video_url',
@@ -312,9 +376,42 @@ class Edit extends Component
             $settings->set($key, $this->{$key});
         }
 
+        $slides = [];
+        foreach ($this->hero_slides as $index => $slide) {
+            $videoPath = (string) ($slide['video_path'] ?? '');
+
+            if (! empty($this->hero_slide_remove_videos[$index]) && $videoPath !== '') {
+                $videos->delete($videoPath);
+                $videoPath = '';
+            }
+
+            if (! empty($this->hero_slide_videos[$index])) {
+                $videos->delete($videoPath !== '' ? $videoPath : null);
+                $videoPath = $videos->store($this->hero_slide_videos[$index], 'site/hero/'.$index);
+                $slide['video_source'] = 'upload';
+            }
+
+            $slides[] = [
+                'label' => (string) ($slide['label'] ?? ''),
+                'headline' => (string) ($slide['headline'] ?? ''),
+                'tagline' => (string) ($slide['tagline'] ?? ''),
+                'video_url' => (string) ($slide['video_url'] ?? ''),
+                'video_path' => $videoPath,
+                'video_source' => $this->normalizeVideoSource(
+                    (string) ($slide['video_source'] ?? ''),
+                    $videoPath !== '' ? $videoPath : null,
+                    (string) ($slide['video_url'] ?? '')
+                ),
+            ];
+        }
+
+        $this->hero_slides = $slides;
+        $this->hero_slide_videos = [null, null, null, null];
+        $this->hero_slide_remove_videos = [false, false, false, false];
+
         $settings->set('home_pillars', json_encode(array_values($this->home_pillars)));
         $settings->set('about_values', json_encode(array_values($this->about_values)));
-        $settings->set('hero_slides', json_encode(array_values($this->hero_slides)));
+        $settings->set('hero_slides', json_encode(array_values($slides)));
 
         session()->flash('status', 'Settings saved.');
     }
@@ -326,10 +423,23 @@ class Edit extends Component
         $this->currentHeroPath = null;
     }
 
+    public function clearHeroVideo(): void
+    {
+        $this->hero_video = null;
+        $this->removeHeroVideoFile = true;
+    }
+
+    public function clearHeroSlideVideo(int $index): void
+    {
+        $this->hero_slide_videos[$index] = null;
+        $this->hero_slide_remove_videos[$index] = true;
+    }
+
     public function render()
     {
         return view('livewire.admin.settings.edit', [
             'uploader' => app(ImageUploader::class),
+            'videoUploader' => app(\App\Services\VideoUploader::class),
         ])->layout('layouts.admin', ['heading' => 'Site settings']);
     }
 }

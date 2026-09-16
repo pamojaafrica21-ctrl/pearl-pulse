@@ -51,7 +51,7 @@ class HomeController extends Controller
             'homeCtaButton' => $settings->get('home_cta_button', 'Plan your journey'),
             'countries' => $countries,
             'journeys' => $journeys,
-            'experiences' => Experience::query()->published()->orderBy('sort_order')->take(6)->get(),
+            'experiences' => Experience::query()->published()->orderBy('sort_order')->take(12)->get(),
             'reviews' => Review::query()->published()->with('journey')->orderBy('sort_order')->take(4)->get(),
             'whatsappUrl' => $settings->whatsappUrl('Hello Pearl Pulse — I would like to plan a journey.'),
             'reviewLinks' => $settings->reviewLinks(),

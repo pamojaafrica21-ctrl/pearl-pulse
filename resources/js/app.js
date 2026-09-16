@@ -60,15 +60,11 @@ function initParallax() {
 }
 
 function initMarquees() {
-    if (prefersReducedMotion()) return;
-
     document.querySelectorAll('[data-marquee]').forEach((track) => {
-        const inner = track.querySelector('[data-marquee-inner]');
-        if (!inner || inner.dataset.cloned === '1') return;
-
-        inner.innerHTML = inner.innerHTML + inner.innerHTML;
-        inner.dataset.cloned = '1';
-        track.classList.add('marquee-active');
+        // Markup already duplicates groups for a seamless CSS loop.
+        // Only wire pause-on-focus for keyboard users.
+        track.addEventListener('focusin', () => track.classList.add('is-paused'));
+        track.addEventListener('focusout', () => track.classList.remove('is-paused'));
     });
 }
 
@@ -84,12 +80,90 @@ function initHeaderShrink() {
     onScroll();
 }
 
+function initYouTubeHeroes() {
+    const frames = Array.from(document.querySelectorAll('.hero-youtube__frame'));
+    if (!frames.length) return;
+
+    const isYouTubeOrigin = (origin) => {
+        try {
+            const host = new URL(origin).hostname.replace(/^www\./, '');
+            return host === 'youtube.com' || host === 'youtube-nocookie.com';
+        } catch {
+            return false;
+        }
+    };
+
+    const markPlaying = (source) => {
+        frames.forEach((frame) => {
+            if (frame.contentWindow === source) {
+                frame.classList.add('is-playing');
+            }
+        });
+    };
+
+    window.addEventListener('message', (event) => {
+        if (!isYouTubeOrigin(event.origin)) return;
+
+        let data = event.data;
+        if (typeof data === 'string') {
+            try {
+                data = JSON.parse(data);
+            } catch {
+                return;
+            }
+        }
+        if (!data || typeof data !== 'object') return;
+
+        const state =
+            data.event === 'onStateChange'
+                ? data.info
+                : data.event === 'infoDelivery'
+                  ? data.info?.playerState
+                  : null;
+
+        // 1 = playing
+        if (state === 1) {
+            markPlaying(event.source);
+        }
+    });
+
+    const listen = (frame) => {
+        try {
+            frame.contentWindow?.postMessage(
+                JSON.stringify({ event: 'listening', id: frame.id || 1 }),
+                '*'
+            );
+            frame.contentWindow?.postMessage(
+                JSON.stringify({
+                    event: 'command',
+                    func: 'addEventListener',
+                    args: ['onStateChange'],
+                }),
+                '*'
+            );
+        } catch {
+            // Cross-origin / blocked embeds stay on the poster image.
+        }
+    };
+
+    frames.forEach((frame) => {
+        if (frame.dataset.ytBound === '1') return;
+        frame.dataset.ytBound = '1';
+        frame.addEventListener('load', () => listen(frame));
+        // In case load already fired
+        if (frame.contentWindow) {
+            listen(frame);
+        }
+    });
+}
+
 function boot() {
     document.documentElement.classList.add('js-motion');
     initReveals();
     initParallax();
     initMarquees();
     initHeaderShrink();
+    initYouTubeHeroes();
 }
 
 document.addEventListener('DOMContentLoaded', boot);

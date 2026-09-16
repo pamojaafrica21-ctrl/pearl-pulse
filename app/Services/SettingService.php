@@ -79,7 +79,8 @@ class SettingService
     {
         $raw = $this->get('hero_slides', '[]');
         $items = is_array($raw) ? $raw : (json_decode((string) $raw, true) ?: []);
-        $uploader = app(ImageUploader::class);
+        $images = app(ImageUploader::class);
+        $videos = app(VideoUploader::class);
         $slides = [];
 
         foreach ($items as $item) {
@@ -91,9 +92,13 @@ class SettingService
             $headline = trim((string) ($item['headline'] ?? ''));
             $tagline = trim((string) ($item['tagline'] ?? ''));
             $videoUrl = trim((string) ($item['video_url'] ?? ''));
+            $videoPath = trim((string) ($item['video_path'] ?? ''));
             $imagePath = trim((string) ($item['image_path'] ?? ''));
+            $source = (string) ($item['video_source'] ?? '');
 
-            if ($label === '' && $headline === '' && $videoUrl === '' && $imagePath === '') {
+            $resolvedVideo = $this->resolveHeroVideoUrl($source, $videoPath, $videoUrl, $videos);
+
+            if ($label === '' && $headline === '' && $resolvedVideo === '' && $imagePath === '') {
                 continue;
             }
 
@@ -101,8 +106,8 @@ class SettingService
                 'label' => $label,
                 'headline' => $headline,
                 'tagline' => $tagline,
-                'video_url' => $videoUrl,
-                'image_url' => $imagePath !== '' ? $uploader->url($imagePath) : null,
+                'video_url' => $resolvedVideo,
+                'image_url' => $imagePath !== '' ? $images->url($imagePath) : null,
             ];
         }
 
@@ -110,13 +115,36 @@ class SettingService
             return $slides;
         }
 
+        $fallbackPath = trim((string) $this->get('hero_video_path', ''));
+        $fallbackUrl = trim((string) $this->get('hero_video_url', ''));
+        $fallbackSource = (string) $this->get('hero_video_source', '');
+
         return [[
             'label' => (string) $this->get('hero_kicker', ''),
             'headline' => (string) $this->get('hero_headline', 'Private journeys into Africa’s wild heart'),
             'tagline' => (string) $this->get('hero_tagline', 'Private, tailor-made journeys shaped around how you want to experience Africa.'),
-            'video_url' => (string) $this->get('hero_video_url', ''),
+            'video_url' => $this->resolveHeroVideoUrl($fallbackSource, $fallbackPath, $fallbackUrl, $videos),
             'image_url' => $this->heroImageUrl(),
         ]];
+    }
+
+    protected function resolveHeroVideoUrl(string $source, string $path, string $url, VideoUploader $videos): string
+    {
+        $preferUpload = $source === 'upload' || ($source === '' && $path !== '');
+
+        if ($preferUpload && $path !== '') {
+            return (string) ($videos->url($path) ?? '');
+        }
+
+        if ($url !== '') {
+            return $url;
+        }
+
+        if ($path !== '') {
+            return (string) ($videos->url($path) ?? '');
+        }
+
+        return '';
     }
 
     public function isSitePublic(): bool

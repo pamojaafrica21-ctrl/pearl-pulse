@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
 
     <title>@yield('title', config('app.name'))</title>
     <meta name="description" content="@yield('meta_description', 'Private, tailor-made journeys across Uganda, Rwanda, Kenya, and Tanzania with Pearl Pulse Safaris.')">
@@ -39,6 +40,7 @@
                         <a class="utility-link" href="{{ route('admin.dashboard') }}">Admin</a>
                     @else
                         <a class="utility-link" href="{{ route('account.favorites') }}">My journeys</a>
+                        <a class="utility-link" href="{{ route('account.profile') }}">Profile</a>
                     @endif
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
@@ -57,16 +59,40 @@
             <nav class="hidden lg:flex items-center gap-6 xl:gap-8" aria-label="Primary left">
                 <div class="relative group/nav">
                     <a href="{{ route('journeys.index') }}" class="{{ request()->routeIs('journeys.*') ? 'nav-link-active font-medium' : 'nav-link' }}">Journeys</a>
-                    <div class="nav-mega nav-mega-wide">
+                    <div class="nav-mega nav-mega-visual nav-mega-start">
                         <p class="nav-mega-label">Explore journeys</p>
-                        <div class="nav-mega-grid">
-                            <a href="{{ route('journeys.index') }}" class="nav-mega-link">All journeys</a>
-                            <a href="{{ route('journeys.finder') }}" class="nav-mega-link">Journey Finder</a>
+                        <div class="nav-mega-countries">
+                            <a href="{{ route('journeys.index') }}" class="nav-mega-country">
+                                <span class="nav-mega-country-thumb nav-mega-country-thumb--icon">
+                                    <span class="text-[10px] tracking-[0.14em] uppercase text-forest">All</span>
+                                </span>
+                                <span>
+                                    <span class="block text-[0.95rem] text-charcoal">All journeys</span>
+                                    <span class="nav-mega-sub">Browse every private itinerary</span>
+                                </span>
+                            </a>
+                            <a href="{{ route('journeys.finder') }}" class="nav-mega-country">
+                                <span class="nav-mega-country-thumb nav-mega-country-thumb--icon">
+                                    <span class="text-[10px] tracking-[0.14em] uppercase text-forest">Find</span>
+                                </span>
+                                <span>
+                                    <span class="block text-[0.95rem] text-charcoal">Journey Finder</span>
+                                    <span class="nav-mega-sub">Filter by country, duration, and pace</span>
+                                </span>
+                            </a>
                             @foreach($navCountries as $country)
-                                <a href="{{ route('journeys.country', $country) }}" class="nav-mega-link nav-mega-link-muted">{{ $country->name }}</a>
+                                <a href="{{ route('journeys.country', $country) }}" class="nav-mega-country">
+                                    <span class="nav-mega-country-thumb">
+                                        @if($country->coverThumbUrl() || $country->coverUrl())
+                                            <img src="{{ $country->coverThumbUrl() ?: $country->coverUrl() }}" alt="" loading="lazy">
+                                        @endif
+                                    </span>
+                                    <span>
+                                        <span class="block text-[0.95rem] text-charcoal">{{ $country->name }}</span>
+                                        <span class="nav-mega-sub">{{ $country->subtitle ?: ($country->teaser ? \Illuminate\Support\Str::limit($country->teaser, 56) : 'Journeys in '.$country->name) }}</span>
+                                    </span>
+                                </a>
                             @endforeach
-                            <a href="{{ route('journeys.index') }}?type=multi" class="nav-mega-link nav-mega-link-muted">Multi-country</a>
-                            <a href="{{ route('journeys.index') }}?type=signature" class="nav-mega-link nav-mega-link-muted">Signature</a>
                         </div>
                     </div>
                 </div>
@@ -86,6 +112,8 @@
                                         <span class="block text-[0.95rem] text-charcoal">{{ $country->name }}</span>
                                         @if($country->subtitle)
                                             <span class="nav-mega-sub">{{ $country->subtitle }}</span>
+                                        @elseif($country->teaser)
+                                            <span class="nav-mega-sub">{{ \Illuminate\Support\Str::limit($country->teaser, 56) }}</span>
                                         @endif
                                     </span>
                                 </a>
@@ -95,11 +123,25 @@
                 </div>
                 <div class="relative group/nav">
                     <a href="{{ route('experiences.index') }}" class="{{ request()->routeIs('experiences.*') ? 'nav-link-active font-medium' : 'nav-link' }}">Experiences</a>
-                    <div class="nav-mega nav-mega-lg">
+                    <div class="nav-mega nav-mega-visual">
                         <p class="nav-mega-label">How you travel</p>
-                        <div class="nav-mega-list">
+                        <div class="nav-mega-countries">
                             @foreach($navExperiences as $experience)
-                                <a href="{{ route('experiences.show', $experience) }}" class="nav-mega-link">{{ $experience->name }}</a>
+                                <a href="{{ route('experiences.show', $experience) }}" class="nav-mega-country">
+                                    <span class="nav-mega-country-thumb">
+                                        @if($experience->coverThumbUrl() || $experience->coverUrl())
+                                            <img src="{{ $experience->coverThumbUrl() ?: $experience->coverUrl() }}" alt="" loading="lazy">
+                                        @endif
+                                    </span>
+                                    <span>
+                                        <span class="block text-[0.95rem] text-charcoal">{{ $experience->name }}</span>
+                                        @if($experience->teaser)
+                                            <span class="nav-mega-sub">{{ \Illuminate\Support\Str::limit($experience->teaser, 56) }}</span>
+                                        @elseif($experience->subtitle)
+                                            <span class="nav-mega-sub">{{ $experience->subtitle }}</span>
+                                        @endif
+                                    </span>
+                                </a>
                             @endforeach
                         </div>
                     </div>
@@ -111,17 +153,40 @@
             </a>
 
             <div class="hidden lg:flex items-center justify-end gap-5 xl:gap-6">
-                <div class="relative group/nav">
+                <div
+                    class="relative group/nav"
+                    x-data="{ aboutPreview: 0 }"
+                >
                     <a href="{{ route('about') }}" class="{{ request()->routeIs('about') || request()->routeIs('our-people') || request()->routeIs('travel-with-a-reason') || request()->routeIs('true-pulse') || request()->routeIs('insiders.*') || request()->routeIs('stays.*') ? 'nav-link-active font-medium' : 'nav-link' }}">About</a>
-                    <div class="nav-mega nav-mega-md nav-mega-end">
+                    <div class="nav-mega nav-mega-about nav-mega-end">
                         <p class="nav-mega-label">Pearl Pulse</p>
-                        <div class="nav-mega-list">
-                            <a href="{{ route('about') }}" class="nav-mega-link">Our story</a>
-                            <a href="{{ route('our-people') }}" class="nav-mega-link">Our people</a>
-                            <a href="{{ route('travel-with-a-reason') }}" class="nav-mega-link">Travel with a reason</a>
-                            <a href="{{ route('stays.index') }}" class="nav-mega-link nav-mega-link-muted">Selected stays</a>
-                            <a href="{{ route('true-pulse') }}" class="nav-mega-link nav-mega-link-muted">True Pulse</a>
-                            <a href="{{ route('insiders.index') }}" class="nav-mega-link nav-mega-link-muted">Insiders</a>
+                        <div class="nav-mega-about-grid">
+                            <div class="nav-mega-list">
+                                @foreach($navAboutItems as $i => $item)
+                                    <a
+                                        href="{{ $item['href'] }}"
+                                        class="nav-mega-link {{ !empty($item['muted']) ? 'nav-mega-link-muted' : '' }}"
+                                        @mouseenter="aboutPreview = {{ $i }}"
+                                        @focus="aboutPreview = {{ $i }}"
+                                    >{{ $item['label'] }}</a>
+                                @endforeach
+                            </div>
+                            <div class="nav-mega-about-preview">
+                                @foreach($navAboutItems as $i => $item)
+                                    <div
+                                        class="nav-mega-about-preview__panel"
+                                        x-show="aboutPreview === {{ $i }}"
+                                        @if($i !== 0) x-cloak @endif
+                                    >
+                                        @if(!empty($item['image']))
+                                            <img src="{{ $item['image'] }}" alt="" loading="lazy">
+                                        @else
+                                            <div class="nav-mega-about-preview__fallback"></div>
+                                        @endif
+                                        <p class="nav-mega-about-preview__copy">{{ $item['teaser'] }}</p>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -208,6 +273,7 @@
                 @auth
                     @unless(auth()->user()->isAdmin())
                         <a href="{{ route('account.favorites') }}" class="block text-sm tracking-[0.14em] uppercase text-charcoal">My journeys</a>
+                        <a href="{{ route('account.profile') }}" class="block text-sm tracking-[0.14em] uppercase text-charcoal">Profile</a>
                     @endunless
                 @else
                     <a href="{{ route('login') }}" class="block text-sm tracking-[0.14em] uppercase text-charcoal">Sign in</a>

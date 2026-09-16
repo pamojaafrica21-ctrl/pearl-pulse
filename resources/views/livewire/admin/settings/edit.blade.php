@@ -27,10 +27,35 @@
                 @error('hero_image') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
-                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Hero video URL (optional fallback)</label>
-                <input type="url" wire:model="hero_video_url" placeholder="https://…" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
-                @error('hero_video_url') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
-                <p class="mt-2 text-xs text-muted">Used when rotating slides below are empty.</p>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Hero video (optional fallback)</label>
+                <p class="mb-3 text-xs text-muted">Used when rotating slides below are empty. Choose uploaded file or a YouTube / MP4 URL.</p>
+                <div class="mb-3 flex flex-wrap gap-4 text-sm">
+                    <label class="inline-flex items-center gap-2">
+                        <input type="radio" wire:model.live="hero_video_source" value="upload" class="border-sand-deep/40 text-forest focus:ring-forest">
+                        Uploaded video
+                    </label>
+                    <label class="inline-flex items-center gap-2">
+                        <input type="radio" wire:model.live="hero_video_source" value="url" class="border-sand-deep/40 text-forest focus:ring-forest">
+                        YouTube or URL
+                    </label>
+                </div>
+                @if($hero_video_source === 'upload')
+                    @if($currentHeroVideoPath && ! $removeHeroVideoFile)
+                        <div class="mb-2 flex flex-wrap items-center gap-3 text-sm">
+                            <span class="inline-flex items-center gap-2 rounded-sm bg-forest/10 px-2 py-1 text-forest">Video file attached</span>
+                            <a href="{{ $videoUploader->url($currentHeroVideoPath) }}" target="_blank" rel="noopener" class="text-forest hover:underline">Preview</a>
+                            <button type="button" wire:click="clearHeroVideo" class="text-red-700 hover:underline">Remove file</button>
+                        </div>
+                    @elseif($removeHeroVideoFile)
+                        <p class="mb-2 text-xs text-amber-800">Video file will be removed when you save.</p>
+                    @endif
+                    <input type="file" wire:model="hero_video" accept="video/mp4,video/webm,video/quicktime" class="text-sm w-full">
+                    <div wire:loading wire:target="hero_video" class="text-xs text-muted mt-1">Uploading video…</div>
+                    @error('hero_video') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                @else
+                    <input type="url" wire:model="hero_video_url" placeholder="https://www.youtube.com/watch?v=…" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                    @error('hero_video_url') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                @endif
             </div>
         </section>
 
@@ -43,7 +68,37 @@
                     <input type="text" wire:model="hero_slides.{{ $index }}.label" placeholder="Destination label (e.g. Kenya)" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
                     <input type="text" wire:model="hero_slides.{{ $index }}.headline" placeholder="Headline" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
                     <input type="text" wire:model="hero_slides.{{ $index }}.tagline" placeholder="Tagline" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
-                    <input type="url" wire:model="hero_slides.{{ $index }}.video_url" placeholder="Video URL (optional)" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+
+                    <div class="space-y-2 pt-1">
+                        <p class="text-xs tracking-[0.12em] uppercase text-muted">Slide video</p>
+                        <div class="flex flex-wrap gap-4 text-sm">
+                            <label class="inline-flex items-center gap-2">
+                                <input type="radio" wire:model.live="hero_slides.{{ $index }}.video_source" value="upload" class="border-sand-deep/40 text-forest focus:ring-forest">
+                                Uploaded video
+                            </label>
+                            <label class="inline-flex items-center gap-2">
+                                <input type="radio" wire:model.live="hero_slides.{{ $index }}.video_source" value="url" class="border-sand-deep/40 text-forest focus:ring-forest">
+                                YouTube or URL
+                            </label>
+                        </div>
+                        @if(($slide['video_source'] ?? 'url') === 'upload')
+                            @if(!empty($slide['video_path']) && empty($hero_slide_remove_videos[$index]))
+                                <div class="flex flex-wrap items-center gap-3 text-sm">
+                                    <span class="inline-flex items-center gap-2 rounded-sm bg-forest/10 px-2 py-1 text-forest">Video file attached</span>
+                                    <a href="{{ $videoUploader->url($slide['video_path']) }}" target="_blank" rel="noopener" class="text-forest hover:underline">Preview</a>
+                                    <button type="button" wire:click="clearHeroSlideVideo({{ $index }})" class="text-red-700 hover:underline">Remove file</button>
+                                </div>
+                            @elseif(!empty($hero_slide_remove_videos[$index]))
+                                <p class="text-xs text-amber-800">Video file will be removed when you save.</p>
+                            @endif
+                            <input type="file" wire:model="hero_slide_videos.{{ $index }}" accept="video/mp4,video/webm,video/quicktime" class="text-sm w-full">
+                            <div wire:loading wire:target="hero_slide_videos.{{ $index }}" class="text-xs text-muted">Uploading video…</div>
+                            @error('hero_slide_videos.'.$index) <p class="text-sm text-red-600">{{ $message }}</p> @enderror
+                        @else
+                            <input type="url" wire:model="hero_slides.{{ $index }}.video_url" placeholder="YouTube or MP4 URL (optional)" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                            @error('hero_slides.'.$index.'.video_url') <p class="text-sm text-red-600">{{ $message }}</p> @enderror
+                        @endif
+                    </div>
                 </div>
             @endforeach
         </section>

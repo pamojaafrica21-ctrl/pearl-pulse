@@ -27,10 +27,12 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <div class="mb-10">
+    <div class="mb-8">
         <p class="text-xs tracking-[0.22em] uppercase text-muted mb-3">Sign in</p>
         <h1 class="font-display text-4xl text-charcoal">Welcome back</h1>
-        <p class="mt-2 text-sm text-muted">Access your saved journeys, or continue to the admin if you manage the site.</p>
+        <p class="mt-3 text-sm text-muted leading-relaxed">
+            Access your saved journeys and continue planning at your own pace.
+        </p>
     </div>
 
     <x-auth-session-status class="mb-4 text-sm text-forest" :status="session('status')" />
@@ -84,7 +86,7 @@ new #[Layout('layouts.guest')] class extends Component
             @endif
         </div>
 
-        <div class="flex items-center justify-between gap-4 pt-2">
+        <div class="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
             <a class="text-sm text-forest hover:opacity-70" href="{{ route('register') }}" wire:navigate>Create an account</a>
             <button type="submit" class="btn-primary text-xs">Sign in</button>
         </div>
