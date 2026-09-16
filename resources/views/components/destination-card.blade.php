@@ -1,14 +1,14 @@
 @props(['destination'])
 
 @php
-    $cover = $destination->coverUrl();
+    $cover = $destination->coverThumbUrl() ?: $destination->coverUrl();
     $countryName = $destination->country?->name ?? '';
 @endphp
 
 <a href="{{ $destination->publicUrl() }}" class="destination-card group">
     <div class="overflow-hidden bg-forest/10">
         @if($cover)
-            <img src="{{ $cover }}" alt="{{ $destination->name }}" loading="lazy">
+            <img src="{{ $cover }}" alt="{{ $destination->name }}" loading="lazy" decoding="async">
         @else
             <div class="aspect-[4/5] bg-gradient-to-br from-forest to-forest-light"></div>
         @endif

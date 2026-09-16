@@ -9,6 +9,12 @@ use RuntimeException;
 
 class ImageUploader
 {
+    /** @var array<string, string|null> */
+    protected array $resolvedThumbs = [];
+
+    /** @var array<string, bool> */
+    protected array $thumbExistence = [];
+
     public function __construct(
         protected string $disk = ''
     ) {
@@ -77,17 +83,75 @@ class ImageUploader
             return null;
         }
 
-        $thumb = preg_replace('/(\.[a-zA-Z0-9]+)$/', '_thumb$1', $path);
-
-        if ($thumb && Storage::disk($this->disk)->exists($thumb)) {
-            if ($this->disk === 'public' || config('filesystems.disks.'.$this->disk.'.driver') === 'local') {
-                return '/storage/'.ltrim($thumb, '/');
-            }
-
-            return Storage::disk($this->disk)->url($thumb);
+        if (array_key_exists($path, $this->resolvedThumbs)) {
+            return $this->resolvedThumbs[$path];
         }
 
-        return $this->url($path);
+        $thumb = preg_replace('/(\.[a-zA-Z0-9]+)$/', '_thumb$1', $path);
+
+        if ($thumb && $this->thumbExists($thumb)) {
+            return $this->resolvedThumbs[$path] = $this->publicUrlFor($thumb);
+        }
+
+        return $this->resolvedThumbs[$path] = $this->url($path);
+    }
+
+    /**
+     * Create a missing _thumb sibling for an existing stored image.
+     */
+    public function ensureThumb(?string $path): ?string
+    {
+        if (! $path) {
+            return null;
+        }
+
+        $thumb = preg_replace('/(\.[a-zA-Z0-9]+)$/', '_thumb$1', $path);
+        if (! $thumb) {
+            return null;
+        }
+
+        if ($this->thumbExists($thumb)) {
+            return $thumb;
+        }
+
+        $disk = Storage::disk($this->disk);
+        if (! $disk->exists($path)) {
+            return null;
+        }
+
+        $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION) ?: 'jpg');
+        $absolute = $disk->path($path);
+        $binary = $this->resizeToMax($absolute, 600, $extension === 'jpeg' ? 'jpg' : $extension);
+        $disk->put($thumb, $binary);
+
+        $this->thumbExistence[$thumb] = true;
+        unset($this->resolvedThumbs[$path]);
+
+        return $thumb;
+    }
+
+    protected function thumbExists(string $thumb): bool
+    {
+        if (array_key_exists($thumb, $this->thumbExistence)) {
+            return $this->thumbExistence[$thumb];
+        }
+
+        if ($this->disk === 'public' || config('filesystems.disks.'.$this->disk.'.driver') === 'local') {
+            $root = config('filesystems.disks.'.$this->disk.'.root') ?: storage_path('app/public');
+
+            return $this->thumbExistence[$thumb] = is_file(rtrim($root, '/').'/'.ltrim($thumb, '/'));
+        }
+
+        return $this->thumbExistence[$thumb] = Storage::disk($this->disk)->exists($thumb);
+    }
+
+    protected function publicUrlFor(string $path): string
+    {
+        if ($this->disk === 'public' || config('filesystems.disks.'.$this->disk.'.driver') === 'local') {
+            return '/storage/'.ltrim($path, '/');
+        }
+
+        return Storage::disk($this->disk)->url($path);
     }
 
     /**

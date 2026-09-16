@@ -56,12 +56,11 @@
                     @endif
                     <iframe
                         class="hero-youtube__frame"
-                        src="{{ $youtubeEmbed }}"
+                        x-bind:src="index === {{ $i }} ? @js($youtubeEmbed) : ''"
                         title="{{ $slide['headline'] ?: ($slide['label'] ?: 'Pearl Pulse Safaris') }}"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         referrerpolicy="strict-origin-when-cross-origin"
                         allowfullscreen
-                        loading="{{ $i === 0 ? 'eager' : 'lazy' }}"
                     ></iframe>
                 </div>
             @elseif(!empty($slide['video_url']))
@@ -304,8 +303,8 @@
                                         @focus="go({{ $slideIndex }})"
                                     >
                                         <div class="hidden sm:block w-24 h-[4.5rem] shrink-0 overflow-hidden bg-forest/10">
-                                            @if($journey->coverUrl())
-                                                <img src="{{ $journey->coverUrl() }}" alt="" class="h-full w-full object-cover" loading="lazy">
+                                            @if($journey->coverThumbUrl() || $journey->coverUrl())
+                                                <img src="{{ $journey->coverThumbUrl() ?: $journey->coverUrl() }}" alt="" class="h-full w-full object-cover" loading="lazy" decoding="async">
                                             @endif
                                         </div>
                                         <div class="min-w-0 flex-1">
@@ -356,8 +355,8 @@
                                 class="experience-tile group relative block overflow-hidden min-h-[20rem] w-[78vw] sm:w-[42vw] lg:w-[22rem] xl:w-[26rem] shrink-0 bg-forest"
                                 @if($isClone) tabindex="-1" @endif
                             >
-                                @if($experience->coverUrl())
-                                    <img src="{{ $experience->coverUrl() }}" alt="{{ $isClone ? '' : $experience->name }}" class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy">
+                                @if($experience->coverThumbUrl() || $experience->coverUrl())
+                                    <img src="{{ $experience->coverThumbUrl() ?: $experience->coverUrl() }}" alt="{{ $isClone ? '' : $experience->name }}" class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy" decoding="async">
                                 @endif
                                 <div class="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/25 to-transparent"></div>
                                 <div class="tile-copy relative z-10 flex h-full min-h-[20rem] flex-col justify-end p-6">

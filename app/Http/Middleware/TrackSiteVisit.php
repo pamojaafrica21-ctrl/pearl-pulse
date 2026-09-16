@@ -30,7 +30,8 @@ class TrackSiteVisit
 
         $sessionId = $request->session()->getId();
         if ($sessionId) {
-            PageVisit::record($request->path(), $sessionId);
+            $path = $request->path();
+            defer(static fn () => PageVisit::record($path, $sessionId));
         }
 
         return $response;

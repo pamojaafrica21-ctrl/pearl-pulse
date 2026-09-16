@@ -1,11 +1,11 @@
 @props(['stay'])
 
-@php $cover = $stay->coverUrl(); @endphp
+@php $cover = $stay->coverThumbUrl() ?: $stay->coverUrl(); @endphp
 
 <a href="{{ route('stays.show', $stay) }}" class="destination-card group">
     <div class="overflow-hidden bg-forest/10">
         @if($cover)
-            <img src="{{ $cover }}" alt="{{ $stay->name }}" loading="lazy">
+            <img src="{{ $cover }}" alt="{{ $stay->name }}" loading="lazy" decoding="async">
         @else
             <div class="aspect-[4/5] bg-gradient-to-br from-forest to-forest-light"></div>
         @endif

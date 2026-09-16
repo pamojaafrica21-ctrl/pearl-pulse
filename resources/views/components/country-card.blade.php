@@ -1,11 +1,11 @@
 @props(['country'])
 
-@php $cover = $country->coverUrl(); @endphp
+@php $cover = $country->coverThumbUrl() ?: $country->coverUrl(); @endphp
 
 <a href="{{ route('destinations.country', $country) }}" class="destination-card group">
     <div class="overflow-hidden bg-forest/10">
         @if($cover)
-            <img src="{{ $cover }}" alt="{{ $country->name }}" loading="lazy">
+            <img src="{{ $cover }}" alt="{{ $country->name }}" loading="lazy" decoding="async">
         @else
             <div class="aspect-[4/5] bg-gradient-to-br from-forest to-forest-light"></div>
         @endif

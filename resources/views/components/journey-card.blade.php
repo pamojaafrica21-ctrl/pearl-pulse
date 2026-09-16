@@ -1,7 +1,7 @@
 @props(['journey'])
 
 @php
-    $cover = $journey->coverUrl();
+    $cover = $journey->coverThumbUrl() ?: $journey->coverUrl();
     $countries = $journey->relationLoaded('countries')
         ? $journey->countries->pluck('name')->join(' · ')
         : '';
@@ -10,7 +10,7 @@
 <a href="{{ route('journeys.show', $journey) }}" class="destination-card group">
     <div class="overflow-hidden bg-forest/10">
         @if($cover)
-            <img src="{{ $cover }}" alt="{{ $journey->name }}" loading="lazy">
+            <img src="{{ $cover }}" alt="{{ $journey->name }}" loading="lazy" decoding="async">
         @else
             <div class="aspect-[4/5] bg-gradient-to-br from-forest to-forest-light"></div>
         @endif

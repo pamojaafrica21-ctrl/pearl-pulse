@@ -28,11 +28,14 @@ class Setting extends Model
             ['value' => is_array($value) ? json_encode($value) : $value]
         );
 
-        Cache::forget('site_settings');
+        static::flushCache();
     }
 
     public static function flushCache(): void
     {
         Cache::forget('site_settings');
+        if (class_exists(\App\Support\PublicNav::class)) {
+            \App\Support\PublicNav::forget();
+        }
     }
 }

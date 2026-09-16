@@ -81,15 +81,15 @@
                                 </span>
                             </a>
                             @foreach($navCountries as $country)
-                                <a href="{{ route('journeys.country', $country) }}" class="nav-mega-country">
+                                <a href="{{ $country['journeys_url'] }}" class="nav-mega-country">
                                     <span class="nav-mega-country-thumb">
-                                        @if($country->coverThumbUrl() || $country->coverUrl())
-                                            <img src="{{ $country->coverThumbUrl() ?: $country->coverUrl() }}" alt="" loading="lazy">
+                                        @if(!empty($country['image']))
+                                            <img src="{{ $country['image'] }}" alt="" loading="lazy" decoding="async">
                                         @endif
                                     </span>
                                     <span>
-                                        <span class="block text-[0.95rem] text-charcoal">{{ $country->name }}</span>
-                                        <span class="nav-mega-sub">{{ $country->subtitle ?: ($country->teaser ? \Illuminate\Support\Str::limit($country->teaser, 56) : 'Journeys in '.$country->name) }}</span>
+                                        <span class="block text-[0.95rem] text-charcoal">{{ $country['name'] }}</span>
+                                        <span class="nav-mega-sub">{{ $country['subtitle'] ?: ($country['teaser'] ? \Illuminate\Support\Str::limit($country['teaser'], 56) : 'Journeys in '.$country['name']) }}</span>
                                     </span>
                                 </a>
                             @endforeach
@@ -102,18 +102,18 @@
                         <p class="nav-mega-label">Where we travel</p>
                         <div class="nav-mega-countries">
                             @foreach($navCountries as $country)
-                                <a href="{{ route('destinations.country', $country) }}" class="nav-mega-country">
+                                <a href="{{ $country['destinations_url'] }}" class="nav-mega-country">
                                     <span class="nav-mega-country-thumb">
-                                        @if($country->coverThumbUrl() || $country->coverUrl())
-                                            <img src="{{ $country->coverThumbUrl() ?: $country->coverUrl() }}" alt="" loading="lazy">
+                                        @if(!empty($country['image']))
+                                            <img src="{{ $country['image'] }}" alt="" loading="lazy" decoding="async">
                                         @endif
                                     </span>
                                     <span>
-                                        <span class="block text-[0.95rem] text-charcoal">{{ $country->name }}</span>
-                                        @if($country->subtitle)
-                                            <span class="nav-mega-sub">{{ $country->subtitle }}</span>
-                                        @elseif($country->teaser)
-                                            <span class="nav-mega-sub">{{ \Illuminate\Support\Str::limit($country->teaser, 56) }}</span>
+                                        <span class="block text-[0.95rem] text-charcoal">{{ $country['name'] }}</span>
+                                        @if($country['subtitle'])
+                                            <span class="nav-mega-sub">{{ $country['subtitle'] }}</span>
+                                        @elseif($country['teaser'])
+                                            <span class="nav-mega-sub">{{ \Illuminate\Support\Str::limit($country['teaser'], 56) }}</span>
                                         @endif
                                     </span>
                                 </a>
@@ -127,18 +127,16 @@
                         <p class="nav-mega-label">How you travel</p>
                         <div class="nav-mega-countries">
                             @foreach($navExperiences as $experience)
-                                <a href="{{ route('experiences.show', $experience) }}" class="nav-mega-country">
+                                <a href="{{ $experience['url'] }}" class="nav-mega-country">
                                     <span class="nav-mega-country-thumb">
-                                        @if($experience->coverThumbUrl() || $experience->coverUrl())
-                                            <img src="{{ $experience->coverThumbUrl() ?: $experience->coverUrl() }}" alt="" loading="lazy">
+                                        @if(!empty($experience['image']))
+                                            <img src="{{ $experience['image'] }}" alt="" loading="lazy" decoding="async">
                                         @endif
                                     </span>
                                     <span>
-                                        <span class="block text-[0.95rem] text-charcoal">{{ $experience->name }}</span>
-                                        @if($experience->teaser)
-                                            <span class="nav-mega-sub">{{ \Illuminate\Support\Str::limit($experience->teaser, 56) }}</span>
-                                        @elseif($experience->subtitle)
-                                            <span class="nav-mega-sub">{{ $experience->subtitle }}</span>
+                                        <span class="block text-[0.95rem] text-charcoal">{{ $experience['name'] }}</span>
+                                        @if($experience['teaser'])
+                                            <span class="nav-mega-sub">{{ \Illuminate\Support\Str::limit($experience['teaser'], 56) }}</span>
                                         @endif
                                     </span>
                                 </a>
@@ -231,7 +229,7 @@
                     <a href="{{ route('journeys.index') }}" class="block text-sm text-muted">All journeys</a>
                     <a href="{{ route('journeys.finder') }}" class="block text-sm text-muted">Journey Finder</a>
                     @foreach($navCountries as $country)
-                        <a href="{{ route('journeys.country', $country) }}" class="block text-sm text-muted">{{ $country->name }}</a>
+                        <a href="{{ $country['journeys_url'] }}" class="block text-sm text-muted">{{ $country['name'] }}</a>
                     @endforeach
                 </div>
 
@@ -241,7 +239,7 @@
                 </button>
                 <div x-show="section === 'destinations'" x-cloak class="pb-3 space-y-2 pl-3">
                     @foreach($navCountries as $country)
-                        <a href="{{ route('destinations.country', $country) }}" class="block text-sm text-muted">{{ $country->name }}</a>
+                        <a href="{{ $country['destinations_url'] }}" class="block text-sm text-muted">{{ $country['name'] }}</a>
                     @endforeach
                 </div>
 
@@ -251,7 +249,7 @@
                 </button>
                 <div x-show="section === 'experiences'" x-cloak class="pb-3 space-y-2 pl-3">
                     @foreach($navExperiences as $experience)
-                        <a href="{{ route('experiences.show', $experience) }}" class="block text-sm text-muted">{{ $experience->name }}</a>
+                        <a href="{{ $experience['url'] }}" class="block text-sm text-muted">{{ $experience['name'] }}</a>
                     @endforeach
                 </div>
 
