@@ -15,7 +15,7 @@ class HomeController extends Controller
     {
         $countries = Country::query()
             ->published()
-            ->with(['journeys' => fn ($q) => $q->published()->orderBy('journeys.sort_order')])
+            ->with(['destinations' => fn ($q) => $q->published()->orderBy('sort_order')->orderBy('name')])
             ->orderBy('sort_order')
             ->get();
 
