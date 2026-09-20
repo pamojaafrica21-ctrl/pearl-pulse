@@ -23,46 +23,64 @@
         mobilePanel: null,
         footerOpen: null,
         navOpen: false,
-        navSection: 'destinations',
-        navFocus: {{ data_get($navCountries->first(), 'id', 'null') }},
-        countryFocus: {{ data_get($navCountries->first(), 'id', 'null') }},
-        experienceFocus: {{ data_get($navExperiences->first(), 'id', 'null') }},
-        aboutFocus: 0,
+        navSection: null,
+        navFocus: null,
+        itemFocus: null,
+        countryFocus: null,
+        experienceFocus: null,
+        aboutFocus: null,
+        mobileCountry: null,
         openNav(section) {
             if (this.navOpen && this.navSection === section) {
+                if (this.navFocus !== null) {
+                    this.navFocus = null;
+                    this.itemFocus = null;
+                    return;
+                }
                 this.closeNav();
                 return;
             }
             this.navSection = section;
-            this.syncFocus();
+            this.navFocus = null;
+            this.itemFocus = null;
             this.navOpen = true;
             this.closeMobile();
         },
         setSection(section) {
             this.navSection = section;
-            this.syncFocus();
+            this.navFocus = null;
+            this.itemFocus = null;
         },
-        syncFocus() {
+        selectNavItem(id) {
+            this.navFocus = id;
+            this.itemFocus = null;
             if (this.navSection === 'experiences') {
-                this.navFocus = this.experienceFocus;
+                this.experienceFocus = id;
             } else if (this.navSection === 'about') {
-                this.navFocus = this.aboutFocus;
+                this.aboutFocus = id;
             } else {
-                this.navFocus = this.countryFocus;
+                this.countryFocus = id;
             }
+        },
+        hoverLeaf(id) {
+            this.itemFocus = id;
         },
         closeNav() {
             this.navOpen = false;
+            this.navFocus = null;
+            this.itemFocus = null;
         },
         openMobile() {
             this.closeNav();
             this.mobileOpen = true;
             this.mobilePanel = null;
+            this.mobileCountry = null;
             document.documentElement.classList.add('overflow-hidden');
         },
         closeMobile() {
             this.mobileOpen = false;
             this.mobilePanel = null;
+            this.mobileCountry = null;
             document.documentElement.classList.remove('overflow-hidden');
         },
         toggleMobile() {
@@ -74,8 +92,16 @@
         },
         openMobilePanel(panel) {
             this.mobilePanel = panel;
+            this.mobileCountry = null;
+        },
+        openMobileCountry(id) {
+            this.mobileCountry = id;
         },
         backMobilePanel() {
+            if (this.mobileCountry !== null) {
+                this.mobileCountry = null;
+                return;
+            }
             this.mobilePanel = null;
         }
     }"
@@ -270,7 +296,7 @@
             </div>
 
             {{-- Destinations --}}
-            <div class="mobile-drawer__level" x-show="mobilePanel === 'destinations'" x-cloak x-transition.opacity>
+            <div class="mobile-drawer__level" x-show="mobilePanel === 'destinations' && mobileCountry === null" x-cloak x-transition.opacity>
                 <button type="button" class="mobile-drawer__subhead" @click="backMobilePanel()">
                     <span>Destinations</span>
                     <span class="mobile-drawer__chevron mobile-drawer__chevron--down" aria-hidden="true"></span>
@@ -278,22 +304,46 @@
                 @if($navCountries->isNotEmpty())
                     <div class="mobile-nav__grid">
                         @foreach($navCountries as $country)
-                            <a href="{{ $country['destinations_url'] }}" class="mobile-nav__card" @click="closeMobile()">
+                            <button type="button" class="mobile-nav__card" @click="openMobileCountry({{ $country['id'] }})">
                                 @if(!empty($country['image']) || !empty($country['image_full']))
                                     <img src="{{ $country['image'] ?: $country['image_full'] }}" alt="" loading="lazy" decoding="async">
                                 @else
                                     <span class="mobile-nav__card-fallback" aria-hidden="true"></span>
                                 @endif
                                 <span class="mobile-nav__card-label">{{ $country['name'] }}</span>
-                            </a>
+                            </button>
                         @endforeach
                     </div>
                 @endif
                 <a href="{{ route('destinations.index') }}" class="mobile-nav__all" @click="closeMobile()">All destinations</a>
             </div>
 
+            @foreach($navCountries as $country)
+                <div class="mobile-drawer__level" x-show="mobilePanel === 'destinations' && mobileCountry === {{ $country['id'] }}" x-cloak x-transition.opacity>
+                    <button type="button" class="mobile-drawer__subhead" @click="backMobilePanel()">
+                        <span>{{ $country['name'] }}</span>
+                        <span class="mobile-drawer__chevron mobile-drawer__chevron--down" aria-hidden="true"></span>
+                    </button>
+                    <div class="mobile-nav__leaf-list">
+                        @forelse($country['destinations'] as $destination)
+                            <a href="{{ $destination['url'] }}" class="mobile-nav__leaf" @click="closeMobile()">
+                                @if(!empty($destination['image']) || !empty($destination['image_full']) || !empty($country['image']))
+                                    <img src="{{ $destination['image'] ?? ($destination['image_full'] ?? $country['image']) }}" alt="" loading="lazy" decoding="async">
+                                @else
+                                    <span class="mobile-nav__leaf-fallback" aria-hidden="true"></span>
+                                @endif
+                                <span>{{ $destination['name'] }}</span>
+                            </a>
+                        @empty
+                            <p class="mobile-drawer__text-link">Destinations coming soon.</p>
+                        @endforelse
+                    </div>
+                    <a href="{{ $country['destinations_url'] }}" class="mobile-nav__all" @click="closeMobile()">All {{ $country['name'] }} destinations</a>
+                </div>
+            @endforeach
+
             {{-- Journeys --}}
-            <div class="mobile-drawer__level" x-show="mobilePanel === 'journeys'" x-cloak x-transition.opacity>
+            <div class="mobile-drawer__level" x-show="mobilePanel === 'journeys' && mobileCountry === null" x-cloak x-transition.opacity>
                 <button type="button" class="mobile-drawer__subhead" @click="backMobilePanel()">
                     <span>Journeys</span>
                     <span class="mobile-drawer__chevron mobile-drawer__chevron--down" aria-hidden="true"></span>
@@ -301,20 +351,44 @@
                 @if($navCountries->isNotEmpty())
                     <div class="mobile-nav__grid">
                         @foreach($navCountries as $country)
-                            <a href="{{ $country['journeys_url'] }}" class="mobile-nav__card" @click="closeMobile()">
+                            <button type="button" class="mobile-nav__card" @click="openMobileCountry({{ $country['id'] }})">
                                 @if(!empty($country['image']) || !empty($country['image_full']))
                                     <img src="{{ $country['image'] ?: $country['image_full'] }}" alt="" loading="lazy" decoding="async">
                                 @else
                                     <span class="mobile-nav__card-fallback" aria-hidden="true"></span>
                                 @endif
                                 <span class="mobile-nav__card-label">{{ $country['name'] }}</span>
-                            </a>
+                            </button>
                         @endforeach
                     </div>
                 @endif
                 <a href="{{ route('journeys.index') }}" class="mobile-nav__all" @click="closeMobile()">All journeys</a>
                 <a href="{{ route('journeys.finder') }}" class="mobile-drawer__text-link mt-3" @click="closeMobile()">Journey Finder</a>
             </div>
+
+            @foreach($navCountries as $country)
+                <div class="mobile-drawer__level" x-show="mobilePanel === 'journeys' && mobileCountry === {{ $country['id'] }}" x-cloak x-transition.opacity>
+                    <button type="button" class="mobile-drawer__subhead" @click="backMobilePanel()">
+                        <span>{{ $country['name'] }} journeys</span>
+                        <span class="mobile-drawer__chevron mobile-drawer__chevron--down" aria-hidden="true"></span>
+                    </button>
+                    <div class="mobile-nav__leaf-list">
+                        @forelse($country['journeys'] as $journey)
+                            <a href="{{ $journey['url'] }}" class="mobile-nav__leaf" @click="closeMobile()">
+                                @if(!empty($journey['image']) || !empty($country['image']))
+                                    <img src="{{ $journey['image'] ?? $country['image'] }}" alt="" loading="lazy" decoding="async">
+                                @else
+                                    <span class="mobile-nav__leaf-fallback" aria-hidden="true"></span>
+                                @endif
+                                <span>{{ $journey['name'] }}</span>
+                            </a>
+                        @empty
+                            <p class="mobile-drawer__text-link">Journeys coming soon.</p>
+                        @endforelse
+                    </div>
+                    <a href="{{ $country['journeys_url'] }}" class="mobile-nav__all" @click="closeMobile()">All {{ $country['name'] }} journeys</a>
+                </div>
+            @endforeach
 
             {{-- Experiences --}}
             <div class="mobile-drawer__level" x-show="mobilePanel === 'experiences'" x-cloak x-transition.opacity>
@@ -364,7 +438,7 @@
         aria-hidden="true"
     ></div>
 
-    <div class="hidden lg:block">
+    <div class="hidden lg:block relative z-[46]">
         <x-site-nav-panel
             :countries="$navCountries"
             :experiences="$navExperiences"

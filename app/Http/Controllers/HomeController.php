@@ -15,9 +15,69 @@ class HomeController extends Controller
     {
         $countries = Country::query()
             ->published()
-            ->with(['destinations' => fn ($q) => $q->published()->orderBy('sort_order')->orderBy('name')])
+            ->with(['destinations' => fn ($q) => $q->published()->orderByDesc('is_featured')->orderBy('sort_order')->orderBy('name')])
             ->orderBy('sort_order')
             ->get();
+
+        $countryOrder = ['uganda', 'kenya', 'tanzania', 'rwanda'];
+        $orderedCountries = collect($countryOrder)
+            ->map(fn (string $slug) => $countries->firstWhere('slug', $slug))
+            ->filter()
+            ->concat($countries->reject(fn (Country $country) => in_array($country->slug, $countryOrder, true)))
+            ->values();
+
+        $destinationPanels = $orderedCountries
+            ->map(function (Country $country) {
+                $items = $country->destinations->take(3)->map(fn ($destination) => [
+                    'href' => route('destinations.show', [$country, $destination]),
+                    'image' => $destination->coverUrl() ?: $country->coverUrl(),
+                    'thumb' => $destination->coverThumbUrl() ?: $destination->coverUrl() ?: $country->coverUrl(),
+                    'kicker' => $country->name,
+                    'title' => $destination->name,
+                    'meta' => $destination->region ?: $destination->duration,
+                    'teaser' => $destination->teaser,
+                ])->values();
+
+                if ($items->isEmpty()) {
+                    return null;
+                }
+
+                return [
+                    'key' => $country->slug,
+                    'label' => $country->name,
+                    'href' => route('destinations.country', $country),
+                    'explore' => 'Explore '.$country->name,
+                    'items' => $items,
+                ];
+            })
+            ->filter()
+            ->values();
+
+        $multiJourneys = Journey::query()
+            ->published()
+            ->where('is_multi_country', true)
+            ->with('countries')
+            ->orderBy('sort_order')
+            ->take(3)
+            ->get();
+
+        if ($multiJourneys->isNotEmpty()) {
+            $destinationPanels->push([
+                'key' => 'multi',
+                'label' => 'Around East Africa',
+                'href' => route('journeys.index', ['type' => 'multi']),
+                'explore' => 'Explore multi-country',
+                'items' => $multiJourneys->map(fn (Journey $journey) => [
+                    'href' => route('journeys.show', $journey),
+                    'image' => $journey->coverUrl(),
+                    'thumb' => $journey->coverThumbUrl() ?: $journey->coverUrl(),
+                    'kicker' => $journey->countries->pluck('name')->filter()->join(' · ') ?: 'Multi-country',
+                    'title' => $journey->name,
+                    'meta' => $journey->duration_label,
+                    'teaser' => $journey->teaser,
+                ])->values(),
+            ]);
+        }
 
         $journeys = Journey::query()
             ->published()
@@ -50,6 +110,7 @@ class HomeController extends Controller
             'homeCtaText' => $settings->get('home_cta_text', ''),
             'homeCtaButton' => $settings->get('home_cta_button', 'Plan your journey'),
             'countries' => $countries,
+            'destinationPanels' => $destinationPanels,
             'journeys' => $journeys,
             'experiences' => Experience::query()->published()->orderBy('sort_order')->take(12)->get(),
             'reviews' => Review::query()->published()->with('journey')->orderBy('sort_order')->take(4)->get(),

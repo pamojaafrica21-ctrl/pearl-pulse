@@ -14,11 +14,12 @@ use Illuminate\Support\Facades\Cache;
 
 class PublicNav
 {
-    public const CACHE_KEY = 'public_nav_shell_v6';
+    public const CACHE_KEY = 'public_nav_shell_v7';
 
     public static function forget(): void
     {
         Cache::forget(self::CACHE_KEY);
+        Cache::forget('public_nav_shell_v6');
         Cache::forget('public_nav_shell_v5');
         Cache::forget('public_nav_shell_v4');
         Cache::forget('public_nav_shell_v3');
@@ -61,7 +62,11 @@ class PublicNav
                         'destinations' => $country->destinations->take(10)->map(fn ($destination) => [
                             'id' => $destination->id,
                             'name' => $destination->name,
+                            'teaser' => $destination->teaser,
+                            'subtitle' => $destination->subtitle,
                             'url' => route('destinations.show', [$country, $destination]),
+                            'image' => $images->thumbUrl($destination->cover_path) ?: $images->url($destination->cover_path),
+                            'image_full' => $images->url($destination->cover_path),
                         ])->values()->all(),
                         'journeys' => $country->journeys->take(8)->map(fn ($journey) => [
                             'id' => $journey->id,

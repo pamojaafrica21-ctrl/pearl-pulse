@@ -181,206 +181,200 @@
 <section class="relative bg-cream py-16 lg:py-20 overflow-hidden">
     <x-section-edge placement="top" variant="wave" class="text-cream" />
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <div class="reveal mx-auto max-w-3xl text-center">
-            <div class="mb-4 flex justify-center">
+        <div class="reveal mx-auto max-w-3xl text-center max-lg:mx-0 max-lg:text-left">
+            <div class="mb-4 flex justify-center max-lg:justify-start">
                 <x-path-accent />
             </div>
             <p class="section-eyebrow">{{ $destinationsEyebrow }}</p>
             <h2 class="font-display text-4xl md:text-5xl text-charcoal">{{ $destinationsHeading }}</h2>
             @if($destinationsIntro)
-                <p class="mt-4 text-muted leading-relaxed">{{ $destinationsIntro }}</p>
+                <p class="mt-4 text-muted leading-relaxed max-lg:max-w-xl">{{ $destinationsIntro }}</p>
             @endif
         </div>
 
-        @if($countries->isNotEmpty())
+        @if($destinationPanels->isNotEmpty())
             <div
                 class="mt-10"
-                x-data="{ active: '{{ $countries->first()->slug }}' }"
+                x-data="{ active: '{{ $destinationPanels->first()['key'] }}' }"
             >
                 <nav class="country-navbar reveal" aria-label="Countries">
                     <div class="country-navbar__track" role="tablist">
-                        @foreach($countries as $country)
+                        @foreach($destinationPanels as $panel)
                             <button
                                 type="button"
-                                id="country-tab-{{ $country->slug }}"
+                                id="country-tab-{{ $panel['key'] }}"
                                 class="country-navbar__tab{{ $loop->first ? ' is-active' : '' }}"
                                 role="tab"
-                                :class="{ 'is-active': active === '{{ $country->slug }}' }"
-                                :aria-selected="(active === '{{ $country->slug }}').toString()"
-                                aria-controls="country-panel-{{ $country->slug }}"
-                                @click="active = '{{ $country->slug }}'; $el.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' })"
-                            >{{ $country->name }}</button>
+                                :class="{ 'is-active': active === '{{ $panel['key'] }}' }"
+                                :aria-selected="(active === '{{ $panel['key'] }}').toString()"
+                                aria-controls="country-panel-{{ $panel['key'] }}"
+                                @click="
+                                    active = '{{ $panel['key'] }}';
+                                    $el.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+                                    $nextTick(() => document.getElementById('country-carousel-{{ $panel['key'] }}')?.scrollTo({ left: 0 }));
+                                "
+                            >{{ $panel['label'] }}</button>
                         @endforeach
                     </div>
                 </nav>
 
-                @foreach($countries as $country)
+                @foreach($destinationPanels as $panel)
                     @php
-                        $parks = $country->destinations;
-                        $destinationSlides = $parks->isNotEmpty()
-                            ? $parks->map(fn ($destination) => [
-                                'type' => 'destination',
-                                'href' => route('destinations.show', [$country, $destination]),
-                                'image' => $destination->coverUrl() ?: $country->coverUrl(),
-                                'thumb' => $destination->coverThumbUrl() ?: $destination->coverUrl() ?: $country->coverUrl(),
-                                'title' => $destination->name,
-                                'meta' => $destination->region ?: $destination->duration,
-                                'teaser' => $destination->teaser,
-                            ])->values()
-                            : collect([[
-                                'type' => 'country',
-                                'href' => route('destinations.country', $country),
-                                'image' => $country->coverUrl(),
-                                'thumb' => $country->coverThumbUrl() ?: $country->coverUrl(),
-                                'title' => $country->name,
-                                'meta' => null,
-                                'teaser' => $country->teaser,
-                            ]]);
-                        $slideCount = $destinationSlides->count();
+                        $items = $panel['items'];
+                        $slideCount = $items->count();
                     @endphp
                     <div
-                        id="country-panel-{{ $country->slug }}"
+                        id="country-panel-{{ $panel['key'] }}"
                         role="tabpanel"
-                        aria-labelledby="country-tab-{{ $country->slug }}"
-                        x-show="active === '{{ $country->slug }}'"
+                        aria-labelledby="country-tab-{{ $panel['key'] }}"
+                        x-show="active === '{{ $panel['key'] }}'"
                         @if(! $loop->first) x-cloak @endif
                     >
-                    <div
-                        class="destination-block grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 lg:items-start"
-                        x-data="{
-                            index: 0,
-                            count: {{ $slideCount }},
-                            timer: null,
-                            duration: 4000,
-                            paused: false,
-                            next() { this.index = (this.index + 1) % this.count; this.restart() },
-                            prev() { this.index = (this.index - 1 + this.count) % this.count; this.restart() },
-                            go(i) { this.index = i; this.restart() },
-                            restart() {
-                                clearInterval(this.timer);
-                                if (this.count > 1 && !this.paused) {
-                                    this.timer = setInterval(() => { this.index = (this.index + 1) % this.count }, this.duration);
-                                }
-                            },
-                            pause() { this.paused = true; clearInterval(this.timer) },
-                            resume() { this.paused = false; this.restart() }
-                        }"
-                        x-init="restart()"
-                        @mouseenter="pause()"
-                        @mouseleave="resume()"
-                        @focusin="pause()"
-                        @focusout="resume()"
-                    >
-                        <div class="country-panel__media relative overflow-hidden bg-forest aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5]">
-                            @foreach($destinationSlides as $i => $slide)
-                                <a
-                                    href="{{ $slide['href'] }}"
-                                    class="absolute inset-0 block"
-                                    x-show="index === {{ $i }}"
-                                    x-transition:enter="transition ease-out duration-700"
-                                    x-transition:enter-start="opacity-0"
-                                    x-transition:enter-end="opacity-100"
-                                    x-transition:leave="transition ease-in duration-500"
-                                    x-transition:leave-start="opacity-100"
-                                    x-transition:leave-end="opacity-0"
-                                    @if($i !== 0) x-cloak @endif
-                                >
-                                    @if($slide['image'])
-                                        <img
-                                            src="{{ $slide['image'] }}"
-                                            alt="{{ $slide['title'] }}"
-                                            class="absolute inset-0 h-full w-full object-cover scale-105"
-                                            loading="{{ $i === 0 && $loop->parent->first ? 'eager' : 'lazy' }}"
-                                        >
+                        <div
+                            id="country-carousel-{{ $panel['key'] }}"
+                            class="destination-carousel lg:hidden"
+                        >
+                            @foreach($items as $item)
+                                <a href="{{ $item['href'] }}" class="destination-slide">
+                                    @if($item['image'])
+                                        <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}" loading="{{ $loop->first ? 'eager' : 'lazy' }}">
                                     @else
                                         <div class="absolute inset-0 bg-gradient-to-br from-forest to-forest-light"></div>
                                     @endif
-                                    <div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/25 to-transparent"></div>
-                                    <div class="absolute inset-x-0 bottom-0 p-5 sm:p-6 pb-8">
-                                        @if($slide['type'] === 'destination')
-                                            <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">{{ $country->name }}</p>
+                                    <div class="destination-slide__shade"></div>
+                                    <div class="destination-slide__copy">
+                                        <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">{{ $item['kicker'] }}</p>
+                                        <h3 class="font-display text-3xl text-white leading-tight mt-1">{{ $item['title'] }}</h3>
+                                        @if($item['teaser'])
+                                            <p class="mt-2 text-sm text-white/85 leading-relaxed line-clamp-3">{{ $item['teaser'] }}</p>
                                         @endif
-                                        <h3 class="font-display text-3xl md:text-4xl text-white leading-tight mt-1">{{ $slide['title'] }}</h3>
-                                        @if($slide['meta'])
-                                            <p class="mt-2 text-[11px] tracking-[0.16em] uppercase text-white/70">{{ $slide['meta'] }}</p>
-                                        @endif
-                                        @if($slide['teaser'])
-                                            <p class="mt-2 text-sm text-white/85 leading-relaxed line-clamp-3">{{ $slide['teaser'] }}</p>
-                                        @endif
+                                        <span class="destination-slide__cta" aria-hidden="true">Explore</span>
                                     </div>
                                 </a>
                             @endforeach
-
-                            @if($slideCount > 1)
-                                <div class="absolute top-4 right-4 z-10 flex gap-2">
-                                    <button type="button" class="country-panel__nav" @click.prevent="prev()" aria-label="Previous destination">
-                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"/></svg>
-                                    </button>
-                                    <button type="button" class="country-panel__nav" @click.prevent="next()" aria-label="Next destination">
-                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
-                                    </button>
-                                </div>
-                                <div class="absolute bottom-3 left-5 right-5 z-10 flex gap-1.5" role="tablist" aria-label="{{ $country->name }} destinations">
-                                    @foreach($destinationSlides as $i => $slide)
-                                        <button
-                                            type="button"
-                                            class="h-1 flex-1 transition"
-                                            :class="index === {{ $i }} ? 'bg-white' : 'bg-white/35 hover:bg-white/60'"
-                                            @click.prevent="go({{ $i }})"
-                                            :aria-selected="(index === {{ $i }}).toString()"
-                                            aria-label="Show {{ $slide['title'] }}"
-                                        ></button>
-                                    @endforeach
-                                </div>
-                            @endif
                         </div>
 
-                        <div class="flex flex-col min-h-0 lg:pt-1">
-                            <div class="flex flex-wrap items-baseline justify-between gap-3 mb-5">
-                                <div>
-                                    <p class="text-[11px] tracking-[0.18em] uppercase text-muted">Destinations</p>
-                                    <h3 class="font-display text-3xl text-charcoal mt-1">{{ $country->name }}</h3>
-                                </div>
-                                <a href="{{ route('destinations.country', $country) }}" class="text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">
-                                    Explore {{ $country->name }}
-                                </a>
+                        <div class="mt-5 lg:hidden">
+                            <a href="{{ $panel['href'] }}" class="text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">
+                                {{ $panel['explore'] }}
+                            </a>
+                        </div>
+
+                        <div
+                            class="destination-block hidden lg:grid grid-cols-2 gap-12 items-start"
+                            x-data="{
+                                index: 0,
+                                count: {{ $slideCount }},
+                                timer: null,
+                                duration: 4000,
+                                paused: false,
+                                next() { this.index = (this.index + 1) % this.count; this.restart() },
+                                prev() { this.index = (this.index - 1 + this.count) % this.count; this.restart() },
+                                go(i) { this.index = i; this.restart() },
+                                restart() {
+                                    clearInterval(this.timer);
+                                    if (this.count > 1 && !this.paused) {
+                                        this.timer = setInterval(() => { this.index = (this.index + 1) % this.count }, this.duration);
+                                    }
+                                },
+                                pause() { this.paused = true; clearInterval(this.timer) },
+                                resume() { this.paused = false; this.restart() }
+                            }"
+                            x-init="restart()"
+                            @mouseenter="pause()"
+                            @mouseleave="resume()"
+                            @focusin="pause()"
+                            @focusout="resume()"
+                        >
+                            <div class="country-panel__media relative overflow-hidden bg-forest aspect-[4/5]">
+                                @foreach($items as $i => $item)
+                                    <a
+                                        href="{{ $item['href'] }}"
+                                        class="absolute inset-0 block"
+                                        x-show="index === {{ $i }}"
+                                        x-transition:enter="transition ease-out duration-700"
+                                        x-transition:enter-start="opacity-0"
+                                        x-transition:enter-end="opacity-100"
+                                        x-transition:leave="transition ease-in duration-500"
+                                        x-transition:leave-start="opacity-100"
+                                        x-transition:leave-end="opacity-0"
+                                        @if($i !== 0) x-cloak @endif
+                                    >
+                                        @if($item['image'])
+                                            <img
+                                                src="{{ $item['image'] }}"
+                                                alt="{{ $item['title'] }}"
+                                                class="absolute inset-0 h-full w-full object-cover scale-105"
+                                                loading="{{ $i === 0 && $loop->parent->first ? 'eager' : 'lazy' }}"
+                                            >
+                                        @else
+                                            <div class="absolute inset-0 bg-gradient-to-br from-forest to-forest-light"></div>
+                                        @endif
+                                        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/25 to-transparent"></div>
+                                        <div class="absolute inset-x-0 bottom-0 p-6 pb-8">
+                                            <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">{{ $item['kicker'] }}</p>
+                                            <h3 class="font-display text-3xl md:text-4xl text-white leading-tight mt-1">{{ $item['title'] }}</h3>
+                                            @if($item['meta'])
+                                                <p class="mt-2 text-[11px] tracking-[0.16em] uppercase text-white/70">{{ $item['meta'] }}</p>
+                                            @endif
+                                            @if($item['teaser'])
+                                                <p class="mt-2 text-sm text-white/85 leading-relaxed line-clamp-3">{{ $item['teaser'] }}</p>
+                                            @endif
+                                        </div>
+                                    </a>
+                                @endforeach
+
+                                @if($slideCount > 1)
+                                    <div class="absolute top-4 right-4 z-10 flex gap-2">
+                                        <button type="button" class="country-panel__nav" @click.prevent="prev()" aria-label="Previous destination">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"/></svg>
+                                        </button>
+                                        <button type="button" class="country-panel__nav" @click.prevent="next()" aria-label="Next destination">
+                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
+                                        </button>
+                                    </div>
+                                @endif
                             </div>
 
-                            @if($parks->isEmpty())
-                                <p class="text-sm text-muted">Destinations for {{ $country->name }} are being prepared.</p>
-                            @else
-                                <div class="space-y-1 flex-1">
-                                    @foreach($destinationSlides as $dIndex => $slide)
+                            <div class="flex flex-col min-h-0 pt-1">
+                                <div class="flex flex-wrap items-baseline justify-between gap-3 mb-5">
+                                    <div>
+                                        <p class="text-[11px] tracking-[0.18em] uppercase text-muted">Destinations</p>
+                                        <h3 class="font-display text-3xl text-charcoal mt-1">{{ $panel['label'] }}</h3>
+                                    </div>
+                                    <a href="{{ $panel['href'] }}" class="text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">
+                                        {{ $panel['explore'] }}
+                                    </a>
+                                </div>
+
+                                <div class="flex flex-col gap-3">
+                                    @foreach($items as $dIndex => $item)
                                         <a
-                                            href="{{ $slide['href'] }}"
-                                            class="journey-row group flex gap-4 sm:gap-5 items-start border-b border-charcoal/10 py-4 sm:py-5 last:border-0"
+                                            href="{{ $item['href'] }}"
+                                            class="destination-pick group"
                                             :class="index === {{ $dIndex }} ? 'is-active' : ''"
                                             @mouseenter="go({{ $dIndex }})"
                                             @focus="go({{ $dIndex }})"
                                         >
-                                            <div class="hidden sm:block w-24 h-[4.5rem] shrink-0 overflow-hidden bg-forest/10">
-                                                @if($slide['thumb'])
-                                                    <img src="{{ $slide['thumb'] }}" alt="" class="h-full w-full object-cover" loading="lazy" decoding="async">
+                                            <div class="destination-pick__media">
+                                                @if($item['thumb'])
+                                                    <img src="{{ $item['thumb'] }}" alt="" loading="lazy" decoding="async">
                                                 @endif
                                             </div>
                                             <div class="min-w-0 flex-1">
-                                                <h4
-                                                    class="font-display text-xl sm:text-2xl text-charcoal group-hover:text-forest transition"
-                                                    :class="index === {{ $dIndex }} ? 'text-forest' : ''"
-                                                >{{ $slide['title'] }}</h4>
-                                                @if($slide['meta'])
-                                                    <p class="mt-1 text-[11px] tracking-[0.16em] uppercase text-muted">{{ $slide['meta'] }}</p>
+                                                <h4 class="font-display text-xl text-charcoal group-hover:text-forest transition">{{ $item['title'] }}</h4>
+                                                @if($item['meta'])
+                                                    <p class="mt-1 text-[11px] tracking-[0.16em] uppercase text-muted">{{ $item['meta'] }}</p>
                                                 @endif
-                                                @if($slide['teaser'])
-                                                    <p class="mt-2 text-sm text-muted leading-relaxed line-clamp-2">{{ $slide['teaser'] }}</p>
+                                                @if($item['teaser'])
+                                                    <p class="mt-2 text-sm text-muted leading-relaxed line-clamp-2">{{ $item['teaser'] }}</p>
                                                 @endif
                                             </div>
                                         </a>
                                     @endforeach
                                 </div>
-                            @endif
+                            </div>
                         </div>
-                    </div>
                     </div>
                 @endforeach
             </div>
