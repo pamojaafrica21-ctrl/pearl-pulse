@@ -5,8 +5,8 @@
 ])
 
 @php
-    $firstCountryId = $countries->first()?->id;
-    $firstExperienceId = $experiences->first()?->id;
+    $firstCountryId = $countries->first()['id'] ?? null;
+    $firstExperienceId = $experiences->first()['id'] ?? null;
 @endphp
 
 <div
@@ -51,11 +51,11 @@
                     @if($countries->isNotEmpty())
                         <div class="site-nav-panel__tiles">
                             @foreach($countries->take(2) as $country)
-                                <a href="{{ route('destinations.country', $country) }}" class="site-nav-panel__tile" @mouseenter="navFocus = {{ $country->id }}; countryFocus = {{ $country->id }}" @focus="navFocus = {{ $country->id }}; countryFocus = {{ $country->id }}">
-                                    @if($country->coverThumbUrl() || $country->coverUrl())
-                                        <img src="{{ $country->coverThumbUrl() ?: $country->coverUrl() }}" alt="" loading="lazy">
+                                <a href="{{ $country['destinations_url'] }}" class="site-nav-panel__tile" @mouseenter="navFocus = {{ $country['id'] }}; countryFocus = {{ $country['id'] }}" @focus="navFocus = {{ $country['id'] }}; countryFocus = {{ $country['id'] }}">
+                                    @if(!empty($country['image']))
+                                        <img src="{{ $country['image'] }}" alt="" loading="lazy">
                                     @endif
-                                    <span>{{ $country->name }}</span>
+                                    <span>{{ $country['name'] }}</span>
                                 </a>
                             @endforeach
                         </div>
@@ -65,12 +65,12 @@
                                 <button
                                     type="button"
                                     class="site-nav-panel__list-item"
-                                    :class="navFocus === {{ $country->id }} && 'is-active'"
-                                    @mouseenter="navFocus = {{ $country->id }}; countryFocus = {{ $country->id }}"
-                                    @focus="navFocus = {{ $country->id }}; countryFocus = {{ $country->id }}"
-                                    @click="navFocus = {{ $country->id }}; countryFocus = {{ $country->id }}"
+                                    :class="navFocus === {{ $country['id'] }} && 'is-active'"
+                                    @mouseenter="navFocus = {{ $country['id'] }}; countryFocus = {{ $country['id'] }}"
+                                    @focus="navFocus = {{ $country['id'] }}; countryFocus = {{ $country['id'] }}"
+                                    @click="navFocus = {{ $country['id'] }}; countryFocus = {{ $country['id'] }}"
                                 >
-                                    <span>{{ $country->name }}</span>
+                                    <span>{{ $country['name'] }}</span>
                                     <span class="site-nav-panel__chevron" aria-hidden="true">›</span>
                                 </button>
                             @endforeach
@@ -79,11 +79,11 @@
                 </div>
                 <div class="site-nav-panel__col site-nav-panel__col--detail">
                     @foreach($countries as $country)
-                        <div x-show="navFocus === {{ $country->id }}" @if($country->id !== $firstCountryId) x-cloak @endif>
-                            <a href="{{ route('destinations.country', $country) }}" class="site-nav-panel__all">All {{ $country->name }} destinations</a>
+                        <div x-show="navFocus === {{ $country['id'] }}" @if($country['id'] !== $firstCountryId) x-cloak @endif>
+                            <a href="{{ $country['destinations_url'] }}" class="site-nav-panel__all">All {{ $country['name'] }} destinations</a>
                             <div class="site-nav-panel__list">
-                                @forelse($country->destinations->take(10) as $destination)
-                                    <a href="{{ route('destinations.show', [$country, $destination]) }}" class="site-nav-panel__list-link">{{ $destination->name }}</a>
+                                @forelse(array_slice($country['destinations'], 0, 10) as $destination)
+                                    <a href="{{ $destination['url'] }}" class="site-nav-panel__list-link">{{ $destination['name'] }}</a>
                                 @empty
                                     <p class="site-nav-panel__empty">Destinations coming soon.</p>
                                 @endforelse
@@ -93,18 +93,18 @@
                 </div>
                 <div class="site-nav-panel__col site-nav-panel__col--preview">
                     @foreach($countries as $country)
-                        <div class="site-nav-panel__preview" x-show="navFocus === {{ $country->id }}" @if($country->id !== $firstCountryId) x-cloak @endif>
-                            @if($country->coverUrl())
-                                <img src="{{ $country->coverUrl() }}" alt="" loading="lazy">
+                        <div class="site-nav-panel__preview" x-show="navFocus === {{ $country['id'] }}" @if($country['id'] !== $firstCountryId) x-cloak @endif>
+                            @if(!empty($country['image_full']) || !empty($country['image']))
+                                <img src="{{ $country['image_full'] ?: $country['image'] }}" alt="" loading="lazy">
                             @else
                                 <div class="site-nav-panel__preview-fallback"></div>
                             @endif
                             <div class="site-nav-panel__preview-copy">
-                                <p class="site-nav-panel__preview-title">{{ $country->name }}</p>
-                                @if($country->teaser || $country->subtitle)
-                                    <p>{{ $country->subtitle ?: \Illuminate\Support\Str::limit($country->teaser, 110) }}</p>
+                                <p class="site-nav-panel__preview-title">{{ $country['name'] }}</p>
+                                @if(!empty($country['teaser']) || !empty($country['subtitle']))
+                                    <p>{{ $country['subtitle'] ?: \Illuminate\Support\Str::limit($country['teaser'], 110) }}</p>
                                 @endif
-                                <a href="{{ route('destinations.country', $country) }}">Explore {{ $country->name }}</a>
+                                <a href="{{ $country['destinations_url'] }}">Explore {{ $country['name'] }}</a>
                             </div>
                         </div>
                     @endforeach
@@ -130,12 +130,12 @@
                             <button
                                 type="button"
                                 class="site-nav-panel__list-item"
-                                :class="navFocus === {{ $country->id }} && 'is-active'"
-                                @mouseenter="navFocus = {{ $country->id }}; countryFocus = {{ $country->id }}"
-                                @focus="navFocus = {{ $country->id }}; countryFocus = {{ $country->id }}"
-                                @click="navFocus = {{ $country->id }}; countryFocus = {{ $country->id }}"
+                                :class="navFocus === {{ $country['id'] }} && 'is-active'"
+                                @mouseenter="navFocus = {{ $country['id'] }}; countryFocus = {{ $country['id'] }}"
+                                @focus="navFocus = {{ $country['id'] }}; countryFocus = {{ $country['id'] }}"
+                                @click="navFocus = {{ $country['id'] }}; countryFocus = {{ $country['id'] }}"
                             >
-                                <span>{{ $country->name }}</span>
+                                <span>{{ $country['name'] }}</span>
                                 <span class="site-nav-panel__chevron" aria-hidden="true">›</span>
                             </button>
                         @endforeach
@@ -143,14 +143,14 @@
                 </div>
                 <div class="site-nav-panel__col site-nav-panel__col--detail">
                     @foreach($countries as $country)
-                        <div x-show="navFocus === {{ $country->id }}" @if($country->id !== $firstCountryId) x-cloak @endif>
-                            <a href="{{ route('journeys.country', $country) }}" class="site-nav-panel__all">All {{ $country->name }} journeys</a>
+                        <div x-show="navFocus === {{ $country['id'] }}" @if($country['id'] !== $firstCountryId) x-cloak @endif>
+                            <a href="{{ $country['journeys_url'] }}" class="site-nav-panel__all">All {{ $country['name'] }} journeys</a>
                             <div class="site-nav-panel__list">
-                                @forelse($country->journeys->take(8) as $journey)
-                                    <a href="{{ route('journeys.show', $journey) }}" class="site-nav-panel__list-link">
-                                        <span>{{ $journey->name }}</span>
-                                        @if($journey->duration_label)
-                                            <span class="site-nav-panel__meta">{{ $journey->duration_label }}</span>
+                                @forelse(array_slice($country['journeys'], 0, 8) as $journey)
+                                    <a href="{{ $journey['url'] }}" class="site-nav-panel__list-link">
+                                        <span>{{ $journey['name'] }}</span>
+                                        @if(!empty($journey['duration_label']))
+                                            <span class="site-nav-panel__meta">{{ $journey['duration_label'] }}</span>
                                         @endif
                                     </a>
                                 @empty
@@ -162,17 +162,17 @@
                 </div>
                 <div class="site-nav-panel__col site-nav-panel__col--preview">
                     @foreach($countries as $country)
-                        @php $previewJourney = $country->journeys->first(); @endphp
-                        <div class="site-nav-panel__preview" x-show="navFocus === {{ $country->id }}" @if($country->id !== $firstCountryId) x-cloak @endif>
-                            @if(($previewJourney?->coverUrl()) || $country->coverUrl())
-                                <img src="{{ $previewJourney?->coverUrl() ?: $country->coverUrl() }}" alt="" loading="lazy">
+                        @php $previewJourney = $country['journeys'][0] ?? null; @endphp
+                        <div class="site-nav-panel__preview" x-show="navFocus === {{ $country['id'] }}" @if($country['id'] !== $firstCountryId) x-cloak @endif>
+                            @if(!empty($previewJourney['image']) || !empty($country['image_full']) || !empty($country['image']))
+                                <img src="{{ $previewJourney['image'] ?? ($country['image_full'] ?: $country['image']) }}" alt="" loading="lazy">
                             @else
                                 <div class="site-nav-panel__preview-fallback"></div>
                             @endif
                             <div class="site-nav-panel__preview-copy">
-                                <p class="site-nav-panel__preview-title">{{ $previewJourney?->name ?: ($country->name.' journeys') }}</p>
-                                <p>{{ $previewJourney?->teaser ? \Illuminate\Support\Str::limit($previewJourney->teaser, 110) : 'Private itineraries shaped around '.$country->name.'.' }}</p>
-                                <a href="{{ $previewJourney ? route('journeys.show', $previewJourney) : route('journeys.country', $country) }}">
+                                <p class="site-nav-panel__preview-title">{{ $previewJourney['name'] ?? ($country['name'].' journeys') }}</p>
+                                <p>{{ !empty($previewJourney['teaser']) ? \Illuminate\Support\Str::limit($previewJourney['teaser'], 110) : 'Private itineraries shaped around '.$country['name'].'.' }}</p>
+                                <a href="{{ $previewJourney['url'] ?? $country['journeys_url'] }}">
                                     {{ $previewJourney ? 'View journey' : 'Explore journeys' }}
                                 </a>
                             </div>
@@ -189,11 +189,11 @@
                     @if($experiences->isNotEmpty())
                         <div class="site-nav-panel__tiles">
                             @foreach($experiences->take(2) as $experience)
-                                <a href="{{ route('experiences.show', $experience) }}" class="site-nav-panel__tile" @mouseenter="navFocus = {{ $experience->id }}; experienceFocus = {{ $experience->id }}" @focus="navFocus = {{ $experience->id }}; experienceFocus = {{ $experience->id }}">
-                                    @if($experience->coverThumbUrl() || $experience->coverUrl())
-                                        <img src="{{ $experience->coverThumbUrl() ?: $experience->coverUrl() }}" alt="" loading="lazy">
+                                <a href="{{ $experience['url'] }}" class="site-nav-panel__tile" @mouseenter="navFocus = {{ $experience['id'] }}; experienceFocus = {{ $experience['id'] }}" @focus="navFocus = {{ $experience['id'] }}; experienceFocus = {{ $experience['id'] }}">
+                                    @if(!empty($experience['image']))
+                                        <img src="{{ $experience['image'] }}" alt="" loading="lazy">
                                     @endif
-                                    <span>{{ $experience->name }}</span>
+                                    <span>{{ $experience['name'] }}</span>
                                 </a>
                             @endforeach
                         </div>
@@ -203,12 +203,12 @@
                                 <button
                                     type="button"
                                     class="site-nav-panel__list-item"
-                                    :class="navFocus === {{ $experience->id }} && 'is-active'"
-                                    @mouseenter="navFocus = {{ $experience->id }}; experienceFocus = {{ $experience->id }}"
-                                    @focus="navFocus = {{ $experience->id }}; experienceFocus = {{ $experience->id }}"
-                                    @click="navFocus = {{ $experience->id }}; experienceFocus = {{ $experience->id }}"
+                                    :class="navFocus === {{ $experience['id'] }} && 'is-active'"
+                                    @mouseenter="navFocus = {{ $experience['id'] }}; experienceFocus = {{ $experience['id'] }}"
+                                    @focus="navFocus = {{ $experience['id'] }}; experienceFocus = {{ $experience['id'] }}"
+                                    @click="navFocus = {{ $experience['id'] }}; experienceFocus = {{ $experience['id'] }}"
                                 >
-                                    <span>{{ $experience->name }}</span>
+                                    <span>{{ $experience['name'] }}</span>
                                     <span class="site-nav-panel__chevron" aria-hidden="true">›</span>
                                 </button>
                             @endforeach
@@ -217,18 +217,18 @@
                 </div>
                 <div class="site-nav-panel__col site-nav-panel__col--preview">
                     @foreach($experiences as $experience)
-                        <div class="site-nav-panel__preview" x-show="navFocus === {{ $experience->id }}" @if($experience->id !== $firstExperienceId) x-cloak @endif>
-                            @if($experience->coverUrl())
-                                <img src="{{ $experience->coverUrl() }}" alt="" loading="lazy">
+                        <div class="site-nav-panel__preview" x-show="navFocus === {{ $experience['id'] }}" @if($experience['id'] !== $firstExperienceId) x-cloak @endif>
+                            @if(!empty($experience['image_full']) || !empty($experience['image']))
+                                <img src="{{ $experience['image_full'] ?: $experience['image'] }}" alt="" loading="lazy">
                             @else
                                 <div class="site-nav-panel__preview-fallback"></div>
                             @endif
                             <div class="site-nav-panel__preview-copy">
-                                <p class="site-nav-panel__preview-title">{{ $experience->name }}</p>
-                                @if($experience->teaser || $experience->subtitle)
-                                    <p>{{ $experience->subtitle ?: \Illuminate\Support\Str::limit($experience->teaser, 110) }}</p>
+                                <p class="site-nav-panel__preview-title">{{ $experience['name'] }}</p>
+                                @if(!empty($experience['teaser']) || !empty($experience['subtitle']))
+                                    <p>{{ $experience['subtitle'] ?: \Illuminate\Support\Str::limit($experience['teaser'], 110) }}</p>
                                 @endif
-                                <a href="{{ route('experiences.show', $experience) }}">Explore experience</a>
+                                <a href="{{ $experience['url'] }}">Explore experience</a>
                             </div>
                         </div>
                     @endforeach

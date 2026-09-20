@@ -23,9 +23,9 @@
         footerOpen: null,
         navOpen: false,
         navSection: 'destinations',
-        navFocus: {{ $navCountries->first()?->id ?? 'null' }},
-        countryFocus: {{ $navCountries->first()?->id ?? 'null' }},
-        experienceFocus: {{ $navExperiences->first()?->id ?? 'null' }},
+        navFocus: {{ $navCountries->first()['id'] ?? 'null' }},
+        countryFocus: {{ $navCountries->first()['id'] ?? 'null' }},
+        experienceFocus: {{ $navExperiences->first()['id'] ?? 'null' }},
         aboutFocus: 0,
         openNav(section) {
             if (this.navOpen && this.navSection === section) {
@@ -176,9 +176,9 @@
                 <div x-show="section === 'destinations'" x-cloak class="pb-3 space-y-2 pl-3">
                     <a href="{{ route('destinations.index') }}" class="block text-sm text-muted">All destinations</a>
                     @foreach($navCountries as $country)
-                        <a href="{{ route('destinations.country', $country) }}" class="block text-sm text-muted">{{ $country->name }}</a>
-                        @foreach($country->destinations->take(4) as $destination)
-                            <a href="{{ route('destinations.show', [$country, $destination]) }}" class="block text-sm text-muted/80 pl-3">{{ $destination->name }}</a>
+                        <a href="{{ $country['destinations_url'] }}" class="block text-sm text-muted">{{ $country['name'] }}</a>
+                        @foreach(array_slice($country['destinations'], 0, 4) as $destination)
+                            <a href="{{ $destination['url'] }}" class="block text-sm text-muted/80 pl-3">{{ $destination['name'] }}</a>
                         @endforeach
                     @endforeach
                 </div>
@@ -191,9 +191,9 @@
                     <a href="{{ route('journeys.index') }}" class="block text-sm text-muted">All journeys</a>
                     <a href="{{ route('journeys.finder') }}" class="block text-sm text-muted">Journey Finder</a>
                     @foreach($navCountries as $country)
-                        <a href="{{ route('journeys.country', $country) }}" class="block text-sm text-muted">{{ $country->name }}</a>
-                        @foreach($country->journeys->take(3) as $journey)
-                            <a href="{{ route('journeys.show', $journey) }}" class="block text-sm text-muted/80 pl-3">{{ $journey->name }}</a>
+                        <a href="{{ $country['journeys_url'] }}" class="block text-sm text-muted">{{ $country['name'] }}</a>
+                        @foreach(array_slice($country['journeys'], 0, 3) as $journey)
+                            <a href="{{ $journey['url'] }}" class="block text-sm text-muted/80 pl-3">{{ $journey['name'] }}</a>
                         @endforeach
                     @endforeach
                 </div>
@@ -205,7 +205,7 @@
                 <div x-show="section === 'experiences'" x-cloak class="pb-3 space-y-2 pl-3">
                     <a href="{{ route('experiences.index') }}" class="block text-sm text-muted">All experiences</a>
                     @foreach($navExperiences as $experience)
-                        <a href="{{ route('experiences.show', $experience) }}" class="block text-sm text-muted">{{ $experience->name }}</a>
+                        <a href="{{ $experience['url'] }}" class="block text-sm text-muted">{{ $experience['name'] }}</a>
                     @endforeach
                 </div>
 

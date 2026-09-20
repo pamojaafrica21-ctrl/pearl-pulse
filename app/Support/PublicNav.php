@@ -8,16 +8,18 @@ use App\Models\Experience;
 use App\Models\PulseItem;
 use App\Models\Stay;
 use App\Models\TeamMember;
+use App\Services\ImageUploader;
 use App\Services\SettingService;
 use Illuminate\Support\Facades\Cache;
 
 class PublicNav
 {
-    public const CACHE_KEY = 'public_nav_shell_v4';
+    public const CACHE_KEY = 'public_nav_shell_v5';
 
     public static function forget(): void
     {
         Cache::forget(self::CACHE_KEY);
+        Cache::forget('public_nav_shell_v4');
         Cache::forget('public_nav_shell_v3');
         Cache::forget('public_nav_shell_v2');
         Cache::forget('public_nav_shell_v1');
@@ -28,13 +30,66 @@ class PublicNav
      */
     public static function forLayout(SettingService $settings): array
     {
-        // Never cache Eloquent collections — serialize/unserialize breaks them.
-        $shell = Cache::remember(self::CACHE_KEY, 600, function () use ($settings) {
+        return Cache::remember(self::CACHE_KEY, 600, function () use ($settings) {
+            $images = app(ImageUploader::class);
             $heroImage = $settings->heroImageUrl();
             $team = TeamMember::query()->published()->orderBy('sort_order')->first();
             $stay = Stay::query()->published()->orderBy('sort_order')->first();
             $pulse = PulseItem::query()->published()->orderBy('sort_order')->first();
             $article = Article::query()->published()->orderBy('sort_order')->first();
+
+            $countries = Country::query()
+                ->published()
+                ->orderBy('sort_order')
+                ->with([
+                    'destinations' => fn ($q) => $q->published()->orderBy('sort_order')->orderBy('name'),
+                    'journeys' => fn ($q) => $q->published()->orderBy('journeys.sort_order'),
+                ])
+                ->get()
+                ->map(function (Country $country) use ($images) {
+                    return [
+                        'id' => $country->id,
+                        'name' => $country->name,
+                        'slug' => $country->slug,
+                        'subtitle' => $country->subtitle,
+                        'teaser' => $country->teaser,
+                        'image' => $images->thumbUrl($country->cover_path) ?: $images->url($country->cover_path),
+                        'image_full' => $images->url($country->cover_path),
+                        'destinations_url' => route('destinations.country', $country),
+                        'journeys_url' => route('journeys.country', $country),
+                        'destinations' => $country->destinations->take(10)->map(fn ($destination) => [
+                            'id' => $destination->id,
+                            'name' => $destination->name,
+                            'url' => route('destinations.show', [$country, $destination]),
+                        ])->values()->all(),
+                        'journeys' => $country->journeys->take(8)->map(fn ($journey) => [
+                            'id' => $journey->id,
+                            'name' => $journey->name,
+                            'slug' => $journey->slug,
+                            'teaser' => $journey->teaser,
+                            'duration_label' => $journey->duration_label,
+                            'image' => $images->url($journey->cover_path),
+                            'url' => route('journeys.show', $journey),
+                        ])->values()->all(),
+                    ];
+                })
+                ->values();
+
+            $experiences = Experience::query()
+                ->published()
+                ->orderBy('sort_order')
+                ->get()
+                ->map(fn (Experience $experience) => [
+                    'id' => $experience->id,
+                    'name' => $experience->name,
+                    'slug' => $experience->slug,
+                    'subtitle' => $experience->subtitle,
+                    'teaser' => $experience->teaser,
+                    'image' => $images->thumbUrl($experience->cover_path) ?: $images->url($experience->cover_path),
+                    'image_full' => $images->url($experience->cover_path),
+                    'url' => route('experiences.show', $experience),
+                ])
+                ->values();
 
             return [
                 'siteContact' => $settings->contact(),
@@ -42,6 +97,8 @@ class PublicNav
                 'reviewLinks' => $settings->reviewLinks(),
                 'footerBlurb' => $settings->get('footer_blurb', 'Private journeys through East Africa.'),
                 'whatsappUrl' => $settings->whatsappUrl('Hello Pearl Pulse — I would like to plan a journey.'),
+                'navCountries' => $countries,
+                'navExperiences' => $experiences,
                 'navAboutItems' => [
                     [
                         'label' => 'Our story',
@@ -85,17 +142,5 @@ class PublicNav
                 ],
             ];
         });
-
-        return array_merge($shell, [
-            'navCountries' => Country::query()
-                ->published()
-                ->orderBy('sort_order')
-                ->with([
-                    'destinations' => fn ($q) => $q->published()->orderBy('sort_order')->orderBy('name'),
-                    'journeys' => fn ($q) => $q->published()->orderBy('journeys.sort_order'),
-                ])
-                ->get(),
-            'navExperiences' => Experience::query()->published()->orderBy('sort_order')->get(),
-        ]);
     }
 }
