@@ -20,6 +20,7 @@
     class="min-h-screen flex flex-col bg-white"
     x-data="{
         mobileOpen: false,
+        mobilePanel: null,
         footerOpen: null,
         navOpen: false,
         navSection: 'destinations',
@@ -35,7 +36,7 @@
             this.navSection = section;
             this.syncFocus();
             this.navOpen = true;
-            this.mobileOpen = false;
+            this.closeMobile();
         },
         setSection(section) {
             this.navSection = section;
@@ -52,9 +53,33 @@
         },
         closeNav() {
             this.navOpen = false;
+        },
+        openMobile() {
+            this.closeNav();
+            this.mobileOpen = true;
+            this.mobilePanel = null;
+            document.documentElement.classList.add('overflow-hidden');
+        },
+        closeMobile() {
+            this.mobileOpen = false;
+            this.mobilePanel = null;
+            document.documentElement.classList.remove('overflow-hidden');
+        },
+        toggleMobile() {
+            if (this.mobileOpen) {
+                this.closeMobile();
+            } else {
+                this.openMobile();
+            }
+        },
+        openMobilePanel(panel) {
+            this.mobilePanel = panel;
+        },
+        backMobilePanel() {
+            this.mobilePanel = null;
         }
     }"
-    @keydown.escape.window="closeNav()"
+    @keydown.escape.window="closeNav(); closeMobile()"
 >
     <div class="sticky top-0 z-50" data-site-chrome x-init="$nextTick(() => { const set = () => document.documentElement.style.setProperty('--site-chrome-height', $el.offsetHeight + 'px'); set(); new ResizeObserver(set).observe($el); })">
     {{-- Utility bar (AST trust cues) --}}
@@ -100,6 +125,19 @@
         data-site-header
     >
         <div class="site-header-grid mx-auto max-w-7xl px-5 py-1 lg:px-8 lg:py-1.5">
+            <div class="flex lg:hidden items-center justify-self-start">
+                <button
+                    type="button"
+                    class="text-charcoal"
+                    @click="toggleMobile()"
+                    aria-label="Menu"
+                    :aria-expanded="mobileOpen.toString()"
+                >
+                    <svg x-show="!mobileOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7h16M4 12h16M4 17h16"/></svg>
+                    <svg x-show="mobileOpen" x-cloak class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 6l12 12M18 6 6 18"/></svg>
+                </button>
+            </div>
+
             <nav class="hidden lg:flex items-center gap-6 xl:gap-8" aria-label="Primary left">
                 <button
                     type="button"
@@ -124,7 +162,7 @@
                 >Experiences</button>
             </nav>
 
-            <a href="{{ route('home') }}" class="font-display text-2xl md:text-[1.85rem] tracking-wide text-charcoal transition-opacity hover:opacity-80 shrink-0 text-center justify-self-center" @click="closeNav()">
+            <a href="{{ route('home') }}" class="font-display text-2xl md:text-[1.85rem] tracking-wide text-charcoal transition-opacity hover:opacity-80 shrink-0 text-center justify-self-center" @click="closeNav(); closeMobile()">
                 Pearl Pulse <span class="font-sans text-[0.42em] tracking-[0.22em] uppercase text-charcoal/50 align-middle">Safaris</span>
             </a>
 
@@ -150,94 +188,170 @@
                 <a href="{{ route('plan') }}" class="btn-primary !px-5 !py-1.5 text-[11px]" @click="closeNav()">Plan your journey</a>
             </div>
 
-            <div class="flex lg:hidden items-center gap-3 justify-self-end">
-                <button type="button" class="text-charcoal" @click="closeNav(); $dispatch('open-journey-search')" aria-label="Find your journey">
+            <div class="flex lg:hidden items-center justify-self-end">
+                <button type="button" class="text-charcoal" @click="closeMobile(); closeNav(); $dispatch('open-journey-search')" aria-label="Find your journey">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.3-4.3M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/></svg>
                 </button>
-                <button type="button" class="text-charcoal" @click="closeNav(); mobileOpen = !mobileOpen" aria-label="Menu" :aria-expanded="mobileOpen.toString()">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7h16M4 12h16M4 17h16"/></svg>
-                </button>
-            </div>
-        </div>
-
-        {{-- Mobile drawer --}}
-        <div
-            x-show="mobileOpen"
-            x-cloak
-            x-transition
-            class="lg:hidden border-t border-charcoal/8 bg-white px-5 py-6 max-h-[85vh] overflow-y-auto"
-            x-data="{ section: null }"
-        >
-            <div class="space-y-1">
-                <button type="button" class="flex w-full items-center justify-between py-3 text-left tracking-[0.14em] uppercase text-sm text-charcoal" @click="section = section === 'destinations' ? null : 'destinations'">
-                    Destinations
-                    <span class="text-muted" x-text="section === 'destinations' ? '−' : '+'"></span>
-                </button>
-                <div x-show="section === 'destinations'" x-cloak class="pb-3 space-y-2 pl-3">
-                    <a href="{{ route('destinations.index') }}" class="block text-sm text-muted">All destinations</a>
-                    @foreach($navCountries as $country)
-                        <a href="{{ $country['destinations_url'] }}" class="block text-sm text-muted">{{ $country['name'] }}</a>
-                        @foreach(array_slice($country['destinations'], 0, 4) as $destination)
-                            <a href="{{ $destination['url'] }}" class="block text-sm text-muted/80 pl-3">{{ $destination['name'] }}</a>
-                        @endforeach
-                    @endforeach
-                </div>
-
-                <button type="button" class="flex w-full items-center justify-between py-3 text-left tracking-[0.14em] uppercase text-sm text-charcoal" @click="section = section === 'journeys' ? null : 'journeys'">
-                    Journeys
-                    <span class="text-muted" x-text="section === 'journeys' ? '−' : '+'"></span>
-                </button>
-                <div x-show="section === 'journeys'" x-cloak class="pb-3 space-y-2 pl-3">
-                    <a href="{{ route('journeys.index') }}" class="block text-sm text-muted">All journeys</a>
-                    <a href="{{ route('journeys.finder') }}" class="block text-sm text-muted">Journey Finder</a>
-                    @foreach($navCountries as $country)
-                        <a href="{{ $country['journeys_url'] }}" class="block text-sm text-muted">{{ $country['name'] }}</a>
-                        @foreach(array_slice($country['journeys'], 0, 3) as $journey)
-                            <a href="{{ $journey['url'] }}" class="block text-sm text-muted/80 pl-3">{{ $journey['name'] }}</a>
-                        @endforeach
-                    @endforeach
-                </div>
-
-                <button type="button" class="flex w-full items-center justify-between py-3 text-left tracking-[0.14em] uppercase text-sm text-charcoal" @click="section = section === 'experiences' ? null : 'experiences'">
-                    Experiences
-                    <span class="text-muted" x-text="section === 'experiences' ? '−' : '+'"></span>
-                </button>
-                <div x-show="section === 'experiences'" x-cloak class="pb-3 space-y-2 pl-3">
-                    <a href="{{ route('experiences.index') }}" class="block text-sm text-muted">All experiences</a>
-                    @foreach($navExperiences as $experience)
-                        <a href="{{ $experience['url'] }}" class="block text-sm text-muted">{{ $experience['name'] }}</a>
-                    @endforeach
-                </div>
-
-                <button type="button" class="flex w-full items-center justify-between py-3 text-left tracking-[0.14em] uppercase text-sm text-charcoal" @click="section = section === 'about' ? null : 'about'">
-                    About
-                    <span class="text-muted" x-text="section === 'about' ? '−' : '+'"></span>
-                </button>
-                <div x-show="section === 'about'" x-cloak class="pb-3 space-y-2 pl-3">
-                    @foreach($navAboutItems as $item)
-                        <a href="{{ $item['href'] }}" class="block text-sm text-muted">{{ $item['label'] }}</a>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="mt-6 space-y-3 border-t border-charcoal/8 pt-6">
-                @auth
-                    @unless(auth()->user()->isAdmin())
-                        <a href="{{ route('account.favorites') }}" class="block text-sm tracking-[0.14em] uppercase text-charcoal">My journeys</a>
-                        <a href="{{ route('account.requests') }}" class="block text-sm tracking-[0.14em] uppercase text-charcoal">My requests</a>
-                        <a href="{{ route('account.profile') }}" class="block text-sm tracking-[0.14em] uppercase text-charcoal">Profile</a>
-                    @endunless
-                @else
-                    <a href="{{ route('login') }}" class="block text-sm tracking-[0.14em] uppercase text-charcoal">Sign in</a>
-                    <a href="{{ route('register') }}" class="block text-sm tracking-[0.14em] uppercase text-charcoal">Register</a>
-                @endauth
-                <a href="{{ route('plan') }}" class="btn-primary w-full text-center text-[11px]">Plan your journey</a>
-                @if($siteContact['phone'] ?? null)
-                    <a href="tel:{{ preg_replace('/\s+/', '', $siteContact['phone']) }}" class="block text-center text-sm text-muted">{{ $siteContact['phone'] }}</a>
-                @endif
             </div>
         </div>
     </header>
+    </div>
+
+    {{-- Mobile full-screen drawer (A&K-style) --}}
+    <div
+        class="mobile-drawer lg:hidden"
+        x-show="mobileOpen"
+        x-cloak
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
+    >
+        <div
+            class="mobile-drawer__backdrop"
+            x-show="mobileOpen"
+            x-transition.opacity
+            @click="closeMobile()"
+        ></div>
+
+        <div
+            class="mobile-drawer__sheet"
+            x-show="mobileOpen"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="-translate-x-full"
+            x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="-translate-x-full"
+            @click.stop
+        >
+            {{-- Root --}}
+            <div class="mobile-drawer__level" x-show="!mobilePanel" x-transition.opacity>
+                <nav class="mobile-drawer__primary" aria-label="Mobile primary">
+                    <button type="button" class="mobile-drawer__primary-item" @click="openMobilePanel('destinations')">
+                        <span>Destinations</span>
+                        <span class="mobile-drawer__chevron" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="mobile-drawer__primary-item" @click="openMobilePanel('journeys')">
+                        <span>Journeys</span>
+                        <span class="mobile-drawer__chevron" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="mobile-drawer__primary-item" @click="openMobilePanel('experiences')">
+                        <span>Experiences</span>
+                        <span class="mobile-drawer__chevron" aria-hidden="true"></span>
+                    </button>
+                </nav>
+
+                <div class="mobile-drawer__section">
+                    <p class="mobile-drawer__eyebrow">Popular</p>
+                    <a href="{{ route('journeys.finder') }}" class="mobile-drawer__text-link" @click="closeMobile()">Journey Finder</a>
+                    <a href="{{ route('plan') }}" class="mobile-drawer__text-link" @click="closeMobile()">Plan your journey</a>
+                    <a href="{{ route('stays.index') }}" class="mobile-drawer__text-link" @click="closeMobile()">Selected stays</a>
+                </div>
+
+                <div class="mobile-drawer__section">
+                    <button type="button" class="mobile-drawer__row" @click="openMobilePanel('about')">
+                        <span>About</span>
+                        <span class="mobile-drawer__chevron" aria-hidden="true"></span>
+                    </button>
+                    @auth
+                        @unless(auth()->user()->isAdmin())
+                            <a href="{{ route('account.favorites') }}" class="mobile-drawer__text-link" @click="closeMobile()">My journeys</a>
+                            <a href="{{ route('account.requests') }}" class="mobile-drawer__text-link" @click="closeMobile()">My requests</a>
+                            <a href="{{ route('account.profile') }}" class="mobile-drawer__text-link" @click="closeMobile()">Profile</a>
+                        @endunless
+                    @else
+                        <a href="{{ route('login') }}" class="mobile-drawer__text-link" @click="closeMobile()">Sign in</a>
+                        <a href="{{ route('register') }}" class="mobile-drawer__text-link" @click="closeMobile()">Register</a>
+                    @endauth
+                    @if($siteContact['phone'] ?? null)
+                        <a href="tel:{{ preg_replace('/\s+/', '', $siteContact['phone']) }}" class="mobile-drawer__text-link">{{ $siteContact['phone'] }}</a>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Destinations --}}
+            <div class="mobile-drawer__level" x-show="mobilePanel === 'destinations'" x-cloak x-transition.opacity>
+                <button type="button" class="mobile-drawer__subhead" @click="backMobilePanel()">
+                    <span>Destinations</span>
+                    <span class="mobile-drawer__chevron mobile-drawer__chevron--down" aria-hidden="true"></span>
+                </button>
+                @if($navCountries->isNotEmpty())
+                    <div class="mobile-nav__grid">
+                        @foreach($navCountries as $country)
+                            <a href="{{ $country['destinations_url'] }}" class="mobile-nav__card" @click="closeMobile()">
+                                @if(!empty($country['image']) || !empty($country['image_full']))
+                                    <img src="{{ $country['image'] ?: $country['image_full'] }}" alt="" loading="lazy" decoding="async">
+                                @else
+                                    <span class="mobile-nav__card-fallback" aria-hidden="true"></span>
+                                @endif
+                                <span class="mobile-nav__card-label">{{ $country['name'] }}</span>
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+                <a href="{{ route('destinations.index') }}" class="mobile-nav__all" @click="closeMobile()">All destinations</a>
+            </div>
+
+            {{-- Journeys --}}
+            <div class="mobile-drawer__level" x-show="mobilePanel === 'journeys'" x-cloak x-transition.opacity>
+                <button type="button" class="mobile-drawer__subhead" @click="backMobilePanel()">
+                    <span>Journeys</span>
+                    <span class="mobile-drawer__chevron mobile-drawer__chevron--down" aria-hidden="true"></span>
+                </button>
+                @if($navCountries->isNotEmpty())
+                    <div class="mobile-nav__grid">
+                        @foreach($navCountries as $country)
+                            <a href="{{ $country['journeys_url'] }}" class="mobile-nav__card" @click="closeMobile()">
+                                @if(!empty($country['image']) || !empty($country['image_full']))
+                                    <img src="{{ $country['image'] ?: $country['image_full'] }}" alt="" loading="lazy" decoding="async">
+                                @else
+                                    <span class="mobile-nav__card-fallback" aria-hidden="true"></span>
+                                @endif
+                                <span class="mobile-nav__card-label">{{ $country['name'] }}</span>
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+                <a href="{{ route('journeys.index') }}" class="mobile-nav__all" @click="closeMobile()">All journeys</a>
+                <a href="{{ route('journeys.finder') }}" class="mobile-drawer__text-link mt-3" @click="closeMobile()">Journey Finder</a>
+            </div>
+
+            {{-- Experiences --}}
+            <div class="mobile-drawer__level" x-show="mobilePanel === 'experiences'" x-cloak x-transition.opacity>
+                <button type="button" class="mobile-drawer__subhead" @click="backMobilePanel()">
+                    <span>Experiences</span>
+                    <span class="mobile-drawer__chevron mobile-drawer__chevron--down" aria-hidden="true"></span>
+                </button>
+                @if($navExperiences->isNotEmpty())
+                    <div class="mobile-nav__grid">
+                        @foreach($navExperiences as $experience)
+                            <a href="{{ $experience['url'] }}" class="mobile-nav__card" @click="closeMobile()">
+                                @if(!empty($experience['image']) || !empty($experience['image_full']))
+                                    <img src="{{ $experience['image'] ?: $experience['image_full'] }}" alt="" loading="lazy" decoding="async">
+                                @else
+                                    <span class="mobile-nav__card-fallback" aria-hidden="true"></span>
+                                @endif
+                                <span class="mobile-nav__card-label">{{ $experience['name'] }}</span>
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+                <a href="{{ route('experiences.index') }}" class="mobile-nav__all" @click="closeMobile()">All experiences</a>
+            </div>
+
+            {{-- About --}}
+            <div class="mobile-drawer__level" x-show="mobilePanel === 'about'" x-cloak x-transition.opacity>
+                <button type="button" class="mobile-drawer__subhead" @click="backMobilePanel()">
+                    <span>About</span>
+                    <span class="mobile-drawer__chevron mobile-drawer__chevron--down" aria-hidden="true"></span>
+                </button>
+                <div class="mobile-drawer__section !border-0 !pt-0">
+                    @foreach($navAboutItems as $item)
+                        <a href="{{ $item['href'] }}" class="mobile-drawer__text-link" @click="closeMobile()">{{ $item['label'] }}</a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
     </div>
 
     <div
