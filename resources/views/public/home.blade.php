@@ -207,7 +207,7 @@
     <x-section-edge variant="ridge" class="text-white" />
 </section>
 
-<section class="relative bg-white py-24 lg:py-32 overflow-hidden">
+<section class="relative bg-white pt-24 pb-0 lg:pt-32 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="reveal mx-auto max-w-3xl text-center">
             <div class="mb-4 flex justify-center">
@@ -254,10 +254,11 @@
     <div class="mx-auto max-w-7xl px-5 lg:px-8 mt-12 flex justify-center reveal">
         <a href="{{ route('experiences.index') }}" class="btn-outline-dark">All experiences</a>
     </div>
-    <x-section-edge variant="wave" class="text-cream" />
+
+    <x-savanna-edge class="mt-14 lg:mt-16" />
 </section>
 
-<section class="relative bg-cream py-24 lg:py-32">
+<section class="relative bg-cream pt-16 pb-24 lg:pt-20 lg:pb-32">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="reveal max-w-3xl">
             <p class="section-eyebrow">{{ $featuredEyebrow }}</p>

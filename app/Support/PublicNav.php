@@ -13,11 +13,12 @@ use Illuminate\Support\Facades\Cache;
 
 class PublicNav
 {
-    public const CACHE_KEY = 'public_nav_shell_v3';
+    public const CACHE_KEY = 'public_nav_shell_v4';
 
     public static function forget(): void
     {
         Cache::forget(self::CACHE_KEY);
+        Cache::forget('public_nav_shell_v3');
         Cache::forget('public_nav_shell_v2');
         Cache::forget('public_nav_shell_v1');
     }
@@ -27,7 +28,8 @@ class PublicNav
      */
     public static function forLayout(SettingService $settings): array
     {
-        return Cache::remember(self::CACHE_KEY, 600, function () use ($settings) {
+        // Never cache Eloquent collections — serialize/unserialize breaks them.
+        $shell = Cache::remember(self::CACHE_KEY, 600, function () use ($settings) {
             $heroImage = $settings->heroImageUrl();
             $team = TeamMember::query()->published()->orderBy('sort_order')->first();
             $stay = Stay::query()->published()->orderBy('sort_order')->first();
@@ -40,15 +42,6 @@ class PublicNav
                 'reviewLinks' => $settings->reviewLinks(),
                 'footerBlurb' => $settings->get('footer_blurb', 'Private journeys through East Africa.'),
                 'whatsappUrl' => $settings->whatsappUrl('Hello Pearl Pulse — I would like to plan a journey.'),
-                'navCountries' => Country::query()
-                    ->published()
-                    ->orderBy('sort_order')
-                    ->with([
-                        'destinations' => fn ($q) => $q->published()->orderBy('sort_order')->orderBy('name'),
-                        'journeys' => fn ($q) => $q->published()->orderBy('journeys.sort_order'),
-                    ])
-                    ->get(),
-                'navExperiences' => Experience::query()->published()->orderBy('sort_order')->get(),
                 'navAboutItems' => [
                     [
                         'label' => 'Our story',
@@ -92,5 +85,17 @@ class PublicNav
                 ],
             ];
         });
+
+        return array_merge($shell, [
+            'navCountries' => Country::query()
+                ->published()
+                ->orderBy('sort_order')
+                ->with([
+                    'destinations' => fn ($q) => $q->published()->orderBy('sort_order')->orderBy('name'),
+                    'journeys' => fn ($q) => $q->published()->orderBy('journeys.sort_order'),
+                ])
+                ->get(),
+            'navExperiences' => Experience::query()->published()->orderBy('sort_order')->get(),
+        ]);
     }
 }

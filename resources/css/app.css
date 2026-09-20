@@ -1004,6 +1004,25 @@
         height: auto;
     }
 
+    .savanna-edge {
+        display: block;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        line-height: 0;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .savanna-edge__image {
+        display: block;
+        width: 100%;
+        height: clamp(4.5rem, 12vw, 9.5rem);
+        object-fit: fill;
+        object-position: center bottom;
+        mix-blend-mode: multiply;
+    }
+
     .trust-strip {
         @apply relative overflow-hidden;
         background: linear-gradient(90deg, rgb(28 43 31 / 0.96), rgb(42 61 46 / 0.92));
