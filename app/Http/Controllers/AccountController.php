@@ -28,6 +28,18 @@ class AccountController extends Controller
         ]);
     }
 
+    public function requests(Request $request): View
+    {
+        $enquiries = $request->user()
+            ->enquiries()
+            ->latest()
+            ->get();
+
+        return view('public.account.requests', [
+            'enquiries' => $enquiries,
+        ]);
+    }
+
     public function profile(): View
     {
         return view('public.account.profile');

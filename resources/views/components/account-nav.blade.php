@@ -6,7 +6,18 @@
     $user = auth()->user();
     $links = [
         'favorites' => ['label' => 'Saved journeys', 'href' => route('account.favorites')],
+        'requests' => ['label' => 'My requests', 'href' => route('account.requests')],
         'profile' => ['label' => 'Profile', 'href' => route('account.profile')],
+    ];
+    $headings = [
+        'favorites' => 'Saved journeys',
+        'requests' => 'My requests',
+        'profile' => 'Profile',
+    ];
+    $intros = [
+        'favorites' => 'Favourites you have saved while exploring. When you are ready, plan a private proposal with us.',
+        'requests' => 'Journey Finder and plan submissions linked to your account.',
+        'profile' => 'Update your details and keep your Pearl Pulse account secure.',
     ];
 @endphp
 
@@ -16,14 +27,10 @@
             <div>
                 <p class="section-eyebrow">Your account</p>
                 <h1 class="font-display text-4xl sm:text-5xl md:text-6xl text-charcoal mt-2">
-                    {{ $active === 'profile' ? 'Profile' : 'Saved journeys' }}
+                    {{ $headings[$active] ?? 'Your account' }}
                 </h1>
                 <p class="mt-3 max-w-xl text-muted leading-relaxed">
-                    @if($active === 'profile')
-                        Update your details and keep your Pearl Pulse account secure.
-                    @else
-                        Favourites you have saved while exploring. When you are ready, plan a private proposal with us.
-                    @endif
+                    {{ $intros[$active] ?? '' }}
                 </p>
                 @if($user)
                     <p class="mt-4 text-sm text-charcoal/70">

@@ -1,8 +1,11 @@
-@props(['country'])
+@props(['country', 'overlay' => false])
 
 @php $cover = $country->coverThumbUrl() ?: $country->coverUrl(); @endphp
 
-<a href="{{ route('destinations.country', $country) }}" class="destination-card group">
+<a
+    href="{{ route('destinations.country', $country) }}"
+    class="destination-card group {{ $overlay ? 'destination-card--overlay' : '' }}"
+>
     <div class="overflow-hidden bg-forest/10">
         @if($cover)
             <img src="{{ $cover }}" alt="{{ $country->name }}" loading="lazy" decoding="async">

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Enquiry extends Model
 {
     protected $fillable = [
+        'user_id',
         'destination_id',
         'journey_id',
         'name',
@@ -24,6 +25,7 @@ class Enquiry extends Model
         'preferences',
         'whatsapp',
         'status',
+        'source',
     ];
 
     protected function casts(): array
@@ -32,6 +34,11 @@ class Enquiry extends Model
             'preferred_destinations' => 'array',
             'preferred_experiences' => 'array',
         ];
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function destination(): BelongsTo

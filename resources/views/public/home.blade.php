@@ -10,7 +10,7 @@
 @endphp
 
 <section
-    class="relative min-h-[calc(100svh-5.5rem)] flex items-end overflow-hidden bg-forest"
+    class="relative min-h-[calc(76svh-5.5rem)] flex items-end overflow-hidden bg-forest"
     x-data="{
         index: 0,
         count: {{ $slideCount }},
@@ -138,8 +138,29 @@
     </div>
 </section>
 
+<section class="trust-strip">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-8 gap-y-3 px-5 py-4 text-center lg:px-8">
+        <div class="trust-strip__item">
+            <span class="trust-strip__icon" aria-hidden="true">✓</span>
+            <span>Gorilla tracking</span>
+        </div>
+        <div class="trust-strip__item">
+            <span class="trust-strip__icon" aria-hidden="true">✓</span>
+            <span>Great migration</span>
+        </div>
+        <div class="trust-strip__item">
+            <span class="trust-strip__icon" aria-hidden="true">✓</span>
+            <span>Kenya, Tanzania & Uganda</span>
+        </div>
+        <div class="trust-strip__item">
+            <span class="trust-strip__icon" aria-hidden="true">✓</span>
+            <span>Iconic private journeys</span>
+        </div>
+    </div>
+</section>
+
 @if($homeIntroHeading || $homeIntroBody)
-<section class="bg-white py-24 lg:py-32">
+<section class="bg-white py-10 lg:py-12">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 text-center reveal">
         @if($homeIntroEyebrow)
             <p class="section-eyebrow">{{ $homeIntroEyebrow }}</p>
@@ -150,16 +171,20 @@
         @if($homeIntroBody)
             <p class="mt-6 text-muted text-lg leading-relaxed whitespace-pre-line">{{ $homeIntroBody }}</p>
         @endif
-        <div class="mt-10">
+        <div class="mt-8">
             <a href="{{ route('about') }}" class="btn-outline-dark">Our story</a>
         </div>
     </div>
 </section>
 @endif
 
-<section class="bg-cream py-24 lg:py-32 overflow-hidden">
+<section class="relative bg-cream py-16 lg:py-20 overflow-hidden">
+    <x-section-edge placement="top" variant="wave" class="text-cream" />
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <div class="reveal max-w-3xl">
+        <div class="reveal mx-auto max-w-3xl text-center">
+            <div class="mb-4 flex justify-center">
+                <x-path-accent />
+            </div>
             <p class="section-eyebrow">{{ $destinationsEyebrow }}</p>
             <h2 class="font-display text-4xl md:text-5xl text-charcoal">{{ $destinationsHeading }}</h2>
             @if($destinationsIntro)
@@ -167,175 +192,27 @@
             @endif
         </div>
 
-        <div class="mt-16 space-y-24 lg:space-y-28">
-            @foreach($countries as $country)
-                @php
-                    $countryJourneys = $country->journeys->take(3);
-                    $destinationSlides = collect([[
-                        'type' => 'country',
-                        'href' => route('destinations.country', $country),
-                        'image' => $country->coverUrl(),
-                        'title' => $country->name,
-                        'meta' => null,
-                        'teaser' => $country->teaser,
-                    ]])->concat($countryJourneys->map(fn ($journey) => [
-                        'type' => 'journey',
-                        'href' => route('journeys.show', $journey),
-                        'image' => $journey->coverUrl() ?: $country->coverUrl(),
-                        'title' => $journey->name,
-                        'meta' => $journey->duration_label,
-                        'teaser' => $journey->teaser,
-                    ]))->values();
-                    $slideCount = $destinationSlides->count();
-                @endphp
-                <div
-                    class="reveal destination-block grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 lg:items-start"
-                    x-data="{
-                        index: 0,
-                        count: {{ $slideCount }},
-                        timer: null,
-                        duration: 4000,
-                        paused: false,
-                        next() { this.index = (this.index + 1) % this.count; this.restart() },
-                        prev() { this.index = (this.index - 1 + this.count) % this.count; this.restart() },
-                        go(i) { this.index = i; this.restart() },
-                        restart() {
-                            clearInterval(this.timer);
-                            if (this.count > 1 && !this.paused) {
-                                this.timer = setInterval(() => { this.index = (this.index + 1) % this.count }, this.duration);
-                            }
-                        },
-                        pause() { this.paused = true; clearInterval(this.timer) },
-                        resume() { this.paused = false; this.restart() }
-                    }"
-                    x-init="restart()"
-                    @mouseenter="pause()"
-                    @mouseleave="resume()"
-                    @focusin="pause()"
-                    @focusout="resume()"
-                >
-                    <div class="country-panel__media relative overflow-hidden bg-forest aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5]">
-                        @foreach($destinationSlides as $i => $slide)
-                            <a
-                                href="{{ $slide['href'] }}"
-                                class="absolute inset-0 block"
-                                x-show="index === {{ $i }}"
-                                x-transition:enter="transition ease-out duration-700"
-                                x-transition:enter-start="opacity-0"
-                                x-transition:enter-end="opacity-100"
-                                x-transition:leave="transition ease-in duration-500"
-                                x-transition:leave-start="opacity-100"
-                                x-transition:leave-end="opacity-0"
-                                @if($i !== 0) x-cloak @endif
-                            >
-                                @if($slide['image'])
-                                    <img
-                                        src="{{ $slide['image'] }}"
-                                        alt="{{ $slide['title'] }}"
-                                        class="absolute inset-0 h-full w-full object-cover scale-105"
-                                        loading="{{ $i === 0 && $loop->parent->first ? 'eager' : 'lazy' }}"
-                                    >
-                                @else
-                                    <div class="absolute inset-0 bg-gradient-to-br from-forest to-forest-light"></div>
-                                @endif
-                                <div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/25 to-transparent"></div>
-                                <div class="absolute inset-x-0 bottom-0 p-5 sm:p-6 pb-8">
-                                    @if($slide['type'] === 'journey')
-                                        <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">{{ $country->name }}</p>
-                                    @endif
-                                    <h3 class="font-display text-3xl md:text-4xl text-white leading-tight mt-1">{{ $slide['title'] }}</h3>
-                                    @if($slide['meta'])
-                                        <p class="mt-2 text-[11px] tracking-[0.16em] uppercase text-white/70">{{ $slide['meta'] }}</p>
-                                    @endif
-                                    @if($slide['teaser'])
-                                        <p class="mt-2 text-sm text-white/85 leading-relaxed line-clamp-3">{{ $slide['teaser'] }}</p>
-                                    @endif
-                                </div>
-                            </a>
-                        @endforeach
+        @if($countries->isNotEmpty())
+            <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5 reveal-stagger">
+                @foreach($countries as $country)
+                    <x-country-card :country="$country" overlay />
+                @endforeach
+            </div>
+        @endif
 
-                        @if($slideCount > 1)
-                            <div class="absolute top-4 right-4 z-10 flex gap-2">
-                                <button type="button" class="country-panel__nav" @click.prevent="prev()" aria-label="Previous slide">
-                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"/></svg>
-                                </button>
-                                <button type="button" class="country-panel__nav" @click.prevent="next()" aria-label="Next slide">
-                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
-                                </button>
-                            </div>
-                            <div class="absolute bottom-3 left-5 right-5 z-10 flex gap-1.5" role="tablist" aria-label="{{ $country->name }} slides">
-                                @foreach($destinationSlides as $i => $slide)
-                                    <button
-                                        type="button"
-                                        class="h-1 flex-1 transition"
-                                        :class="index === {{ $i }} ? 'bg-white' : 'bg-white/35 hover:bg-white/60'"
-                                        @click.prevent="go({{ $i }})"
-                                        :aria-selected="(index === {{ $i }}).toString()"
-                                        aria-label="Show {{ $slide['title'] }}"
-                                    ></button>
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
-
-                    <div class="flex flex-col min-h-0 lg:pt-1">
-                        <div class="flex flex-wrap items-baseline justify-between gap-3 mb-5">
-                            <div>
-                                <p class="text-[11px] tracking-[0.18em] uppercase text-muted">Featured journeys</p>
-                                <h3 class="font-display text-3xl text-charcoal mt-1">{{ $country->name }}</h3>
-                            </div>
-                            <a href="{{ route('destinations.country', $country) }}" class="text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">
-                                Explore {{ $country->name }}
-                            </a>
-                        </div>
-
-                        @if($countryJourneys->isEmpty())
-                            <p class="text-sm text-muted">Journeys for {{ $country->name }} are being prepared.</p>
-                        @else
-                            <div class="space-y-1 flex-1">
-                                @foreach($countryJourneys as $jIndex => $journey)
-                                    @php $slideIndex = $jIndex + 1; @endphp
-                                    <a
-                                        href="{{ route('journeys.show', $journey) }}"
-                                        class="journey-row group flex gap-4 sm:gap-5 items-start border-b border-charcoal/10 py-4 sm:py-5 last:border-0"
-                                        :class="index === {{ $slideIndex }} ? 'is-active' : ''"
-                                        @mouseenter="go({{ $slideIndex }})"
-                                        @focus="go({{ $slideIndex }})"
-                                    >
-                                        <div class="hidden sm:block w-24 h-[4.5rem] shrink-0 overflow-hidden bg-forest/10">
-                                            @if($journey->coverThumbUrl() || $journey->coverUrl())
-                                                <img src="{{ $journey->coverThumbUrl() ?: $journey->coverUrl() }}" alt="" class="h-full w-full object-cover" loading="lazy" decoding="async">
-                                            @endif
-                                        </div>
-                                        <div class="min-w-0 flex-1">
-                                            <h4
-                                                class="font-display text-xl sm:text-2xl text-charcoal group-hover:text-forest transition"
-                                                :class="index === {{ $slideIndex }} ? 'text-forest' : ''"
-                                            >{{ $journey->name }}</h4>
-                                            @if($journey->duration_label)
-                                                <p class="mt-1 text-[11px] tracking-[0.16em] uppercase text-muted">{{ $journey->duration_label }}</p>
-                                            @endif
-                                            @if($journey->teaser)
-                                                <p class="mt-2 text-sm text-muted leading-relaxed line-clamp-2">{{ $journey->teaser }}</p>
-                                            @endif
-                                        </div>
-                                    </a>
-                                @endforeach
-                            </div>
-                            <a href="{{ route('journeys.country', $country) }}" class="mt-6 inline-block text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">
-                                All {{ $country->name }} journeys →
-                            </a>
-                        @endif
-                    </div>
-                </div>
-            @endforeach
+        <div class="mt-10 flex justify-center reveal">
+            <a href="{{ route('destinations.index') }}" class="btn-outline-dark">All destinations</a>
         </div>
     </div>
+    <x-section-edge variant="ridge" class="text-white" />
 </section>
 
-<section class="bg-white py-24 lg:py-32 overflow-hidden">
+<section class="relative bg-white py-24 lg:py-32 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <div class="reveal max-w-3xl">
+        <div class="reveal mx-auto max-w-3xl text-center">
+            <div class="mb-4 flex justify-center">
+                <x-path-accent class="opacity-70" />
+            </div>
             <p class="section-eyebrow">{{ $experiencesEyebrow }}</p>
             <h2 class="font-display text-4xl md:text-5xl text-charcoal">{{ $experiencesHeading }}</h2>
             @if($experiencesIntro)
@@ -360,6 +237,7 @@
                                 @endif
                                 <div class="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/25 to-transparent"></div>
                                 <div class="tile-copy relative z-10 flex h-full min-h-[20rem] flex-col justify-end p-6">
+                                    <span class="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/55 text-white transition group-hover:bg-white group-hover:text-charcoal" aria-hidden="true">→</span>
                                     <h3 class="font-display text-3xl text-white">{{ $experience->name }}</h3>
                                     @if($experience->teaser)
                                         <p class="mt-2 text-sm text-white/75 line-clamp-2">{{ $experience->teaser }}</p>
@@ -373,12 +251,13 @@
         </div>
     @endif
 
-    <div class="mx-auto max-w-7xl px-5 lg:px-8 mt-12 reveal">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8 mt-12 flex justify-center reveal">
         <a href="{{ route('experiences.index') }}" class="btn-outline-dark">All experiences</a>
     </div>
+    <x-section-edge variant="wave" class="text-cream" />
 </section>
 
-<section class="bg-cream py-24 lg:py-32">
+<section class="relative bg-cream py-24 lg:py-32">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="reveal max-w-3xl">
             <p class="section-eyebrow">{{ $featuredEyebrow }}</p>
@@ -387,56 +266,49 @@
                 <p class="mt-4 text-muted leading-relaxed">{{ $featuredIntro }}</p>
             @endif
         </div>
-        <div class="mt-12 grid gap-10 sm:grid-cols-3 reveal-stagger">
+        <div class="mt-12 grid gap-8 sm:grid-cols-3 reveal-stagger">
             @foreach($journeys as $journey)
-                <div class="lift-card">
-                    <x-journey-card :journey="$journey" />
-                </div>
+                <x-journey-card :journey="$journey" />
             @endforeach
         </div>
         <div class="mt-14 reveal">
             <a href="{{ route('journeys.index') }}" class="btn-primary">All journeys</a>
         </div>
     </div>
+    <x-section-edge variant="ridge" class="text-forest" />
 </section>
 
-<section class="bg-forest text-sand py-24 lg:py-28 overflow-hidden relative">
-    <div class="absolute inset-0 opacity-30 pointer-events-none" aria-hidden="true">
-        <div class="absolute -right-20 top-10 h-72 w-72 rounded-full bg-white/10 blur-3xl"></div>
-        <div class="absolute -left-16 bottom-0 h-56 w-56 rounded-full bg-sand/10 blur-3xl"></div>
-    </div>
-    <div class="relative mx-auto max-w-3xl px-5 lg:px-8 reveal">
+<section class="bg-forest text-sand py-20 lg:py-24 overflow-hidden relative surface-nature">
+    <div class="relative mx-auto max-w-3xl px-5 lg:px-8 reveal text-center">
         <p class="text-[11px] tracking-[0.22em] uppercase text-sand/50 mb-3">Journey Finder</p>
         <h2 class="font-display text-4xl md:text-5xl text-white">Not sure where to begin?</h2>
         <p class="mt-4 text-sand/75 leading-relaxed">Refine by country, duration, experience, and stay style — then we tailor from there.</p>
-        <div class="mt-10 flex flex-wrap gap-4">
+        <div class="mt-10 flex flex-wrap justify-center gap-4">
             <a href="{{ route('journeys.finder') }}" class="btn-outline">Open the finder</a>
             <button type="button" @click="$dispatch('open-journey-search')" class="text-sm tracking-[0.14em] uppercase text-sand/80 hover:text-white self-center transition">Quick search</button>
         </div>
     </div>
-</section>
 
-@if(count($homePillars))
-<section class="bg-white py-24 lg:py-32">
-    <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <div class="reveal max-w-3xl">
-            <p class="section-eyebrow">Why travel with Pearl Pulse</p>
-            <h2 class="font-display text-4xl md:text-5xl text-charcoal">What sets the journey apart</h2>
+    @if(count($homePillars))
+        <div class="relative mx-auto mt-14 max-w-7xl px-5 lg:px-8">
+            <div class="feature-strip reveal-stagger rounded-2xl border border-white/15 bg-white/5 backdrop-blur-[2px]">
+                @foreach($homePillars as $index => $pillar)
+                    <div class="feature-strip__item">
+                        <span class="feature-strip__mark">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</span>
+                        <h3 class="font-display text-2xl text-white">{{ $pillar['title'] }}</h3>
+                        <p class="mt-3 text-sm text-sand/75 leading-relaxed">{{ $pillar['text'] }}</p>
+                    </div>
+                @endforeach
+            </div>
         </div>
-        <div class="mt-14 grid gap-10 md:grid-cols-2 lg:grid-cols-3 reveal-stagger">
-            @foreach($homePillars as $pillar)
-                <div class="border-t border-charcoal/10 pt-6">
-                    <h3 class="font-display text-2xl text-charcoal">{{ $pillar['title'] }}</h3>
-                    <p class="mt-3 text-sm text-muted leading-relaxed">{{ $pillar['text'] }}</p>
-                </div>
-            @endforeach
-        </div>
-    </div>
+    @endif
+
+    <x-section-edge variant="torn" class="{{ $reviews->isNotEmpty() ? 'text-cream' : 'text-white' }}" />
 </section>
-@endif
 
 @if($reviews->isNotEmpty())
-<section class="bg-cream py-24 lg:py-32">
+<section class="relative bg-cream py-24 lg:py-32">
+    <x-section-edge placement="top" variant="wave" class="text-cream" />
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="flex flex-wrap items-end justify-between gap-4 mb-12 reveal">
             <div>
@@ -453,27 +325,35 @@
                 <a href="{{ route('true-pulse') }}" class="tracking-[0.12em] uppercase text-forest hover:opacity-70 transition">True Pulse</a>
             </div>
         </div>
-        <div class="grid gap-10 md:grid-cols-2 reveal-stagger">
-            @foreach($reviews as $review)
-                <blockquote class="border-t border-charcoal/10 pt-6">
-                    <p class="font-display text-2xl md:text-3xl text-charcoal leading-snug">“{{ $review->quote }}”</p>
-                    <footer class="mt-5 text-sm text-muted">
-                        <span class="text-charcoal">{{ $review->guest_name }}</span>
-                        @if($review->guest_country)
-                            · {{ $review->guest_country }}
-                        @endif
-                        @if($review->journey)
-                            · <a href="{{ route('journeys.show', $review->journey) }}" class="hover:text-forest transition">{{ $review->journey->name }}</a>
-                        @endif
-                    </footer>
-                </blockquote>
-            @endforeach
+        <div class="marquee reveal" data-marquee>
+            <div class="marquee__track" data-marquee-inner>
+                @foreach([false, true] as $isClone)
+                    <div class="marquee__group" @if($isClone) aria-hidden="true" @endif>
+                        @foreach($reviews as $review)
+                            <blockquote class="w-[82vw] shrink-0 rounded-2xl border border-charcoal/10 bg-white p-6 sm:w-[28rem] lg:w-[32rem]">
+                                <p class="font-display text-2xl md:text-3xl text-charcoal leading-snug">“{{ $review->quote }}”</p>
+                                <footer class="mt-6 border-t border-charcoal/10 pt-4 text-sm text-muted">
+                                    <span class="text-charcoal">{{ $review->guest_name }}</span>
+                                    @if($review->guest_country)
+                                        · {{ $review->guest_country }}
+                                    @endif
+                                    @if($review->journey)
+                                        · <a href="{{ route('journeys.show', $review->journey) }}" class="hover:text-forest transition" @if($isClone) tabindex="-1" @endif>{{ $review->journey->name }}</a>
+                                    @endif
+                                    <span class="mt-2 block text-[10px] uppercase tracking-[0.18em] text-muted">Guest review</span>
+                                </footer>
+                            </blockquote>
+                        @endforeach
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
+    <x-section-edge variant="ridge" class="text-white" />
 </section>
 @endif
 
-<section class="border-t border-charcoal/8 bg-white py-20">
+<section class="bg-white py-20">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <p class="section-eyebrow reveal">Continue</p>
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 reveal-stagger">
@@ -497,11 +377,9 @@
     </div>
 </section>
 
-<div class="reveal">
-    <x-page-cta :heading="$homeCtaHeading" :text="$homeCtaText" :button="$homeCtaButton">
-        @if($whatsappUrl)
-            <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener" class="text-sm tracking-[0.14em] uppercase text-sand/70 hover:text-sand">WhatsApp</a>
-        @endif
-    </x-page-cta>
-</div>
+<x-page-cta :heading="$homeCtaHeading" :text="$homeCtaText" :button="$homeCtaButton">
+    @if($whatsappUrl)
+        <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener" class="text-sm tracking-[0.14em] uppercase text-white/75 hover:text-white transition [text-shadow:0_1px_12px_rgb(0_0_0_/_0.4)]">WhatsApp</a>
+    @endif
+</x-page-cta>
 @endsection

@@ -94,6 +94,7 @@ class EnquiryForm extends Component
             : null;
 
         $enquiry = Enquiry::query()->create([
+            'user_id' => auth()->id(),
             'destination_id' => $this->destinationId,
             'journey_id' => $journey?->id,
             'name' => $this->name,

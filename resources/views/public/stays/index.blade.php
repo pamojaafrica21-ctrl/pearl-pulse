@@ -18,5 +18,5 @@
         @endforeach
     </div>
 </section>
-<x-page-cta heading="Tell us how you like to stay" text="Comfortable, luxury, or ultra-luxury — we will match the journey." />
+<x-page-cta heading="Tell us how you like to stay" text="Essential, premium, or signature — we will match the journey." />
 @endsection

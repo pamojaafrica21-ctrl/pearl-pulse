@@ -13,11 +13,12 @@ use Illuminate\Support\Facades\Cache;
 
 class PublicNav
 {
-    public const CACHE_KEY = 'public_nav_shell_v2';
+    public const CACHE_KEY = 'public_nav_shell_v3';
 
     public static function forget(): void
     {
         Cache::forget(self::CACHE_KEY);
+        Cache::forget('public_nav_shell_v2');
         Cache::forget('public_nav_shell_v1');
     }
 
@@ -33,42 +34,21 @@ class PublicNav
             $pulse = PulseItem::query()->published()->orderBy('sort_order')->first();
             $article = Article::query()->published()->orderBy('sort_order')->first();
 
-            $countries = Country::query()
-                ->published()
-                ->orderBy('sort_order')
-                ->get(['id', 'name', 'slug', 'subtitle', 'teaser', 'cover_path', 'sort_order', 'status'])
-                ->map(fn (Country $country) => [
-                    'name' => $country->name,
-                    'slug' => $country->slug,
-                    'subtitle' => $country->subtitle,
-                    'teaser' => $country->teaser,
-                    'image' => $country->coverThumbUrl() ?: $country->coverUrl(),
-                    'journeys_url' => route('journeys.country', $country),
-                    'destinations_url' => route('destinations.country', $country),
-                ])
-                ->all();
-
-            $experiences = Experience::query()
-                ->published()
-                ->orderBy('sort_order')
-                ->get(['id', 'name', 'slug', 'teaser', 'cover_path', 'sort_order', 'status'])
-                ->map(fn (Experience $experience) => [
-                    'name' => $experience->name,
-                    'slug' => $experience->slug,
-                    'teaser' => $experience->teaser,
-                    'image' => $experience->coverThumbUrl() ?: $experience->coverUrl(),
-                    'url' => route('experiences.show', $experience),
-                ])
-                ->all();
-
             return [
                 'siteContact' => $settings->contact(),
                 'siteSocial' => $settings->social(),
                 'reviewLinks' => $settings->reviewLinks(),
                 'footerBlurb' => $settings->get('footer_blurb', 'Private journeys through East Africa.'),
                 'whatsappUrl' => $settings->whatsappUrl('Hello Pearl Pulse — I would like to plan a journey.'),
-                'navCountries' => $countries,
-                'navExperiences' => $experiences,
+                'navCountries' => Country::query()
+                    ->published()
+                    ->orderBy('sort_order')
+                    ->with([
+                        'destinations' => fn ($q) => $q->published()->orderBy('sort_order')->orderBy('name'),
+                        'journeys' => fn ($q) => $q->published()->orderBy('journeys.sort_order'),
+                    ])
+                    ->get(),
+                'navExperiences' => Experience::query()->published()->orderBy('sort_order')->get(),
                 'navAboutItems' => [
                     [
                         'label' => 'Our story',

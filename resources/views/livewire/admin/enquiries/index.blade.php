@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.5s>
     <div class="flex gap-2 mb-6">
         @foreach(['' => 'All', 'new' => 'New', 'read' => 'Read', 'responded' => 'Responded'] as $value => $label)
             <button
@@ -15,7 +15,7 @@
                 <thead class="bg-cream text-left text-xs tracking-wider uppercase text-muted">
                     <tr>
                         <th class="px-4 py-3">From</th>
-                        <th class="px-4 py-3">Destination</th>
+                        <th class="px-4 py-3">Source</th>
                         <th class="px-4 py-3">Status</th>
                         <th class="px-4 py-3">Date</th>
                     </tr>
@@ -31,7 +31,13 @@
                                 <div>{{ $enquiry->name }}</div>
                                 <div class="text-xs text-muted font-normal">{{ $enquiry->email }}</div>
                             </td>
-                            <td class="px-4 py-3">{{ $enquiry->journey?->name ?? $enquiry->destination?->name ?? 'General' }}</td>
+                            <td class="px-4 py-3">
+                                @if($enquiry->source === 'journey_finder')
+                                    <span class="inline-block text-[10px] tracking-[0.12em] uppercase px-2 py-0.5 bg-forest/10 text-forest">Journey Finder</span>
+                                @else
+                                    <span class="text-muted">{{ $enquiry->journey?->name ?? $enquiry->destination?->name ?? 'Plan form' }}</span>
+                                @endif
+                            </td>
                             <td class="px-4 py-3 capitalize">{{ $enquiry->status }}</td>
                             <td class="px-4 py-3 text-muted">{{ $enquiry->created_at->format('d M Y H:i') }}</td>
                         </tr>
@@ -52,9 +58,16 @@
                         · {{ $viewingEnquiry->phone }}
                     @endif
                 </p>
-                <p class="text-xs tracking-[0.12em] uppercase text-gold mt-4">
-                    {{ $viewingEnquiry->journey?->name ?? $viewingEnquiry->destination?->name ?? 'General enquiry' }}
-                </p>
+                @if($viewingEnquiry->source === 'journey_finder')
+                    <p class="text-xs tracking-[0.12em] uppercase text-gold mt-4">Journey Finder quiz</p>
+                @else
+                    <p class="text-xs tracking-[0.12em] uppercase text-gold mt-4">
+                        {{ $viewingEnquiry->journey?->name ?? $viewingEnquiry->destination?->name ?? 'General enquiry' }}
+                    </p>
+                @endif
+                @if($viewingEnquiry->user)
+                    <p class="mt-2 text-sm">Account: {{ $viewingEnquiry->user->name }} ({{ $viewingEnquiry->user->email }})</p>
+                @endif
                 @if($viewingEnquiry->whatsapp)
                     <p class="mt-2 text-sm">WhatsApp: {{ $viewingEnquiry->whatsapp }}</p>
                 @endif
@@ -68,15 +81,15 @@
                     <p class="mt-2 text-sm">Experiences: {{ implode(', ', $viewingEnquiry->preferred_experiences) }}</p>
                 @endif
                 @if($viewingEnquiry->accommodation)
-                    <p class="mt-2 text-sm">Stay: {{ $viewingEnquiry->accommodation }} · {{ $viewingEnquiry->investment }}</p>
+                    <p class="mt-2 text-sm">Stay: {{ $viewingEnquiry->accommodation }}@if($viewingEnquiry->investment) · {{ $viewingEnquiry->investment }}@endif</p>
                 @endif
                 @if($viewingEnquiry->travel_dates)
                     <p class="mt-2 text-sm">Dates: {{ $viewingEnquiry->travel_dates }}</p>
                 @endif
                 @if($viewingEnquiry->preferences)
-                    <div class="mt-2 text-sm prose prose-sm max-w-none prose-p:my-1">
-                        <span class="text-muted">Preferences:</span>
-                        {!! $viewingEnquiry->preferences !!}
+                    <div class="mt-2 text-sm whitespace-pre-line">
+                        <span class="text-muted">Summary:</span>
+                        {{ strip_tags($viewingEnquiry->preferences) }}
                     </div>
                 @endif
                 <div class="mt-4 text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-2">

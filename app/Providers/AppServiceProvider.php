@@ -45,6 +45,8 @@ class AppServiceProvider extends ServiceProvider
             \App\Models\Stay::class,
             \App\Models\PulseItem::class,
             \App\Models\Article::class,
+            \App\Models\Destination::class,
+            \App\Models\Journey::class,
         ] as $model) {
             $model::saved(fn () => PublicNav::forget());
             $model::deleted(fn () => PublicNav::forget());

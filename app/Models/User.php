@@ -39,6 +39,11 @@ class User extends Authenticatable
         return $this->hasMany(Favorite::class);
     }
 
+    public function enquiries()
+    {
+        return $this->hasMany(Enquiry::class);
+    }
+
     public function favoriteJourneys()
     {
         return $this->belongsToMany(Journey::class, 'favorites')->withTimestamps();

@@ -1,6 +1,9 @@
 <x-mail::message>
 # New enquiry
 
+@if($enquiry->source === 'journey_finder')
+**Source:** Journey Finder quiz  
+@endif
 @if($enquiry->journey)
 **Journey:** {{ $enquiry->journey->name }}
 @endif
@@ -38,7 +41,7 @@
 **Dates:** {{ $enquiry->travel_dates }}  
 @endif
 @if($enquiry->preferences)
-**Preferences:** {{ trim(preg_replace('/\s+/', ' ', strip_tags(str_replace(['</p>', '<br>', '<br/>', '<br />'], "\n", $enquiry->preferences)))) }}  
+**Quiz summary:** {{ trim(preg_replace('/\s+/', ' ', strip_tags(str_replace(['</p>', '<br>', '<br/>', '<br />', "\n"], ' / ', $enquiry->preferences)))) }}  
 @endif
 
 **Message:**

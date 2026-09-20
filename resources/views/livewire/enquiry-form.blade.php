@@ -73,9 +73,9 @@
                     <label class="block text-xs tracking-[0.14em] uppercase mb-2 opacity-70">Accommodation preference</label>
                     <select wire:model.live="accommodation" class="w-full border-sand-deep/40 bg-white/90 text-charcoal focus:border-forest focus:ring-forest">
                         <option value="">Select</option>
-                        <option value="Comfortable">Comfortable / mid-range</option>
-                        <option value="Luxury">Luxury</option>
-                        <option value="Ultra-luxury">Ultra-luxury</option>
+                        <option value="Comfortable">Essential</option>
+                        <option value="Luxury">Premium</option>
+                        <option value="Ultra-luxury">Signature</option>
                         <option value="Mix">A considered mix</option>
                         <option value="Other">Other</option>
                     </select>
@@ -92,9 +92,9 @@
                     <label class="block text-xs tracking-[0.14em] uppercase mb-2 opacity-70">Approximate investment</label>
                     <select wire:model.live="investment" class="w-full border-sand-deep/40 bg-white/90 text-charcoal focus:border-forest focus:ring-forest">
                         <option value="">Select</option>
-                        <option value="Mid-range">Mid-range quality</option>
-                        <option value="Luxury">Luxury</option>
-                        <option value="Ultra-luxury">Ultra-luxury / private proposal</option>
+                        <option value="Mid-range">Essential quality</option>
+                        <option value="Luxury">Premium</option>
+                        <option value="Ultra-luxury">Signature / private proposal</option>
                         <option value="Unsure">Not sure yet</option>
                         <option value="Other">Other</option>
                     </select>

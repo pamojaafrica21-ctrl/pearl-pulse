@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.5s>
     {{-- Site visibility --}}
     <div class="mb-10 bg-white border border-sand-deep/30 p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div>
@@ -93,7 +93,13 @@
                 @forelse($recentEnquiries as $enquiry)
                     <tr>
                         <td class="px-4 py-3">{{ $enquiry->name }}</td>
-                        <td class="px-4 py-3">{{ $enquiry->destination?->name ?? 'General' }}</td>
+                        <td class="px-4 py-3">
+                            @if($enquiry->source === 'journey_finder')
+                                Journey Finder
+                            @else
+                                {{ $enquiry->destination?->name ?? 'General' }}
+                            @endif
+                        </td>
                         <td class="px-4 py-3 capitalize">{{ $enquiry->status }}</td>
                         <td class="px-4 py-3 text-muted">{{ $enquiry->created_at->format('d M Y') }}</td>
                     </tr>
