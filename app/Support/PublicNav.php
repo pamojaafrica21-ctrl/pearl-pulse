@@ -14,11 +14,12 @@ use Illuminate\Support\Facades\Cache;
 
 class PublicNav
 {
-    public const CACHE_KEY = 'public_nav_shell_v5';
+    public const CACHE_KEY = 'public_nav_shell_v6';
 
     public static function forget(): void
     {
         Cache::forget(self::CACHE_KEY);
+        Cache::forget('public_nav_shell_v5');
         Cache::forget('public_nav_shell_v4');
         Cache::forget('public_nav_shell_v3');
         Cache::forget('public_nav_shell_v2');
@@ -30,7 +31,7 @@ class PublicNav
      */
     public static function forLayout(SettingService $settings): array
     {
-        return Cache::remember(self::CACHE_KEY, 600, function () use ($settings) {
+        $payload = Cache::remember(self::CACHE_KEY, 600, function () use ($settings) {
             $images = app(ImageUploader::class);
             $heroImage = $settings->heroImageUrl();
             $team = TeamMember::query()->published()->orderBy('sort_order')->first();
@@ -73,7 +74,8 @@ class PublicNav
                         ])->values()->all(),
                     ];
                 })
-                ->values();
+                ->values()
+                ->all();
 
             $experiences = Experience::query()
                 ->published()
@@ -89,7 +91,8 @@ class PublicNav
                     'image_full' => $images->url($experience->cover_path),
                     'url' => route('experiences.show', $experience),
                 ])
-                ->values();
+                ->values()
+                ->all();
 
             return [
                 'siteContact' => $settings->contact(),
@@ -142,5 +145,11 @@ class PublicNav
                 ],
             ];
         });
+
+        $payload['navCountries'] = collect($payload['navCountries'] ?? []);
+        $payload['navExperiences'] = collect($payload['navExperiences'] ?? []);
+        $payload['navAboutItems'] = $payload['navAboutItems'] ?? [];
+
+        return $payload;
     }
 }

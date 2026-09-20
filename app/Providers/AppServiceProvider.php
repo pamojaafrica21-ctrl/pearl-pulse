@@ -24,7 +24,9 @@ class AppServiceProvider extends ServiceProvider
         View::composer('layouts.public', function ($view) {
             try {
                 $view->with(PublicNav::forLayout(app(SettingService::class)));
-            } catch (\Throwable) {
+            } catch (\Throwable $e) {
+                report($e);
+                PublicNav::forget();
                 $view->with([
                     'siteContact' => ['address' => '', 'phone' => '', 'email' => '', 'admin_email' => '', 'whatsapp' => ''],
                     'siteSocial' => ['instagram' => '', 'facebook' => '', 'twitter' => ''],

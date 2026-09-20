@@ -23,9 +23,9 @@
         footerOpen: null,
         navOpen: false,
         navSection: 'destinations',
-        navFocus: {{ $navCountries->first()['id'] ?? 'null' }},
-        countryFocus: {{ $navCountries->first()['id'] ?? 'null' }},
-        experienceFocus: {{ $navExperiences->first()['id'] ?? 'null' }},
+        navFocus: {{ data_get($navCountries->first(), 'id', 'null') }},
+        countryFocus: {{ data_get($navCountries->first(), 'id', 'null') }},
+        experienceFocus: {{ data_get($navExperiences->first(), 'id', 'null') }},
         aboutFocus: 0,
         openNav(section) {
             if (this.navOpen && this.navSection === section) {

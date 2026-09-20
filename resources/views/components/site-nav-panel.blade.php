@@ -5,8 +5,8 @@
 ])
 
 @php
-    $firstCountryId = $countries->first()['id'] ?? null;
-    $firstExperienceId = $experiences->first()['id'] ?? null;
+    $firstCountryId = data_get($countries->first(), 'id');
+    $firstExperienceId = data_get($experiences->first(), 'id');
 @endphp
 
 <div
