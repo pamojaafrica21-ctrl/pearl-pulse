@@ -33,6 +33,7 @@
                 <a href="{{ route('admin.faqs.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.faqs.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">FAQs</a>
                 <a href="{{ route('admin.pages.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.pages.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Pages</a>
                 <a href="{{ route('admin.enquiries.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.enquiries.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Enquiries</a>
+                <a href="{{ route('admin.bookings.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.bookings.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Bookings</a>
                 <a href="{{ route('admin.settings.edit') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.settings.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Settings</a>
                 <a href="{{ route('home') }}" class="block px-3 py-2 rounded-sm text-sand/50 hover:text-sand mt-6" target="_blank">View site →</a>
             </nav>

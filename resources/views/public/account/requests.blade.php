@@ -37,19 +37,23 @@
                             <div>
                                 <p class="text-[11px] tracking-[0.14em] uppercase text-muted">
                                     {{ $enquiry->created_at->format('d M Y · H:i') }}
-                                    ·
-                                    @if($enquiry->source === 'journey_finder')
-                                        Journey Finder
-                                    @else
-                                        Plan form
-                                    @endif
+                                    · {{ $enquiry->channelLabel() }}
                                 </p>
                                 <h2 class="font-display text-2xl text-forest mt-1">
-                                    {{ $enquiry->journey?->name ?? (is_array($enquiry->preferred_destinations) && $enquiry->preferred_destinations !== [] ? implode(', ', $enquiry->preferred_destinations) : 'Custom journey request') }}
+                                    {{ $enquiry->booking?->reference ? $enquiry->booking->reference.' · ' : '' }}{{ $enquiry->journey?->name ?? (is_array($enquiry->preferred_destinations) && $enquiry->preferred_destinations !== [] ? implode(', ', $enquiry->preferred_destinations) : 'Custom journey request') }}
                                 </h2>
                             </div>
-                            <span class="text-[10px] tracking-[0.12em] uppercase px-2 py-1 border border-charcoal/15 text-muted capitalize">{{ $enquiry->status }}</span>
+                            <span class="text-[10px] tracking-[0.12em] uppercase px-2 py-1 border border-charcoal/15 text-muted">{{ $enquiry->guestStatusLabel() }}</span>
                         </div>
+
+                        @if($enquiry->booking)
+                            <p class="mt-3 text-sm text-charcoal">
+                                Booking {{ $enquiry->booking->statusLabel() }}
+                                @if($enquiry->booking->datesLabel())
+                                    · {{ $enquiry->booking->datesLabel() }}
+                                @endif
+                            </p>
+                        @endif
 
                         <div class="mt-4 grid gap-2 text-sm text-muted sm:grid-cols-2">
                             @if($enquiry->days)

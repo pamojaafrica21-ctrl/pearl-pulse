@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Booking;
 use App\Models\Destination;
 use App\Models\Enquiry;
 use App\Models\PageVisit;
@@ -47,8 +48,10 @@ class Dashboard extends Component
         return view('livewire.admin.dashboard', [
             'destinationCount' => Destination::query()->count(),
             'publishedCount' => Destination::query()->published()->count(),
-            'newEnquiries' => Enquiry::query()->where('status', 'new')->count(),
-            'recentEnquiries' => Enquiry::query()->with('destination')->latest()->take(5)->get(),
+            'newEnquiries' => Enquiry::query()->where('status', Enquiry::STATUS_NEW)->count(),
+            'openEnquiries' => Enquiry::query()->open()->count(),
+            'confirmedBookings' => Booking::query()->where('status', Booking::STATUS_CONFIRMED)->count(),
+            'recentEnquiries' => Enquiry::query()->with(['destination', 'assignee'])->latest()->take(5)->get(),
             'visitStats' => PageVisit::stats(),
         ])->layout('layouts.admin', ['heading' => 'Dashboard']);
     }

@@ -94,7 +94,7 @@ class EnquiryForm extends Component
             : null;
 
         $enquiry = Enquiry::query()->create([
-            'user_id' => auth()->id(),
+            'user_id' => Enquiry::matchingUserId($this->email),
             'destination_id' => $this->destinationId,
             'journey_id' => $journey?->id,
             'name' => $this->name,
@@ -111,6 +111,8 @@ class EnquiryForm extends Component
             'travel_dates' => $this->resolvedTravelDates(),
             'preferences' => $this->preferences ?: null,
             'status' => 'new',
+            'channel' => Enquiry::CHANNEL_WEBSITE,
+            'source' => 'plan',
         ]);
 
         $enquiry->load(['destination', 'journey']);

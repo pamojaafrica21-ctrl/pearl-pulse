@@ -61,20 +61,29 @@
         </div>
     </div>
 
-    <div class="grid gap-4 sm:grid-cols-3 mb-10">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
         <div class="bg-white border border-sand-deep/30 p-5">
             <p class="text-xs tracking-[0.15em] uppercase text-muted">Destinations</p>
             <p class="font-display text-4xl text-forest mt-2">{{ $destinationCount }}</p>
             <p class="text-sm text-muted mt-1">{{ $publishedCount }} published</p>
         </div>
         <div class="bg-white border border-sand-deep/30 p-5">
-            <p class="text-xs tracking-[0.15em] uppercase text-muted">New enquiries</p>
-            <p class="font-display text-4xl text-forest mt-2">{{ $newEnquiries }}</p>
+            <p class="text-xs tracking-[0.15em] uppercase text-muted">Open enquiries</p>
+            <p class="font-display text-4xl text-forest mt-2">{{ $openEnquiries }}</p>
+            <p class="text-sm text-muted mt-1">{{ $newEnquiries }} new</p>
             <a href="{{ route('admin.enquiries.index') }}" class="text-sm text-gold mt-2 inline-block" wire:navigate>View inbox →</a>
         </div>
         <div class="bg-white border border-sand-deep/30 p-5">
+            <p class="text-xs tracking-[0.15em] uppercase text-muted">Confirmed bookings</p>
+            <p class="font-display text-4xl text-forest mt-2">{{ $confirmedBookings }}</p>
+            <a href="{{ route('admin.bookings.index') }}" class="text-sm text-gold mt-2 inline-block" wire:navigate>View bookings →</a>
+        </div>
+        <div class="bg-white border border-sand-deep/30 p-5">
             <p class="text-xs tracking-[0.15em] uppercase text-muted">Quick actions</p>
-            <a href="{{ route('admin.destinations.create') }}" class="btn-primary mt-4 text-xs inline-block" wire:navigate>New destination</a>
+            <div class="mt-4 flex flex-wrap gap-2">
+                <a href="{{ route('admin.enquiries.create') }}" class="btn-primary text-xs inline-block" wire:navigate>Log enquiry</a>
+                <a href="{{ route('admin.bookings.create') }}" class="btn-outline-dark text-xs inline-block" wire:navigate>Log booking</a>
+            </div>
         </div>
     </div>
 
@@ -84,7 +93,7 @@
             <thead class="bg-cream text-left text-xs tracking-wider uppercase text-muted">
                 <tr>
                     <th class="px-4 py-3">Name</th>
-                    <th class="px-4 py-3">Destination</th>
+                    <th class="px-4 py-3">Channel</th>
                     <th class="px-4 py-3">Status</th>
                     <th class="px-4 py-3">Date</th>
                 </tr>
@@ -92,15 +101,11 @@
             <tbody class="divide-y divide-sand-deep/20">
                 @forelse($recentEnquiries as $enquiry)
                     <tr>
-                        <td class="px-4 py-3">{{ $enquiry->name }}</td>
                         <td class="px-4 py-3">
-                            @if($enquiry->source === 'journey_finder')
-                                Journey Finder
-                            @else
-                                {{ $enquiry->destination?->name ?? 'General' }}
-                            @endif
+                            <a href="{{ route('admin.enquiries.index', ['open' => $enquiry->id]) }}" wire:navigate class="hover:text-forest">{{ $enquiry->name }}</a>
                         </td>
-                        <td class="px-4 py-3 capitalize">{{ $enquiry->status }}</td>
+                        <td class="px-4 py-3">{{ $enquiry->channelLabel() }}</td>
+                        <td class="px-4 py-3">{{ $enquiry->statusLabel() }}</td>
                         <td class="px-4 py-3 text-muted">{{ $enquiry->created_at->format('d M Y') }}</td>
                     </tr>
                 @empty

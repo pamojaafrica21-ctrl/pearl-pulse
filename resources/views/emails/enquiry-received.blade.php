@@ -1,8 +1,8 @@
 <x-mail::message>
 # New enquiry
 
-@if($enquiry->source === 'journey_finder')
-**Source:** Journey Finder quiz  
+@if($enquiry->channel)
+**Channel:** {{ $enquiry->channelLabel() }}  
 @endif
 @if($enquiry->journey)
 **Journey:** {{ $enquiry->journey->name }}

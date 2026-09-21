@@ -16,7 +16,7 @@
     ];
     $intros = [
         'favorites' => 'Favourites you have saved while exploring. When you are ready, plan a private proposal with us.',
-        'requests' => 'Journey Finder and plan submissions linked to your account.',
+        'requests' => 'Journey Finder, plan submissions, and any confirmed bookings linked to your account.',
         'profile' => 'Update your details and keep your Pearl Pulse account secure.',
     ];
 @endphp

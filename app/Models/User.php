@@ -44,6 +44,21 @@ class User extends Authenticatable
         return $this->hasMany(Enquiry::class);
     }
 
+    public function assignedEnquiries()
+    {
+        return $this->hasMany(Enquiry::class, 'assigned_user_id');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function assignedBookings()
+    {
+        return $this->hasMany(Booking::class, 'assigned_user_id');
+    }
+
     public function favoriteJourneys()
     {
         return $this->belongsToMany(Journey::class, 'favorites')->withTimestamps();

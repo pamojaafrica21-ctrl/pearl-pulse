@@ -32,6 +32,7 @@ class AccountController extends Controller
     {
         $enquiries = $request->user()
             ->enquiries()
+            ->with(['journey', 'booking'])
             ->latest()
             ->get();
 

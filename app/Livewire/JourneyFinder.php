@@ -189,7 +189,7 @@ class JourneyFinder extends Component
         ]);
 
         $enquiry = Enquiry::query()->create([
-            'user_id' => Auth::id(),
+            'user_id' => Enquiry::matchingUserId($this->email),
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone ?: null,
@@ -204,6 +204,7 @@ class JourneyFinder extends Component
             'preferences' => $this->quizSummaryText(),
             'status' => 'new',
             'source' => 'journey_finder',
+            'channel' => Enquiry::CHANNEL_FINDER,
         ]);
 
         $to = $settings->get('admin_email') ?: config('mail.from.address');

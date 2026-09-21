@@ -15,9 +15,12 @@ use App\Livewire\Admin\Articles\Form as ArticleForm;
 use App\Livewire\Admin\Articles\Index as ArticlesIndex;
 use App\Livewire\Admin\Countries\Form as CountryForm;
 use App\Livewire\Admin\Countries\Index as CountriesIndex;
+use App\Livewire\Admin\Bookings\Form as BookingForm;
+use App\Livewire\Admin\Bookings\Index as BookingsIndex;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Admin\Destinations\Form as DestinationForm;
 use App\Livewire\Admin\Destinations\Index as DestinationsIndex;
+use App\Livewire\Admin\Enquiries\Create as EnquiryCreate;
 use App\Livewire\Admin\Enquiries\Index as EnquiriesIndex;
 use App\Livewire\Admin\Experiences\Form as ExperienceForm;
 use App\Livewire\Admin\Experiences\Index as ExperiencesIndex;
@@ -129,6 +132,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/pages/create', PageForm::class)->name('pages.create');
     Route::get('/pages/{page}/edit', PageForm::class)->name('pages.edit');
     Route::get('/enquiries', EnquiriesIndex::class)->name('enquiries.index');
+    Route::get('/enquiries/create', EnquiryCreate::class)->name('enquiries.create');
+    Route::get('/bookings', BookingsIndex::class)->name('bookings.index');
+    Route::get('/bookings/create', BookingForm::class)->name('bookings.create');
+    Route::get('/bookings/{booking}/edit', BookingForm::class)->name('bookings.edit');
     Route::get('/settings', SettingsEdit::class)->name('settings.edit');
 });
 
