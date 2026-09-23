@@ -74,7 +74,7 @@ class PublicNav
                             'slug' => $journey->slug,
                             'teaser' => $journey->teaser,
                             'duration_label' => $journey->duration_label,
-                            'image' => $images->url($journey->cover_path),
+                            'image' => $images->thumbUrl($journey->cover_path) ?: $images->url($journey->cover_path),
                             'url' => route('journeys.show', $journey),
                         ])->values()->all(),
                     ];

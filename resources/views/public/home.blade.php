@@ -51,7 +51,8 @@
                             src="{{ $youtubePoster }}"
                             alt=""
                             class="absolute inset-0 h-full w-full object-cover scale-105"
-                            @if($i > 0) loading="lazy" @endif
+                            decoding="async"
+                            @if($i === 0) fetchpriority="high" @else loading="lazy" @endif
                         >
                     @endif
                     <iframe
@@ -69,13 +70,16 @@
                     muted
                     loop
                     playsinline
-                    preload="{{ $i === 0 ? 'auto' : 'none' }}"
+                    preload="{{ $i === 0 ? 'metadata' : 'none' }}"
                     poster="{{ $slide['image_url'] }}"
                     data-parallax="0.08"
                     x-bind:autoplay="index === {{ $i }}"
                     @if($i === 0) autoplay @endif
                 >
-                    <source src="{{ $slide['video_url'] }}" type="video/mp4">
+                    <source
+                        x-bind:src="index === {{ $i }} ? @js($slide['video_url']) : ''"
+                        type="video/mp4"
+                    >
                 </video>
             @elseif(!empty($slide['image_url']))
                 <img
@@ -83,7 +87,8 @@
                     alt="{{ $slide['headline'] ?: 'Pearl Pulse Safaris' }}"
                     class="absolute inset-0 h-full w-full object-cover scale-105"
                     data-parallax="0.1"
-                    @if($i > 0) loading="lazy" @endif
+                    decoding="async"
+                    @if($i === 0) fetchpriority="high" @else loading="lazy" @endif
                 >
             @else
                 <div class="absolute inset-0 bg-gradient-to-br from-forest via-forest-light to-[#3d4f35]"></div>
@@ -236,8 +241,13 @@
                         >
                             @foreach($items as $item)
                                 <a href="{{ $item['href'] }}" class="destination-slide">
-                                    @if($item['image'])
-                                        <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}" loading="{{ $loop->first ? 'eager' : 'lazy' }}">
+                                    @if($item['thumb'] ?? $item['image'])
+                                        <img
+                                            src="{{ $item['thumb'] ?? $item['image'] }}"
+                                            alt="{{ $item['title'] }}"
+                                            loading="{{ $loop->first && $loop->parent->first ? 'eager' : 'lazy' }}"
+                                            decoding="async"
+                                        >
                                     @else
                                         <div class="absolute inset-0 bg-gradient-to-br from-forest to-forest-light"></div>
                                     @endif
@@ -306,6 +316,8 @@
                                                 alt="{{ $item['title'] }}"
                                                 class="absolute inset-0 h-full w-full object-cover scale-105"
                                                 loading="{{ $i === 0 && $loop->parent->first ? 'eager' : 'lazy' }}"
+                                                decoding="async"
+                                                @if($i === 0 && $loop->parent->first) fetchpriority="low" @endif
                                             >
                                         @else
                                             <div class="absolute inset-0 bg-gradient-to-br from-forest to-forest-light"></div>

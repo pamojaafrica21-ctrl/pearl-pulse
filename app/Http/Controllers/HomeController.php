@@ -31,7 +31,10 @@ class HomeController extends Controller
                 $items = $country->destinations->take(3)->map(fn ($destination) => [
                     'href' => route('destinations.show', [$country, $destination]),
                     'image' => $destination->coverUrl() ?: $country->coverUrl(),
-                    'thumb' => $destination->coverThumbUrl() ?: $destination->coverUrl() ?: $country->coverUrl(),
+                    'thumb' => $destination->coverThumbUrl()
+                        ?: $country->coverThumbUrl()
+                        ?: $destination->coverUrl()
+                        ?: $country->coverUrl(),
                     'kicker' => $country->name,
                     'title' => $destination->name,
                     'meta' => $destination->region ?: $destination->duration,
@@ -112,7 +115,7 @@ class HomeController extends Controller
             'countries' => $countries,
             'destinationPanels' => $destinationPanels,
             'journeys' => $journeys,
-            'experiences' => Experience::query()->published()->orderBy('sort_order')->take(12)->get(),
+            'experiences' => Experience::query()->published()->orderBy('sort_order')->take(8)->get(),
             'reviews' => Review::query()->published()->with('journey')->orderBy('sort_order')->take(4)->get(),
             'whatsappUrl' => $settings->whatsappUrl('Hello Pearl Pulse — I would like to plan a journey.'),
             'reviewLinks' => $settings->reviewLinks(),
