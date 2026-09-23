@@ -84,11 +84,11 @@ class HomeController extends Controller
             ->signature()
             ->with('countries')
             ->orderBy('sort_order')
-            ->take(3)
+            ->take(6)
             ->get();
 
         if ($journeys->isEmpty()) {
-            $journeys = Journey::query()->published()->with('countries')->orderBy('sort_order')->take(3)->get();
+            $journeys = Journey::query()->published()->with('countries')->orderBy('sort_order')->take(6)->get();
         }
 
         return view('public.home', [

@@ -68,6 +68,196 @@ function initMarquees() {
     });
 }
 
+function initCardScrollers() {
+    document.querySelectorAll('[data-card-scroller]').forEach((root) => {
+        if (root.dataset.scrollerBound === '1') return;
+        root.dataset.scrollerBound = '1';
+
+        const wrap = root.closest('[data-card-scroller-wrap]') || root.parentElement;
+        const items = Array.from(root.querySelectorAll('[data-card-scroller-item]'));
+        const prevBtn = wrap?.querySelector('[data-card-scroller-prev]');
+        const nextBtn = wrap?.querySelector('[data-card-scroller-next]');
+
+        if (items.length < 2) {
+            prevBtn?.setAttribute('hidden', '');
+            nextBtn?.setAttribute('hidden', '');
+            return;
+        }
+
+        const pauseMs = Number(root.dataset.pause || 3200);
+        const manualOnly = root.hasAttribute('data-manual');
+        let index = 0;
+        let timer = null;
+        let held = false;
+        let interacting = false;
+        let resumeAfter = null;
+        let drag = null;
+        let suppressClick = false;
+
+        const itemScrollLeft = (item) => {
+            const rootRect = root.getBoundingClientRect();
+            const itemRect = item.getBoundingClientRect();
+            return root.scrollLeft + (itemRect.left - rootRect.left);
+        };
+
+        const nearestIndex = () => {
+            const left = root.scrollLeft;
+            let best = 0;
+            let bestDist = Infinity;
+            items.forEach((item, i) => {
+                const dist = Math.abs(itemScrollLeft(item) - left);
+                if (dist < bestDist) {
+                    bestDist = dist;
+                    best = i;
+                }
+            });
+            return best;
+        };
+
+        const goTo = (i, behavior = 'smooth') => {
+            index = ((i % items.length) + items.length) % items.length;
+            root.scrollTo({ left: itemScrollLeft(items[index]), behavior });
+        };
+
+        const clearTimer = () => {
+            if (timer) {
+                clearTimeout(timer);
+                timer = null;
+            }
+        };
+
+        const schedule = () => {
+            clearTimer();
+            if (manualOnly || prefersReducedMotion() || held || interacting) return;
+            timer = window.setTimeout(() => {
+                goTo(index + 1);
+                schedule();
+            }, pauseMs);
+        };
+
+        const hold = () => {
+            held = true;
+            clearTimer();
+        };
+
+        const release = () => {
+            held = false;
+            index = nearestIndex();
+            schedule();
+        };
+
+        const bumpInteraction = () => {
+            interacting = true;
+            clearTimer();
+            if (resumeAfter) clearTimeout(resumeAfter);
+            resumeAfter = window.setTimeout(() => {
+                interacting = false;
+                index = nearestIndex();
+                schedule();
+            }, 2200);
+        };
+
+        const step = (delta) => {
+            index = nearestIndex();
+            goTo(index + delta);
+            bumpInteraction();
+        };
+
+        prevBtn?.addEventListener('click', () => step(-1));
+        nextBtn?.addEventListener('click', () => step(1));
+
+        root.addEventListener('mouseenter', hold);
+        root.addEventListener('mouseleave', release);
+        root.addEventListener('focusin', hold);
+        root.addEventListener('focusout', (event) => {
+            if (!root.contains(event.relatedTarget)) release();
+        });
+        root.addEventListener(
+            'wheel',
+            (event) => {
+                if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+                    root.scrollLeft += event.deltaY;
+                    event.preventDefault();
+                }
+                bumpInteraction();
+            },
+            { passive: false }
+        );
+        root.addEventListener(
+            'scroll',
+            () => {
+                if (!held && !drag) index = nearestIndex();
+            },
+            { passive: true }
+        );
+
+        root.addEventListener('pointerdown', (event) => {
+            if (event.pointerType === 'mouse' && event.button !== 0) return;
+            if (event.target.closest('a, button')) return;
+            drag = {
+                pointerId: event.pointerId,
+                startX: event.clientX,
+                startScroll: root.scrollLeft,
+                moved: false,
+            };
+            root.classList.add('is-dragging');
+            hold();
+            try {
+                root.setPointerCapture(event.pointerId);
+            } catch {
+                // Ignore capture failures on some browsers.
+            }
+        });
+
+        root.addEventListener('pointermove', (event) => {
+            if (!drag || drag.pointerId !== event.pointerId) return;
+            const dx = event.clientX - drag.startX;
+            if (Math.abs(dx) > 4) drag.moved = true;
+            root.scrollLeft = drag.startScroll - dx;
+        });
+
+        const endDrag = (event) => {
+            if (!drag || drag.pointerId !== event.pointerId) return;
+            const wasDrag = drag.moved;
+            drag = null;
+            root.classList.remove('is-dragging');
+            index = nearestIndex();
+            if (wasDrag) {
+                suppressClick = true;
+                goTo(index, 'smooth');
+                bumpInteraction();
+            } else {
+                release();
+            }
+        };
+
+        root.addEventListener('pointerup', endDrag);
+        root.addEventListener('pointercancel', endDrag);
+
+        root.addEventListener(
+            'click',
+            (event) => {
+                if (!suppressClick) return;
+                event.preventDefault();
+                event.stopPropagation();
+                suppressClick = false;
+            },
+            true
+        );
+
+        const onVisibility = () => {
+            if (document.hidden) {
+                clearTimer();
+            } else if (!held && !interacting) {
+                schedule();
+            }
+        };
+        document.addEventListener('visibilitychange', onVisibility);
+
+        schedule();
+    });
+}
+
 function initHeaderShrink() {
     const header = document.querySelector('[data-site-header]');
     if (!header) return;
@@ -162,6 +352,7 @@ function boot() {
     initReveals();
     initParallax();
     initMarquees();
+    initCardScrollers();
     initHeaderShrink();
     initYouTubeHeroes();
 }

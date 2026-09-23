@@ -4,9 +4,11 @@ namespace App\Livewire;
 
 use App\Mail\EnquiryReceived;
 use App\Models\Country;
+use App\Models\Destination;
 use App\Models\Enquiry;
 use App\Models\Experience;
 use App\Models\Journey;
+use App\Models\Stay;
 use App\Services\SettingService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -375,7 +377,7 @@ class JourneyFinder extends Component
     }
 
     /**
-     * @return array<string, array{label: string, description: string, available: bool}>
+     * @return array<string, array{label: string, description: string, available: bool, image: ?string}>
      */
     protected function stayOptions(): array
     {
@@ -407,10 +409,42 @@ class JourneyFinder extends Component
 
         foreach ($all as $key => &$meta) {
             $meta['available'] = ! $restrict || in_array($key, $styles, true);
+            $meta['image'] = $this->stayStyleImage($key);
         }
         unset($meta);
 
         return $all;
+    }
+
+    protected function stayStyleImage(string $style): ?string
+    {
+        $stay = Stay::query()
+            ->published()
+            ->where('style', $style)
+            ->orderByDesc('is_featured')
+            ->orderBy('sort_order')
+            ->first();
+
+        if ($stay) {
+            $url = $stay->coverThumbUrl() ?: $stay->coverUrl();
+            if ($url) {
+                return $url;
+            }
+            $stay->loadMissing('destination');
+            if ($stay->destination) {
+                return $stay->destination->coverThumbUrl() ?: $stay->destination->coverUrl();
+            }
+        }
+
+        $destination = Destination::query()
+            ->published()
+            ->whereHas('stays', fn ($q) => $q->where('style', $style))
+            ->orderByDesc('is_featured')
+            ->first();
+
+        return $destination
+            ? ($destination->coverThumbUrl() ?: $destination->coverUrl())
+            : null;
     }
 
     protected function pruneDownstreamSelections(bool $fromExperiences = false, bool $fromDuration = false): void

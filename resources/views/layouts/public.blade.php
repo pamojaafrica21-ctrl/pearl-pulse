@@ -103,6 +103,20 @@
                 return;
             }
             this.mobilePanel = null;
+        },
+        toggleMenu() {
+            if (window.matchMedia('(min-width: 1024px)').matches) {
+                if (this.navOpen) {
+                    this.closeNav();
+                } else {
+                    this.openNav('destinations');
+                }
+                return;
+            }
+            this.toggleMobile();
+        },
+        menuIsOpen() {
+            return this.navOpen || this.mobileOpen;
         }
     }"
     @keydown.escape.window="closeNav(); closeMobile()"
@@ -151,73 +165,39 @@
         data-site-header
     >
         <div class="site-header-grid mx-auto max-w-7xl px-5 py-1 lg:px-8 lg:py-1.5">
-            <div class="flex lg:hidden items-center justify-self-start">
+            <div class="flex items-center gap-3 sm:gap-4 justify-self-start">
                 <button
                     type="button"
-                    class="text-charcoal"
-                    @click="toggleMobile()"
+                    class="site-menu-toggle text-charcoal"
+                    @click="toggleMenu()"
                     aria-label="Menu"
-                    :aria-expanded="mobileOpen.toString()"
+                    :aria-expanded="menuIsOpen().toString()"
                 >
-                    <svg x-show="!mobileOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7h16M4 12h16M4 17h16"/></svg>
-                    <svg x-show="mobileOpen" x-cloak class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 6l12 12M18 6 6 18"/></svg>
+                    <svg x-show="!menuIsOpen()" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7h16M4 12h16M4 17h16"/></svg>
+                    <svg x-show="menuIsOpen()" x-cloak class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 6l12 12M18 6 6 18"/></svg>
+                </button>
+                <button
+                    type="button"
+                    class="nav-link inline-flex items-center gap-2"
+                    @click="closeNav(); closeMobile(); $dispatch('open-journey-search')"
+                    aria-label="Find your journey"
+                >
+                    <svg class="h-5 w-5 lg:h-4 lg:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.3-4.3M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/>
+                    </svg>
+                    <span class="hidden sm:inline text-[11px] tracking-[0.16em] uppercase">Find your journey</span>
                 </button>
             </div>
-
-            <nav class="hidden lg:flex items-center gap-6 xl:gap-8" aria-label="Primary left">
-                <button
-                    type="button"
-                    class="nav-link"
-                    :class="navOpen && navSection === 'destinations' ? 'nav-link-active font-medium' : ''"
-                    @click="openNav('destinations')"
-                    :aria-expanded="(navOpen && navSection === 'destinations').toString()"
-                >Destinations</button>
-                <button
-                    type="button"
-                    class="nav-link"
-                    :class="navOpen && navSection === 'journeys' ? 'nav-link-active font-medium' : ''"
-                    @click="openNav('journeys')"
-                    :aria-expanded="(navOpen && navSection === 'journeys').toString()"
-                >Journeys</button>
-                <button
-                    type="button"
-                    class="nav-link"
-                    :class="navOpen && navSection === 'experiences' ? 'nav-link-active font-medium' : ''"
-                    @click="openNav('experiences')"
-                    :aria-expanded="(navOpen && navSection === 'experiences').toString()"
-                >Experiences</button>
-            </nav>
 
             <a href="{{ route('home') }}" class="font-display text-2xl md:text-[1.85rem] tracking-wide text-charcoal transition-opacity hover:opacity-80 shrink-0 text-center justify-self-center" @click="closeNav(); closeMobile()">
                 Pearl Pulse <span class="font-sans text-[0.42em] tracking-[0.22em] uppercase text-charcoal/50 align-middle">Safaris</span>
             </a>
 
-            <div class="hidden lg:flex items-center justify-end gap-5 xl:gap-6">
-                <button
-                    type="button"
-                    class="nav-link"
-                    :class="navOpen && navSection === 'about' ? 'nav-link-active font-medium' : ''"
-                    @click="openNav('about')"
-                    :aria-expanded="(navOpen && navSection === 'about').toString()"
-                >About</button>
-                <button
-                    type="button"
-                    class="nav-link inline-flex items-center gap-2"
-                    @click="closeNav(); $dispatch('open-journey-search')"
-                    aria-label="Find your journey"
-                >
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.3-4.3M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/>
-                    </svg>
-                    <span class="hidden xl:inline">Find your journey</span>
-                </button>
-                <a href="{{ route('plan') }}" class="btn-primary !px-5 !py-1.5 text-[11px]" @click="closeNav()">Plan your journey</a>
-            </div>
-
-            <div class="flex lg:hidden items-center justify-self-end">
-                <button type="button" class="text-charcoal" @click="closeMobile(); closeNav(); $dispatch('open-journey-search')" aria-label="Find your journey">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.3-4.3M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/></svg>
-                </button>
+            <div class="flex items-center justify-end gap-4 justify-self-end">
+                <a href="{{ route('plan') }}" class="btn-primary !px-3 !py-1.5 text-[10px] sm:!px-5 sm:text-[11px] whitespace-nowrap" @click="closeNav(); closeMobile()">
+                    <span class="sm:hidden">Plan</span>
+                    <span class="hidden sm:inline">Plan your journey</span>
+                </a>
             </div>
         </div>
     </header>

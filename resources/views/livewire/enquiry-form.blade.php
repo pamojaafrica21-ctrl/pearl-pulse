@@ -136,14 +136,6 @@
             </div>
 
             <div>
-                <label for="enquiry-preferences-editor" class="block text-xs tracking-[0.14em] uppercase mb-2 opacity-70">Additional preferences</label>
-                <div wire:ignore class="enquiry-editor">
-                    <textarea id="enquiry-preferences-editor">{!! $preferences !!}</textarea>
-                </div>
-                @error('preferences') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-            </div>
-
-            <div>
                 <label for="enquiry-name" class="block text-xs tracking-[0.14em] uppercase mb-2 opacity-70">Name</label>
                 <input id="enquiry-name" type="text" wire:model="name" class="w-full border-sand-deep/40 bg-white/90 text-charcoal focus:border-forest focus:ring-forest">
                 @error('name') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
@@ -193,9 +185,8 @@
 
 @script
 <script>
-    const editorIds = ['enquiry-preferences-editor', 'enquiry-message-editor'];
+    const editorIds = ['enquiry-message-editor'];
     const fieldMap = {
-        'enquiry-preferences-editor': 'preferences',
         'enquiry-message-editor': 'message',
     };
 

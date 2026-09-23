@@ -1,28 +1,49 @@
+@php
+    $stepperLabels = [
+        1 => 'Places',
+        2 => 'Experiences',
+        3 => 'Length',
+        4 => 'When',
+        5 => 'Stays',
+        6 => 'Matches',
+        7 => 'Request',
+    ];
+    // Livewire: 1 intro, 2–7 quiz, 8 request form, 9 done
+    $stepProgress = $step <= 1 ? 0 : min($step - 1, 7);
+    $showStepper = $step >= 2 && $step <= 8;
+@endphp
+
 <div class="journey-quiz">
     <section class="journey-quiz__hero">
         <div class="mx-auto max-w-7xl px-5 lg:px-8">
-            <p class="text-xs tracking-[0.22em] uppercase text-gold mb-3">Journey Finder</p>
-            <h1 class="font-display text-4xl md:text-6xl text-forest">Find your journey</h1>
+            <p class="text-xs tracking-[0.22em] uppercase text-gold mb-2 md:mb-3">Journey Finder</p>
+            <h1 class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-forest leading-tight">Find your journey</h1>
             @if($step === 1)
-                <p class="mt-4 max-w-2xl text-muted leading-relaxed">
+                <p class="mt-3 md:mt-4 max-w-2xl text-muted leading-relaxed text-sm sm:text-base">
                     A short, personal quiz — destination, experiences, pace, and timing — then we match journeys or craft one around you.
                 </p>
-            @else
-                <div class="journey-quiz__progress mt-6" aria-label="Quiz progress">
+            @elseif($showStepper)
+                <div class="journey-quiz__progress mt-5 md:mt-6" aria-label="Quiz progress">
                     <p class="text-xs tracking-[0.16em] uppercase text-muted mb-3">
                         @if($step <= 7)
-                            Step {{ min($step, 7) }} of 7
-                        @elseif($step === 8)
-                            Your custom request
+                            Step {{ $step - 1 }} of 7
                         @else
-                            Request sent
+                            Your custom request
                         @endif
                     </p>
-                    <div class="journey-quiz__dots">
-                        @for($i = 1; $i <= 7; $i++)
-                            <span @class(['journey-quiz__dot', 'is-active' => $step === $i, 'is-done' => $step > $i])></span>
-                        @endfor
-                    </div>
+                    <ol class="journey-quiz__stepper">
+                        @foreach($stepperLabels as $n => $label)
+                            <li
+                                class="journey-quiz__stepper-item{{ $stepProgress === $n ? ' is-active' : '' }}{{ $stepProgress > $n ? ' is-done' : '' }}"
+                                @if($stepProgress === $n) aria-current="step" @endif
+                            >
+                                <span class="journey-quiz__stepper-mark">
+                                    <span class="journey-quiz__stepper-num">{{ $n }}</span>
+                                </span>
+                                <span class="journey-quiz__stepper-label">{{ $label }}</span>
+                            </li>
+                        @endforeach
+                    </ol>
                 </div>
             @endif
         </div>
@@ -30,39 +51,12 @@
 
     <section class="journey-quiz__body">
         <div class="journey-quiz__layout mx-auto max-w-7xl px-5 lg:px-8">
-            <aside class="journey-quiz__path-rail" aria-hidden="true">
-                <svg class="journey-quiz__path-svg" viewBox="0 0 80 720" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path
-                        d="M40 12 C40 80 18 120 40 180 C62 240 40 280 40 340 C40 400 62 440 40 500 C18 560 40 600 40 700"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-dasharray="3 8"
-                        stroke-linecap="round"
-                        class="journey-quiz__path-line"
-                    />
-                </svg>
-                <div class="journey-quiz__milestones">
-                    <span class="journey-quiz__milestone" style="--m: 8%">
-                        <svg viewBox="0 0 48 32" fill="currentColor"><path d="M6 22h4l2-6h10l3 6h5l-2-8h4l2 3h4v-3h-3l-1-4H28l-2-5H16l-2 5H8l-1 4H4v3h2l2 5zm12-8h6l1 3h-8l1-3zM10 24h20v2H10z"/></svg>
-                    </span>
-                    <span class="journey-quiz__milestone" style="--m: 36%">
-                        <svg viewBox="0 0 40 40" fill="currentColor"><ellipse cx="20" cy="28" rx="12" ry="6"/><path d="M10 26c2-10 8-16 18-18 1 4-1 10-4 14"/><circle cx="28" cy="12" r="3"/></svg>
-                    </span>
-                    <span class="journey-quiz__milestone" style="--m: 64%">
-                        <svg viewBox="0 0 40 40" fill="currentColor"><path d="M20 6c-2 6-8 10-8 18h16c0-8-6-12-8-18z"/><path d="M12 28c2 4 6 6 8 6s6-2 8-6"/></svg>
-                    </span>
-                    <span class="journey-quiz__milestone" style="--m: 88%">
-                        <svg viewBox="0 0 40 40" fill="currentColor"><path d="M8 30c4-10 10-16 12-22 2 6 8 12 12 22H8z"/><path d="M14 18c2-1 4-1 6 0"/></svg>
-                    </span>
-                </div>
-            </aside>
-
             <div class="journey-quiz__panel">
                 @if($step === 1)
-                    <div class="journey-quiz__step" wire:key="step-1">
-                        <x-path-accent class="text-forest/40 mb-6" />
+                    <div class="journey-quiz__step journey-quiz__step--intro" wire:key="step-1">
+                        <x-path-accent class="text-forest/40 mb-5 md:mb-6" />
                         <h2 class="font-display text-3xl md:text-4xl text-forest">Where will your path lead?</h2>
-                        <p class="mt-3 max-w-xl text-muted leading-relaxed">
+                        <p class="mt-3 max-w-xl text-muted leading-relaxed text-sm sm:text-base">
                             Answer a few essentials. If what you want is not listed, you can tell us in your own words — we will shape the journey around you.
                         </p>
                         <button type="button" wire:click="start" class="btn-primary mt-8">Begin the quiz</button>
@@ -71,9 +65,9 @@
 
                 @if($step === 2)
                     <div class="journey-quiz__step" wire:key="step-2">
-                        <h2 class="font-display text-3xl text-forest">Where do you want to go?</h2>
-                        <p class="mt-2 text-muted">Select one or more countries — your next choices will narrow to what we offer there.</p>
-                        <div class="journey-quiz__tiles mt-8">
+                        <h2 class="font-display text-2xl sm:text-3xl text-forest">Where do you want to go?</h2>
+                        <p class="mt-2 text-muted text-sm sm:text-base max-w-2xl">Select one or more countries — your next choices will narrow to what we offer there.</p>
+                        <div class="journey-quiz__tiles mt-6 md:mt-8">
                             @foreach($countryOptions as $countryOption)
                                 <button
                                     type="button"
@@ -124,8 +118,8 @@
 
                 @if($step === 3)
                     <div class="journey-quiz__step" wire:key="step-3">
-                        <h2 class="font-display text-3xl text-forest">What do you want to experience?</h2>
-                        <p class="mt-2 text-muted">
+                        <h2 class="font-display text-2xl sm:text-3xl text-forest">What do you want to experience?</h2>
+                        <p class="mt-2 text-muted text-sm sm:text-base max-w-2xl">
                             @if($selectedCountries !== [])
                                 Experiences offered on journeys in your selected {{ \Illuminate\Support\Str::plural('country', count($selectedCountries)) }}.
                             @else
@@ -135,7 +129,7 @@
                         @if($experienceOptions->isEmpty() && $selectedCountries !== [])
                             <p class="mt-6 text-sm text-muted">No listed experiences match those countries yet — describe what you want below, or go back and adjust.</p>
                         @endif
-                        <div class="journey-quiz__tiles mt-8">
+                        <div class="journey-quiz__tiles mt-6 md:mt-8">
                             @foreach($experienceOptions as $experienceOption)
                                 <button
                                     type="button"
@@ -186,9 +180,9 @@
 
                 @if($step === 4)
                     <div class="journey-quiz__step" wire:key="step-4">
-                        <h2 class="font-display text-3xl text-forest">How long will you travel?</h2>
-                        <p class="mt-2 text-muted">Lengths available for your choices so far — pick a pace, or enter a custom length.</p>
-                        <div class="journey-quiz__option-cards mt-8">
+                        <h2 class="font-display text-2xl sm:text-3xl text-forest">How long will you travel?</h2>
+                        <p class="mt-2 text-muted text-sm sm:text-base max-w-2xl">Lengths available for your choices so far — pick a pace, or enter a custom length.</p>
+                        <div class="journey-quiz__option-cards mt-6 md:mt-8">
                             @foreach($durationOptions as $value => $option)
                                 <button
                                     type="button"
@@ -232,9 +226,9 @@
 
                 @if($step === 5)
                     <div class="journey-quiz__step" wire:key="step-5">
-                        <h2 class="font-display text-3xl text-forest">When would you like to travel?</h2>
-                        <p class="mt-2 text-muted">Select one or more periods — or leave dates open and we will advise.</p>
-                        <div class="journey-quiz__option-cards mt-8">
+                        <h2 class="font-display text-2xl sm:text-3xl text-forest">When would you like to travel?</h2>
+                        <p class="mt-2 text-muted text-sm sm:text-base max-w-2xl">Select one or more periods — or leave dates open and we will advise.</p>
+                        <div class="journey-quiz__option-cards mt-6 md:mt-8">
                             @foreach([
                                 'Dry season' => 'Clearer skies, classic game viewing, cooler nights; peak wildlife concentrations.',
                                 'Green season' => 'Lush landscapes, fewer crowds, dramatic skies; great for birding and photography.',
@@ -273,9 +267,9 @@
 
                 @if($step === 6)
                     <div class="journey-quiz__step" wire:key="step-6">
-                        <h2 class="font-display text-3xl text-forest">Stay style & travellers</h2>
-                        <p class="mt-2 text-muted">Stay styles available for your route so far — and who is coming with you.</p>
-                        <div class="journey-quiz__option-cards mt-8">
+                        <h2 class="font-display text-2xl sm:text-3xl text-forest">Stay style & travellers</h2>
+                        <p class="mt-2 text-muted text-sm sm:text-base max-w-2xl">Stay styles available for your route so far — and who is coming with you.</p>
+                        <div class="journey-quiz__stay-tiles mt-6 md:mt-8">
                             @foreach($stayOptions as $value => $option)
                                 <button
                                     type="button"
@@ -283,17 +277,25 @@
                                     @disabled(! $option['available'])
                                     aria-pressed="{{ $stayStyle === $value ? 'true' : 'false' }}"
                                     @class([
-                                        'journey-quiz__option-card',
+                                        'journey-quiz__stay-tile',
                                         'is-selected' => $stayStyle === $value,
                                         'is-disabled' => ! $option['available'],
                                     ])
                                 >
-                                    <span class="journey-quiz__option-card-check" aria-hidden="true">✓</span>
-                                    <span class="journey-quiz__option-card-title">{{ $option['label'] }}</span>
-                                    <span class="journey-quiz__option-card-copy">{{ $option['description'] }}</span>
-                                    @unless($option['available'])
-                                        <span class="journey-quiz__option-card-meta">Not offered on matching journeys</span>
-                                    @endunless
+                                    @if(! empty($option['image']))
+                                        <img src="{{ $option['image'] }}" alt="" loading="lazy" decoding="async">
+                                    @else
+                                        <span class="journey-quiz__stay-tile-fallback" aria-hidden="true"></span>
+                                    @endif
+                                    <span class="journey-quiz__stay-tile-shade" aria-hidden="true"></span>
+                                    <span class="journey-quiz__stay-tile-check" aria-hidden="true">✓</span>
+                                    <span class="journey-quiz__stay-tile-title">{{ $option['label'] }}</span>
+                                    <span class="journey-quiz__stay-tile-copy">
+                                        {{ $option['description'] }}
+                                        @unless($option['available'])
+                                            <span class="journey-quiz__stay-tile-meta">Not offered on matching journeys</span>
+                                        @endunless
+                                    </span>
                                 </button>
                             @endforeach
                         </div>
@@ -311,14 +313,14 @@
 
                 @if($step === 7)
                     <div class="journey-quiz__step" wire:key="step-7">
-                        <h2 class="font-display text-3xl text-forest">
+                        <h2 class="font-display text-2xl sm:text-3xl text-forest">
                             @if($journeys->isNotEmpty())
                                 Journeys shaped around you
                             @else
                                 Let us craft this for you
                             @endif
                         </h2>
-                        <p class="mt-2 text-muted">
+                        <p class="mt-2 text-muted text-sm sm:text-base max-w-2xl">
                             @if($journeys->isNotEmpty())
                                 {{ $journeys->count() }} {{ Str::plural('matched journey', $journeys->count()) }}. Browse below, or request a custom private plan.
                             @else
@@ -334,7 +336,7 @@
                             </div>
                         @endif
 
-                        <div class="journey-quiz__request-band mt-12">
+                        <div class="journey-quiz__request-band mt-10 md:mt-12">
                             <div>
                                 <p class="font-display text-2xl text-forest">Request a custom journey</p>
                                 <p class="mt-2 text-sm text-muted max-w-lg">
@@ -357,8 +359,8 @@
 
                 @if($step === 8)
                     <div class="journey-quiz__step" wire:key="step-8">
-                        <h2 class="font-display text-3xl text-forest">How can we reach you?</h2>
-                        <p class="mt-2 text-muted">Your quiz answers will be included so we can respond with something personal.</p>
+                        <h2 class="font-display text-2xl sm:text-3xl text-forest">How can we reach you?</h2>
+                        <p class="mt-2 text-muted text-sm sm:text-base max-w-2xl">Your quiz answers will be included so we can respond with something personal.</p>
 
                         @auth
                             <p class="mt-4 text-sm text-forest bg-forest/5 border border-forest/15 px-4 py-3">
@@ -401,7 +403,7 @@
                                 <textarea wire:model="message" rows="5" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest" required></textarea>
                                 @error('message') <p class="mt-1 text-sm text-red-700">{{ $message }}</p> @enderror
                             </div>
-                            <div class="journey-quiz__nav !mt-6">
+                            <div class="journey-quiz__nav">
                                 <button type="button" wire:click="$set('step', 7)" class="journey-quiz__back">Back</button>
                                 <button type="submit" class="btn-primary" wire:loading.attr="disabled">Send request</button>
                             </div>
@@ -411,17 +413,17 @@
 
                 @if($step === 9)
                     <div class="journey-quiz__step journey-quiz__step--done" wire:key="step-9">
-                        <x-path-accent class="text-forest/40 mb-6" />
+                        <x-path-accent class="text-forest/40 mb-5 md:mb-6" />
                         <h2 class="font-display text-3xl md:text-4xl text-forest">We have your path</h2>
-                        <p class="mt-3 max-w-xl text-muted leading-relaxed">
+                        <p class="mt-3 max-w-xl text-muted leading-relaxed text-sm sm:text-base">
                             Thank you. Your request is with our planners now — we will be in touch shortly to shape the journey with you.
                         </p>
                         <div class="mt-8 flex flex-wrap gap-4">
                             <button type="button" wire:click="restart" class="btn-primary">Start another quiz</button>
                             @auth
-                                <a href="{{ route('account.requests') }}" class="btn-outline">View My requests</a>
+                                <a href="{{ route('account.requests') }}" class="btn-outline-dark">View My requests</a>
                             @else
-                                <a href="{{ route('journeys.index') }}" class="btn-outline">Browse all journeys</a>
+                                <a href="{{ route('journeys.index') }}" class="btn-outline-dark">Browse all journeys</a>
                             @endauth
                         </div>
                     </div>
@@ -431,6 +433,12 @@
     </section>
 
     @if($step < 8)
-        <x-page-cta heading="Prefer to talk it through?" text="Skip the quiz and tell us directly — we will shape something around you." button="Plan your journey" :href="route('plan')" />
+        <x-page-cta
+            class="journey-quiz__talk-cta"
+            heading="Prefer to talk it through?"
+            text="Skip the quiz and tell us directly — we will shape something around you."
+            button="Plan your journey"
+            :href="route('plan')"
+        />
     @endif
 </div>
