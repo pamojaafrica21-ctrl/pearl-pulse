@@ -23,6 +23,8 @@ export default {
                     deep: '#d4c4a8',
                 },
                 cream: '#fafafa',
+                beige: '#ebe3d4',
+                brown: '#c9b29a',
                 surface: '#ffffff',
                 charcoal: '#1a1a18',
                 gold: '#8a7a5c',

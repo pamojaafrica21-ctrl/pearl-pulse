@@ -10,7 +10,7 @@
 @endphp
 
 <section
-    class="relative min-h-[calc(76svh-5.5rem)] flex flex-col justify-end overflow-hidden bg-forest"
+    class="home-hero relative flex flex-col justify-end overflow-hidden bg-forest"
     x-data="{
         index: 0,
         count: {{ $slideCount }},
@@ -96,24 +96,24 @@
             <div class="absolute inset-0 bg-gradient-to-t from-charcoal/45 via-charcoal/20 to-black/15"></div>
         </div>    @endforeach
 
-    <div class="relative z-10 mx-auto w-full max-w-7xl px-5 pb-16 pt-20 lg:px-8 lg:pb-20">
+    <div class="home-hero__content relative z-10 mx-auto w-full max-w-7xl px-5 lg:px-8">
         @foreach($heroSlides as $i => $slide)
             <div x-show="index === {{ $i }}" @if($i !== 0) x-cloak @endif>
                 @if($slide['label'])
                     <p class="text-[11px] tracking-[0.22em] uppercase text-white/70 fade-up">{{ $slide['label'] }}</p>
                 @endif
-                <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white leading-[0.95] max-w-4xl fade-up mt-4" style="animation-delay: 0.08s">
+                <h1 class="home-hero__title font-display text-white leading-[0.95] max-w-4xl fade-up mt-3 sm:mt-4" style="animation-delay: 0.08s">
                     {{ $slide['headline'] }}
                 </h1>
                 @if($slide['tagline'])
-                    <p class="mt-6 max-w-xl text-white/85 text-lg md:text-xl font-light leading-relaxed fade-up" style="animation-delay: 0.18s">
+                    <p class="home-hero__tagline mt-4 sm:mt-6 max-w-xl text-white/85 font-light leading-relaxed fade-up" style="animation-delay: 0.18s">
                         {{ $slide['tagline'] }}
                     </p>
                 @endif
             </div>
         @endforeach
 
-        <div class="mt-10 flex flex-wrap gap-4 fade-up" style="animation-delay: 0.28s">
+        <div class="mt-8 sm:mt-10 flex flex-wrap gap-4 fade-up" style="animation-delay: 0.28s">
             <a href="{{ route('plan') }}" class="btn-outline">Plan your journey</a>
             <button type="button" @click="$dispatch('open-journey-search')" class="text-sm tracking-[0.14em] uppercase text-white/80 hover:text-white self-center transition">
                 Find your journey
@@ -124,7 +124,7 @@
             @php
                 $nextLabels = collect($heroSlides)->map(fn ($s) => $s['label'] ?: $s['headline'])->values()->all();
             @endphp
-            <div class="mt-14 flex flex-wrap items-end justify-between gap-6 fade-up" style="animation-delay: 0.4s">
+            <div class="mt-10 sm:mt-14 flex flex-wrap items-end justify-between gap-6 fade-up" style="animation-delay: 0.4s">
                 <div class="min-w-[12rem] max-w-sm flex-1">
                     <p class="text-[10px] tracking-[0.2em] uppercase text-white/55 mb-2">Next up</p>
                     <p class="text-sm text-white/90 font-light truncate">
@@ -165,7 +165,7 @@
 </section>
 
 @if($homeIntroHeading || $homeIntroBody)
-<section class="bg-white py-10 lg:py-12">
+<section class="surface surface--white py-10 lg:py-12">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 text-center reveal">
         @if($homeIntroEyebrow)
             <p class="section-eyebrow">{{ $homeIntroEyebrow }}</p>
@@ -183,8 +183,8 @@
 </section>
 @endif
 
-<section class="relative bg-cream py-16 lg:py-20 overflow-hidden">
-    <x-section-edge placement="top" variant="wave" class="text-cream" />
+<section class="surface surface--beige relative py-16 lg:py-20 overflow-hidden">
+    <x-section-edge placement="top" variant="wave" class="text-beige" />
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="reveal mx-auto max-w-5xl text-center max-lg:mx-0 max-lg:text-left">
             <div class="mb-4 flex justify-center max-lg:justify-start">
@@ -323,7 +323,7 @@
                                             <div class="absolute inset-0 bg-gradient-to-br from-forest to-forest-light"></div>
                                         @endif
                                         <div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/25 to-transparent"></div>
-                                        <div class="absolute inset-x-0 bottom-0 p-7 pb-9">
+                                        <div class="absolute inset-x-0 bottom-0 flex flex-col items-start p-7 pb-9">
                                             <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">{{ $item['kicker'] }}</p>
                                             <h3 class="font-display text-3xl md:text-4xl text-white leading-tight mt-1">{{ $item['title'] }}</h3>
                                             @if($item['meta'])
@@ -401,7 +401,7 @@
     <x-section-edge variant="ridge" class="text-white" />
 </section>
 
-<section class="relative bg-white pt-24 pb-20 lg:pt-32 lg:pb-28 overflow-hidden">
+<section class="surface surface--white relative pt-24 pb-20 lg:pt-32 lg:pb-28 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="reveal mx-auto max-w-3xl text-center">
             <div class="mb-4 flex justify-center">
@@ -471,7 +471,7 @@
     </div>
 </section>
 
-<section class="signature-rail relative bg-cream pt-16 pb-20 lg:pt-20 lg:pb-28 overflow-hidden">
+<section class="signature-rail surface surface--beige relative pt-16 pb-20 lg:pt-20 lg:pb-28 overflow-hidden">
     <div
         class="signature-rail__layout mx-auto max-w-7xl"
         data-card-scroller-wrap
@@ -531,7 +531,7 @@
     <x-section-edge variant="ridge" class="text-forest" />
 </section>
 
-<section class="bg-forest text-sand py-20 lg:py-24 overflow-hidden relative surface-nature">
+<section class="surface surface--green text-sand py-20 lg:py-24 overflow-hidden relative surface-nature">
     <div class="relative mx-auto max-w-3xl px-5 lg:px-8 reveal text-center">
         <p class="text-[11px] tracking-[0.22em] uppercase text-sand/50 mb-3">Journey Finder</p>
         <h2 class="font-display text-4xl md:text-5xl text-white">Not sure where to begin?</h2>
@@ -556,12 +556,13 @@
         </div>
     @endif
 
-    <x-section-edge variant="torn" class="{{ $reviews->isNotEmpty() ? 'text-cream' : 'text-white' }}" />
+    @unless($reviews->isNotEmpty())
+        <x-section-edge variant="ridge" class="text-white" />
+    @endunless
 </section>
 
 @if($reviews->isNotEmpty())
-<section class="relative bg-cream py-24 lg:py-32">
-    <x-section-edge placement="top" variant="wave" class="text-cream" />
+<section class="surface surface--brown relative py-24 lg:py-32">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="flex flex-wrap items-end justify-between gap-4 mb-12 reveal">
             <div>
@@ -606,7 +607,7 @@
 </section>
 @endif
 
-<section class="bg-white py-20">
+<section class="surface surface--white py-20">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <p class="section-eyebrow reveal">Continue</p>
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 reveal-stagger">

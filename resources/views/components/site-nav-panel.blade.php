@@ -57,8 +57,17 @@
             <div class="site-nav-panel__rest">
                 <div class="site-nav-panel__col site-nav-panel__col--mid">
                     @if($countries->isNotEmpty())
+                        @php
+                            $featuredNavCountries = collect(['uganda', 'kenya'])
+                                ->map(fn ($slug) => $countries->firstWhere('slug', $slug))
+                                ->filter()
+                                ->values();
+                            if ($featuredNavCountries->count() < 2) {
+                                $featuredNavCountries = $countries->take(2)->values();
+                            }
+                        @endphp
                         <div class="site-nav-panel__tiles">
-                            @foreach($countries->take(2) as $country)
+                            @foreach($featuredNavCountries as $country)
                                 <button
                                     type="button"
                                     class="site-nav-panel__tile"
