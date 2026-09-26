@@ -94,7 +94,8 @@
                 <div class="absolute inset-0 bg-gradient-to-br from-forest via-forest-light to-[#3d4f35]"></div>
             @endif
             <div class="absolute inset-0 bg-gradient-to-t from-charcoal/45 via-charcoal/20 to-black/15"></div>
-        </div>    @endforeach
+        </div>
+    @endforeach
 
     <div class="home-hero__content relative z-10 mx-auto w-full max-w-7xl px-5 lg:px-8">
         @foreach($heroSlides as $i => $slide)
@@ -115,9 +116,9 @@
 
         <div class="mt-8 sm:mt-10 flex flex-wrap gap-4 fade-up" style="animation-delay: 0.28s">
             <a href="{{ route('plan') }}" class="btn-outline">Plan your journey</a>
-            <button type="button" @click="$dispatch('open-journey-search')" class="text-sm tracking-[0.14em] uppercase text-white/80 hover:text-white self-center transition">
-                Find your journey
-            </button>
+            <a href="{{ route('journeys.index') }}" class="text-sm tracking-[0.14em] uppercase text-white/80 hover:text-white self-center transition">
+                Explore journeys
+            </a>
         </div>
 
         @if($slideCount > 1)
@@ -141,31 +142,19 @@
             </div>
         @endif
     </div>
-
-    <div class="trust-strip absolute inset-x-0 bottom-0 z-10 w-full pointer-events-none">
-        <div class="trust-strip__row pointer-events-auto mx-auto max-w-7xl px-5 py-3.5 lg:px-8 lg:py-4">
-            <div class="trust-strip__item">
-                <span class="trust-strip__icon" aria-hidden="true">✓</span>
-                <span>Gorilla tracking</span>
-            </div>
-            <div class="trust-strip__item">
-                <span class="trust-strip__icon" aria-hidden="true">✓</span>
-                <span>Great migration</span>
-            </div>
-            <div class="trust-strip__item">
-                <span class="trust-strip__icon" aria-hidden="true">✓</span>
-                <span>Kenya, Tanzania & Uganda</span>
-            </div>
-            <div class="trust-strip__item">
-                <span class="trust-strip__icon" aria-hidden="true">✓</span>
-                <span>Iconic private journeys</span>
-            </div>
-        </div>
-    </div>
 </section>
 
+<div class="trust-band surface surface--white">
+    <div class="trust-band__row mx-auto max-w-7xl px-5 lg:px-8">
+        <span>Gorilla tracking</span>
+        <span>Great migration</span>
+        <span>Uganda · Rwanda · Kenya · Tanzania</span>
+        <span>Private journeys</span>
+    </div>
+</div>
+
 @if($homeIntroHeading || $homeIntroBody)
-<section class="surface surface--white py-10 lg:py-12">
+<section class="surface surface--white py-14 lg:py-20">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 text-center reveal">
         @if($homeIntroEyebrow)
             <p class="section-eyebrow">{{ $homeIntroEyebrow }}</p>
@@ -177,7 +166,7 @@
             <p class="mt-6 text-muted text-lg leading-relaxed whitespace-pre-line">{{ $homeIntroBody }}</p>
         @endif
         <div class="mt-8">
-            <a href="{{ route('about') }}" class="btn-outline-dark">Our story</a>
+            <a href="{{ route('about') }}" class="btn-outline-dark">Discover Pearl Pulse</a>
         </div>
     </div>
 </section>
@@ -200,7 +189,10 @@
         @if($destinationPanels->isNotEmpty())
             <div
                 class="mt-10"
-                x-data="{ active: '{{ $destinationPanels->first()['key'] }}' }"
+                x-data="{
+                    active: '{{ $destinationPanels->first()['key'] }}',
+                    seen: { '{{ $destinationPanels->first()['key'] }}': true }
+                }"
             >
                 <nav class="country-navbar reveal" aria-label="Countries">
                     <div class="country-navbar__track" role="tablist">
@@ -215,6 +207,7 @@
                                 aria-controls="country-panel-{{ $panel['key'] }}"
                                 @click="
                                     active = '{{ $panel['key'] }}';
+                                    seen['{{ $panel['key'] }}'] = true;
                                     $el.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
                                     $nextTick(() => document.getElementById('country-carousel-{{ $panel['key'] }}')?.scrollTo({ left: 0 }));
                                 "
@@ -243,9 +236,13 @@
                                 <a href="{{ $item['href'] }}" class="destination-slide">
                                     @if($item['thumb'] ?? $item['image'])
                                         <img
-                                            src="{{ $item['thumb'] ?? $item['image'] }}"
+                                            @if($loop->parent->first)
+                                                src="{{ $item['thumb'] ?? $item['image'] }}"
+                                            @else
+                                                x-bind:src="seen['{{ $panel['key'] }}'] ? @js($item['thumb'] ?? $item['image']) : null"
+                                            @endif
                                             alt="{{ $item['title'] }}"
-                                            loading="{{ $loop->first && $loop->parent->first ? 'eager' : 'lazy' }}"
+                                            loading="lazy"
                                             decoding="async"
                                         >
                                     @else
@@ -253,10 +250,10 @@
                                     @endif
                                     <div class="destination-slide__shade"></div>
                                     <div class="destination-slide__copy">
-                                        <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">{{ $item['kicker'] }}</p>
+                                        <p class="text-[11px] tracking-[0.18em] uppercase text-white/80">{{ $item['kicker'] }}</p>
                                         <h3 class="font-display text-3xl text-white leading-tight mt-1">{{ $item['title'] }}</h3>
                                         @if($item['teaser'])
-                                            <p class="mt-2 text-sm text-white/85 leading-relaxed line-clamp-3">{{ $item['teaser'] }}</p>
+                                            <p class="mt-2 text-sm text-white/90 leading-relaxed line-clamp-3">{{ $item['teaser'] }}</p>
                                         @endif
                                         <span class="destination-slide__cta" aria-hidden="true">Explore</span>
                                     </div>
@@ -310,27 +307,31 @@
                                         x-transition:leave-end="opacity-0"
                                         @if($i !== 0) x-cloak @endif
                                     >
-                                        @if($item['image'])
+                                        @if($item['image'] || $item['thumb'])
                                             <img
-                                                src="{{ $item['image'] }}"
+                                                @if($loop->parent->first && $i === 0)
+                                                    src="{{ $item['thumb'] ?? $item['image'] }}"
+                                                    fetchpriority="low"
+                                                @else
+                                                    x-bind:src="(active === '{{ $panel['key'] }}' && (index === {{ $i }} || seen['{{ $panel['key'] }}'])) ? @js($item['thumb'] ?? $item['image']) : null"
+                                                @endif
                                                 alt="{{ $item['title'] }}"
                                                 class="absolute inset-0 h-full w-full object-cover scale-105"
-                                                loading="{{ $i === 0 && $loop->parent->first ? 'eager' : 'lazy' }}"
+                                                loading="lazy"
                                                 decoding="async"
-                                                @if($i === 0 && $loop->parent->first) fetchpriority="low" @endif
                                             >
                                         @else
                                             <div class="absolute inset-0 bg-gradient-to-br from-forest to-forest-light"></div>
                                         @endif
-                                        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/25 to-transparent"></div>
+                                        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/35 to-transparent"></div>
                                         <div class="absolute inset-x-0 bottom-0 flex flex-col items-start p-7 pb-9">
-                                            <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">{{ $item['kicker'] }}</p>
-                                            <h3 class="font-display text-3xl md:text-4xl text-white leading-tight mt-1">{{ $item['title'] }}</h3>
+                                            <p class="text-[11px] tracking-[0.18em] uppercase text-white/80">{{ $item['kicker'] }}</p>
+                                            <h3 class="font-display text-3xl md:text-4xl text-white leading-tight mt-1 [text-shadow:0_1px_18px_rgb(0_0_0_/_0.35)]">{{ $item['title'] }}</h3>
                                             @if($item['meta'])
-                                                <p class="mt-2 text-[11px] tracking-[0.16em] uppercase text-white/70">{{ $item['meta'] }}</p>
+                                                <p class="mt-2 text-[11px] tracking-[0.16em] uppercase text-white/75">{{ $item['meta'] }}</p>
                                             @endif
                                             @if($item['teaser'])
-                                                <p class="mt-2 text-sm text-white/85 leading-relaxed line-clamp-3">{{ $item['teaser'] }}</p>
+                                                <p class="mt-2 text-sm text-white/90 leading-relaxed line-clamp-3">{{ $item['teaser'] }}</p>
                                             @endif
                                             <span class="destination-slide__cta mt-5">Explore</span>
                                         </div>
@@ -371,7 +372,16 @@
                                         >
                                             <div class="destination-pick__media">
                                                 @if($item['thumb'])
-                                                    <img src="{{ $item['thumb'] }}" alt="" loading="lazy" decoding="async">
+                                                    <img
+                                                        @if($loop->parent->first)
+                                                            src="{{ $item['thumb'] }}"
+                                                        @else
+                                                            x-bind:src="seen['{{ $panel['key'] }}'] ? @js($item['thumb']) : null"
+                                                        @endif
+                                                        alt=""
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                    >
                                                 @endif
                                             </div>
                                             <div class="destination-pick__body min-w-0 flex-1">
@@ -401,7 +411,80 @@
     <x-section-edge variant="ridge" class="text-white" />
 </section>
 
-<section class="surface surface--white relative pt-24 pb-20 lg:pt-32 lg:pb-28 overflow-hidden">
+<section class="signature-rail surface surface--white relative pt-16 pb-20 lg:pt-20 lg:pb-28 overflow-hidden">
+    <div
+        class="signature-rail__layout mx-auto max-w-7xl"
+        data-card-scroller-wrap
+    >
+        <div class="signature-rail__intro reveal px-5 lg:px-8">
+            <p class="section-eyebrow">{{ $featuredEyebrow }}</p>
+            <h2 class="font-display text-4xl md:text-5xl text-charcoal leading-tight">{{ $featuredHeading }}</h2>
+            @if($featuredIntro)
+                <p class="mt-4 text-muted leading-relaxed max-w-md">{{ $featuredIntro }}</p>
+            @endif
+
+            @if($journeys->count() > 1)
+                <div class="signature-rail__controls mt-8 lg:mt-auto pt-6">
+                    <button
+                        type="button"
+                        class="signature-rail__btn"
+                        data-card-scroller-prev
+                        aria-label="Previous journeys"
+                    >
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button
+                        type="button"
+                        class="signature-rail__btn"
+                        data-card-scroller-next
+                        aria-label="Next journeys"
+                    >
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            @endif
+
+            <div class="mt-8 hidden lg:block">
+                <a href="{{ route('journeys.index') }}" class="btn-outline-dark">All journeys</a>
+            </div>
+        </div>
+
+        @if($journeys->isNotEmpty())
+            <div
+                class="signature-rail__scroller"
+                data-card-scroller
+                data-manual
+            >
+                <div class="signature-rail__track" data-card-scroller-track>
+                    @foreach($journeys as $journey)
+                        <x-journey-card :journey="$journey" variant="signature" />
+                    @endforeach
+                </div>
+            </div>
+        @endif
+    </div>
+
+    <div class="mx-auto max-w-7xl px-5 lg:px-8 mt-10 lg:hidden reveal">
+        <a href="{{ route('journeys.index') }}" class="btn-outline-dark">All journeys</a>
+    </div>
+
+    <x-section-edge variant="ridge" class="text-forest" />
+</section>
+
+
+<section class="surface surface--green text-sand py-20 lg:py-24 overflow-hidden relative surface-nature">
+    <div class="relative mx-auto max-w-3xl px-5 lg:px-8 reveal text-center">
+        <p class="text-[11px] tracking-[0.22em] uppercase text-sand/50 mb-3">Journey Finder</p>
+        <h2 class="font-display text-4xl md:text-5xl text-white">Not sure where to begin?</h2>
+        <p class="mt-4 text-sand/75 leading-relaxed">Find the Pearl Pulse journey that fits the way you want to experience Africa.</p>
+        <div class="mt-10 flex flex-wrap justify-center gap-4">
+            <a href="{{ route('journeys.finder') }}" class="btn-outline">Find your journey</a>
+            <button type="button" @click="$dispatch('open-journey-search')" class="text-sm tracking-[0.14em] uppercase text-sand/80 hover:text-white self-center transition">Quick search</button>
+        </div>
+    </div>
+    <x-section-edge variant="ridge" class="text-beige" />
+</section>
+<section class="surface surface--beige relative pt-24 pb-20 lg:pt-32 lg:pb-28 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="reveal mx-auto max-w-3xl text-center">
             <div class="mb-4 flex justify-center">
@@ -469,105 +552,130 @@
     <div class="mx-auto max-w-7xl px-5 lg:px-8 mt-12 flex justify-center reveal">
         <a href="{{ route('experiences.index') }}" class="btn-outline-dark">All experiences</a>
     </div>
+    <x-section-edge variant="ridge" class="text-white" />
 </section>
 
-<section class="signature-rail surface surface--beige relative pt-16 pb-20 lg:pt-20 lg:pb-28 overflow-hidden">
-    <div
-        class="signature-rail__layout mx-auto max-w-7xl"
-        data-card-scroller-wrap
-    >
-        <div class="signature-rail__intro reveal px-5 lg:px-8">
-            <p class="section-eyebrow">{{ $featuredEyebrow }}</p>
-            <h2 class="font-display text-4xl md:text-5xl text-charcoal leading-tight">{{ $featuredHeading }}</h2>
-            @if($featuredIntro)
-                <p class="mt-4 text-muted leading-relaxed max-w-md">{{ $featuredIntro }}</p>
-            @endif
 
-            @if($journeys->count() > 1)
-                <div class="signature-rail__controls mt-8 lg:mt-auto pt-6">
-                    <button
-                        type="button"
-                        class="signature-rail__btn"
-                        data-card-scroller-prev
-                        aria-label="Previous journeys"
-                    >
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"/></svg>
-                    </button>
-                    <button
-                        type="button"
-                        class="signature-rail__btn"
-                        data-card-scroller-next
-                        aria-label="Next journeys"
-                    >
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
-                    </button>
-                </div>
-            @endif
-
-            <div class="mt-8 hidden lg:block">
-                <a href="{{ route('journeys.index') }}" class="btn-outline-dark">All journeys</a>
-            </div>
+@if(count($homePillars))
+<section class="surface surface--white relative py-20 lg:py-24">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="reveal mx-auto max-w-3xl text-center mb-12">
+            <p class="section-eyebrow">Why Pearl Pulse</p>
+            <h2 class="font-display text-4xl md:text-5xl text-charcoal">Real differentiators</h2>
         </div>
-
-        @if($journeys->isNotEmpty())
-            <div
-                class="signature-rail__scroller"
-                data-card-scroller
-                data-manual
-            >
-                <div class="signature-rail__track" data-card-scroller-track>
-                    @foreach($journeys as $journey)
-                        <x-journey-card :journey="$journey" variant="signature" />
-                    @endforeach
+        <div class="feature-strip reveal-stagger">
+            @foreach($homePillars as $index => $pillar)
+                <div class="feature-strip__item">
+                    <span class="feature-strip__mark">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</span>
+                    <h3 class="font-display text-2xl text-charcoal">{{ $pillar['title'] }}</h3>
+                    <p class="mt-3 text-sm text-muted leading-relaxed">{{ $pillar['text'] }}</p>
                 </div>
-            </div>
-        @endif
+            @endforeach
+        </div>
     </div>
-
-    <div class="mx-auto max-w-7xl px-5 lg:px-8 mt-10 lg:hidden reveal">
-        <a href="{{ route('journeys.index') }}" class="btn-outline-dark">All journeys</a>
-    </div>
-
-    <x-section-edge variant="ridge" class="text-forest" />
 </section>
+@endif
 
-<section class="surface surface--green text-sand py-20 lg:py-24 overflow-hidden relative surface-nature">
-    <div class="relative mx-auto max-w-3xl px-5 lg:px-8 reveal text-center">
-        <p class="text-[11px] tracking-[0.22em] uppercase text-sand/50 mb-3">Journey Finder</p>
-        <h2 class="font-display text-4xl md:text-5xl text-white">Not sure where to begin?</h2>
-        <p class="mt-4 text-sand/75 leading-relaxed">Refine by country, duration, experience, and stay style — then we tailor from there.</p>
-        <div class="mt-10 flex flex-wrap justify-center gap-4">
-            <a href="{{ route('journeys.finder') }}" class="btn-outline">Open the finder</a>
-            <button type="button" @click="$dispatch('open-journey-search')" class="text-sm tracking-[0.14em] uppercase text-sand/80 hover:text-white self-center transition">Quick search</button>
+@if($team->isNotEmpty())
+<section class="surface surface--beige relative py-20 lg:py-28 overflow-hidden">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="reveal text-center mb-14">
+            <p class="section-eyebrow">Our people</p>
+            <h2 class="font-display text-4xl md:text-5xl text-charcoal">Your journey. Our people.</h2>
+            <p class="mt-4 text-muted max-w-xl mx-auto">The guides and planners behind Pearl Pulse — visible, local, and with you from the first conversation.</p>
         </div>
-    </div>
-
-    @if(count($homePillars))
-        <div class="relative mx-auto mt-14 max-w-7xl px-5 lg:px-8">
-            <div class="feature-strip reveal-stagger rounded-2xl border border-white/15 bg-white/5 backdrop-blur-[2px]">
-                @foreach($homePillars as $index => $pillar)
-                    <div class="feature-strip__item">
-                        <span class="feature-strip__mark">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</span>
-                        <h3 class="font-display text-2xl text-white">{{ $pillar['title'] }}</h3>
-                        <p class="mt-3 text-sm text-sand/75 leading-relaxed">{{ $pillar['text'] }}</p>
+        <div class="people-row reveal-stagger">
+            @foreach($team as $member)
+                <div class="people-row__person">
+                    <div class="people-row__portrait">
+                        @if($member->coverUrl())
+                            <img src="{{ $member->coverThumbUrl() ?: $member->coverUrl() }}" alt="{{ $member->name }}" loading="lazy" decoding="async">
+                        @endif
                     </div>
-                @endforeach
-            </div>
+                    <p class="mt-4 font-display text-xl text-charcoal">{{ $member->name }}</p>
+                    @if($member->role)
+                        <p class="mt-1 text-[11px] tracking-[0.16em] uppercase text-muted">{{ $member->role }}</p>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+        <div class="mt-14 text-center reveal">
+            <a href="{{ route('our-people') }}" class="btn-outline-dark">Meet our team</a>
+        </div>
+    </div>
+</section>
+@endif
+
+<section class="reason-stage">
+    @if($reasonImage)
+        <div class="reason-stage__media" aria-hidden="true">
+            <img src="{{ $reasonImage }}" alt="" loading="lazy" decoding="async">
         </div>
     @endif
-
-    @unless($reviews->isNotEmpty())
-        <x-section-edge variant="ridge" class="text-white" />
-    @endunless
+    <div class="reason-stage__veil" aria-hidden="true"></div>
+    <div class="reason-stage__copy reveal">
+        <p class="text-[11px] tracking-[0.22em] uppercase text-sand/55 mb-3">Travel with a reason</p>
+        <h2 class="font-display text-4xl md:text-5xl text-white leading-tight">Conservation, community, local people</h2>
+        <p class="mt-5 text-sand/80 leading-relaxed max-w-lg">Our journeys connect places and people — so travelling with us can contribute to the land that makes these days possible.</p>
+        <div class="mt-8">
+            <a href="{{ route('travel-with-a-reason') }}" class="btn-outline">Discover our approach</a>
+        </div>
+    </div>
 </section>
+
+@if($pulseItems->isNotEmpty())
+<section class="surface surface--white relative py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="reveal flex flex-wrap items-end justify-between gap-4 mb-10">
+            <div>
+                <p class="section-eyebrow">True Pulse</p>
+                <h2 class="font-display text-4xl md:text-5xl text-charcoal">Africa through the eyes of our travellers</h2>
+            </div>
+            <a href="{{ route('true-pulse') }}" class="text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">Explore True Pulse</a>
+        </div>
+        <div class="pulse-mosaic reveal-stagger">
+            @foreach($pulseItems as $item)
+                <figure>
+                    @if($item->coverUrl())
+                        <img src="{{ $item->coverThumbUrl() ?: $item->coverUrl() }}" alt="{{ $item->title }}" loading="lazy" decoding="async">
+                    @endif
+                    @if($item->caption || $item->title)
+                        <figcaption>{{ $item->caption ?: $item->title }}</figcaption>
+                    @endif
+                </figure>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+@if($stays->isNotEmpty())
+<section class="surface surface--beige relative py-20 lg:py-28 overflow-hidden">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="reveal mx-auto max-w-3xl text-center mb-12">
+            <p class="section-eyebrow">Selected stays</p>
+            <h2 class="font-display text-4xl md:text-5xl text-charcoal">Places we have selected</h2>
+            <p class="mt-4 text-muted leading-relaxed">For their location, character, and ability to complement your journey. We do not own these lodges.</p>
+        </div>
+        <div class="editorial-rail reveal-stagger">
+            @foreach($stays as $stay)
+                <x-stay-card :stay="$stay" />
+            @endforeach
+        </div>
+        <div class="mt-10 text-center reveal">
+            <a href="{{ route('stays.index') }}" class="btn-outline-dark">All selected stays</a>
+        </div>
+    </div>
+</section>
+@endif
 
 @if($reviews->isNotEmpty())
 <section class="surface surface--brown relative py-24 lg:py-32">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="flex flex-wrap items-end justify-between gap-4 mb-12 reveal">
             <div>
-                <p class="section-eyebrow">Guest voices</p>
-                <h2 class="font-display text-4xl md:text-5xl text-charcoal">Stories from the field</h2>
+                <p class="section-eyebrow">Guest reviews</p>
+                <h2 class="font-display text-4xl md:text-5xl text-charcoal">The journeys our guests remember</h2>
             </div>
             <div class="flex gap-4 text-sm">
                 @if(!empty($reviewLinks['google']))
@@ -576,7 +684,6 @@
                 @if(!empty($reviewLinks['tripadvisor']))
                     <a href="{{ $reviewLinks['tripadvisor'] }}" class="tracking-[0.12em] uppercase text-forest hover:opacity-70 transition" target="_blank" rel="noopener">Tripadvisor</a>
                 @endif
-                <a href="{{ route('true-pulse') }}" class="tracking-[0.12em] uppercase text-forest hover:opacity-70 transition">True Pulse</a>
             </div>
         </div>
         <div class="marquee reveal" data-marquee>
@@ -584,9 +691,9 @@
                 @foreach([false, true] as $isClone)
                     <div class="marquee__group" @if($isClone) aria-hidden="true" @endif>
                         @foreach($reviews as $review)
-                            <blockquote class="w-[82vw] shrink-0 rounded-2xl border border-charcoal/10 bg-white p-6 sm:w-[28rem] lg:w-[32rem]">
+                            <blockquote class="w-[82vw] shrink-0 sm:w-[28rem] lg:w-[32rem] px-2">
                                 <p class="font-display text-2xl md:text-3xl text-charcoal leading-snug">“{{ $review->quote }}”</p>
-                                <footer class="mt-6 border-t border-charcoal/10 pt-4 text-sm text-muted">
+                                <footer class="mt-6 pt-4 border-t border-forest/15 text-sm text-muted">
                                     <span class="text-charcoal">{{ $review->guest_name }}</span>
                                     @if($review->guest_country)
                                         · {{ $review->guest_country }}
@@ -594,7 +701,6 @@
                                     @if($review->journey)
                                         · <a href="{{ route('journeys.show', $review->journey) }}" class="hover:text-forest transition" @if($isClone) tabindex="-1" @endif>{{ $review->journey->name }}</a>
                                     @endif
-                                    <span class="mt-2 block text-[10px] uppercase tracking-[0.18em] text-muted">Guest review</span>
                                 </footer>
                             </blockquote>
                         @endforeach
@@ -603,33 +709,30 @@
             </div>
         </div>
     </div>
-    <x-section-edge variant="ridge" class="text-white" />
 </section>
 @endif
 
-<section class="surface surface--white py-20">
+@if($fieldNotes->isNotEmpty())
+<section class="surface surface--white py-20 lg:py-24">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <p class="section-eyebrow reveal">Continue</p>
-        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 reveal-stagger">
-            <a href="{{ route('our-people') }}" class="group block lift-card">
-                <h3 class="font-display text-2xl text-charcoal group-hover:text-forest transition">Our people</h3>
-                <p class="mt-2 text-sm text-muted">Guides and planners who live this work.</p>
-            </a>
-            <a href="{{ route('true-pulse') }}" class="group block lift-card">
-                <h3 class="font-display text-2xl text-charcoal group-hover:text-forest transition">True Pulse</h3>
-                <p class="mt-2 text-sm text-muted">Guest photographs and stories we have approved.</p>
-            </a>
-            <a href="{{ route('stays.index') }}" class="group block lift-card">
-                <h3 class="font-display text-2xl text-charcoal group-hover:text-forest transition">Selected stays</h3>
-                <p class="mt-2 text-sm text-muted">Lodges we choose. We do not own them.</p>
-            </a>
-            <a href="{{ route('insiders.index') }}" class="group block lift-card">
-                <h3 class="font-display text-2xl text-charcoal group-hover:text-forest transition">Insiders</h3>
-                <p class="mt-2 text-sm text-muted">Guides from the ground — permits, seasons, packing.</p>
-            </a>
+        <div class="reveal mb-10">
+            <p class="section-eyebrow">From the Field</p>
+            <h2 class="font-display text-4xl md:text-5xl text-charcoal">Practical answers from the ground</h2>
+        </div>
+        <div class="field-notes reveal-stagger">
+            @foreach($fieldNotes as $article)
+                <a href="{{ route('insiders.show', $article) }}">
+                    <p class="text-[11px] tracking-[0.16em] uppercase text-muted mb-2">{{ $article->typeLabel() }}</p>
+                    <h3 class="font-display text-2xl text-charcoal">{{ $article->title }}</h3>
+                    @if($article->excerpt)
+                        <p class="mt-3 text-sm text-muted leading-relaxed line-clamp-3">{{ $article->excerpt }}</p>
+                    @endif
+                </a>
+            @endforeach
         </div>
     </div>
 </section>
+@endif
 
 <x-page-cta :heading="$homeCtaHeading" :text="$homeCtaText" :button="$homeCtaButton">
     @if($whatsappUrl)

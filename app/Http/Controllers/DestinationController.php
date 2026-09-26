@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Country;
 use App\Models\Destination;
+use App\Models\Experience;
 use App\Models\Faq;
 use App\Models\PulseItem;
+use App\Models\Stay;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -35,6 +37,34 @@ class DestinationController extends Controller
             'journeys' => fn ($q) => $q->published()->with('countries')->orderBy('sort_order')->limit(4),
         ]);
 
+        $destinationIds = $hub->destinations->pluck('id');
+
+        $experiences = Experience::query()
+            ->published()
+            ->whereHas('destinations', fn ($q) => $q->whereIn('destinations.id', $destinationIds))
+            ->orderBy('sort_order')
+            ->take(6)
+            ->get();
+
+        if ($experiences->isEmpty()) {
+            $experiences = Experience::query()
+                ->published()
+                ->whereHas('journeys', fn ($q) => $q->whereHas('countries', fn ($c) => $c->where('countries.id', $hub->id)))
+                ->orderBy('sort_order')
+                ->take(6)
+                ->get();
+        }
+
+        $stays = Stay::query()
+            ->published()
+            ->where(function ($q) use ($destinationIds) {
+                $q->whereIn('destination_id', $destinationIds)
+                    ->orWhereHas('destinations', fn ($d) => $d->whereIn('destinations.id', $destinationIds));
+            })
+            ->orderBy('sort_order')
+            ->take(4)
+            ->get();
+
         $faqs = Faq::query()
             ->published()
             ->where(function ($q) use ($hub) {
@@ -50,13 +80,15 @@ class DestinationController extends Controller
             ->visible()
             ->whereHas('destinations', fn ($q) => $q->where('country_id', $hub->id))
             ->orderBy('sort_order')
-            ->take(3)
+            ->take(6)
             ->get();
 
         return view('public.destinations.country', [
             'country' => $hub,
             'faqs' => $faqs,
             'pulse' => $pulse,
+            'experiences' => $experiences,
+            'stays' => $stays,
         ]);
     }
 

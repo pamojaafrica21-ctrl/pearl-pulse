@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\Country;
 use App\Models\Experience;
 use App\Models\Journey;
+use App\Models\PulseItem;
 use App\Models\Review;
+use App\Models\Stay;
+use App\Models\TeamMember;
 use App\Services\SettingService;
 use Illuminate\View\View;
 
@@ -94,6 +98,20 @@ class HomeController extends Controller
             $journeys = Journey::query()->published()->with('countries')->orderBy('sort_order')->take(6)->get();
         }
 
+        $reasonImage = $settings->get('home_reason_image')
+            ?: Country::query()->published()->where('slug', 'uganda')->value('cover_path');
+
+        $reasonImageUrl = null;
+        if (is_string($reasonImage) && $reasonImage !== '') {
+            $reasonImageUrl = str_starts_with($reasonImage, 'http')
+                ? $reasonImage
+                : asset('storage/'.$reasonImage);
+        }
+        if (! $reasonImageUrl) {
+            $reasonImageUrl = Country::query()->published()->where('slug', 'uganda')->first()?->coverUrl()
+                ?: $countries->first()?->coverUrl();
+        }
+
         return view('public.home', [
             'heroSlides' => $settings->heroSlides(),
             'homeIntroEyebrow' => $settings->get('home_intro_eyebrow', 'Africa, deeply personal'),
@@ -104,19 +122,24 @@ class HomeController extends Controller
             'destinationsHeading' => $settings->get('home_destinations_heading', 'Where do you want to go?'),
             'destinationsIntro' => $settings->get('home_destinations_intro', 'Uganda is home. Rwanda, Kenya, and Tanzania complete the map — parks, seasons, and journeys shaped around how you want to travel.'),
             'experiencesEyebrow' => $settings->get('home_experiences_eyebrow', 'Experiences'),
-            'experiencesHeading' => $settings->get('home_experiences_heading', 'What kind of trip are you looking for?'),
+            'experiencesHeading' => $settings->get('home_experiences_heading', 'How do you want to experience Africa?'),
             'experiencesIntro' => $settings->get('home_experiences_intro', 'Wildlife spectacles, wilderness retreats, cultural immersions, birding and photography — each with its own pace and places.'),
             'featuredEyebrow' => $settings->get('featured_eyebrow', 'Journeys worth taking'),
             'featuredHeading' => $settings->get('featured_heading', 'Signature journeys'),
             'featuredIntro' => $settings->get('featured_intro', ''),
             'homeCtaHeading' => $settings->get('home_cta_heading', 'Where will Africa take you?'),
-            'homeCtaText' => $settings->get('home_cta_text', ''),
+            'homeCtaText' => $settings->get('home_cta_text', 'Tell us what you are dreaming about. We will design the journey around you.'),
             'homeCtaButton' => $settings->get('home_cta_button', 'Plan your journey'),
             'countries' => $countries,
             'destinationPanels' => $destinationPanels,
             'journeys' => $journeys,
-            'experiences' => Experience::query()->published()->orderBy('sort_order')->take(8)->get(),
+            'experiences' => Experience::query()->published()->orderBy('sort_order')->take(6)->get(),
+            'team' => TeamMember::query()->published()->orderBy('sort_order')->take(4)->get(),
+            'pulseItems' => PulseItem::query()->visible()->orderBy('sort_order')->take(4)->get(),
+            'stays' => Stay::query()->published()->orderBy('sort_order')->take(3)->get(),
+            'fieldNotes' => Article::query()->published()->orderByDesc('is_featured')->orderBy('sort_order')->take(3)->get(),
             'reviews' => Review::query()->published()->with('journey')->orderBy('sort_order')->take(4)->get(),
+            'reasonImage' => $reasonImageUrl,
             'whatsappUrl' => $settings->whatsappUrl('Hello Pearl Pulse — I would like to plan a journey.'),
             'reviewLinks' => $settings->reviewLinks(),
         ]);

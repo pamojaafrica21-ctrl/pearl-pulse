@@ -6,6 +6,7 @@
     'href' => null,
     'secondary' => null,
     'secondaryLabel' => null,
+    'image' => null,
 ])
 
 @php
@@ -13,7 +14,7 @@
 @endphp
 
 @push('before-footer')
-<section {{ $attributes->merge(['class' => 'site-closer__cta relative text-sand py-20 lg:py-28']) }}>
+<section {{ $attributes->merge(['class' => 'site-closer__cta relative text-sand pt-20 pb-10 lg:pt-28 lg:pb-12']) }}>
     <div class="relative z-10 mx-auto max-w-2xl px-5 lg:px-8 text-center">
         @if($eyebrow)
             <p class="text-[11px] tracking-[0.22em] uppercase text-white/80 mb-3 [text-shadow:0_1px_12px_rgb(0_0_0_/_0.45)]">{{ $eyebrow }}</p>

@@ -250,8 +250,10 @@
                 <div class="mobile-drawer__section">
                     <p class="mobile-drawer__eyebrow">Popular</p>
                     <a href="{{ route('journeys.finder') }}" class="mobile-drawer__text-link" @click="closeMobile()">Journey Finder</a>
-                    <a href="{{ route('plan') }}" class="mobile-drawer__text-link" @click="closeMobile()">Plan your journey</a>
+                    <a href="{{ route('true-pulse') }}" class="mobile-drawer__text-link" @click="closeMobile()">True Pulse</a>
+                    <a href="{{ route('insiders.index') }}" class="mobile-drawer__text-link" @click="closeMobile()">Insiders</a>
                     <a href="{{ route('stays.index') }}" class="mobile-drawer__text-link" @click="closeMobile()">Selected stays</a>
+                    <a href="{{ route('plan') }}" class="mobile-drawer__text-link" @click="closeMobile()">Plan your journey</a>
                 </div>
 
                 <div class="mobile-drawer__section">
@@ -437,6 +439,7 @@
                 alt=""
                 class="site-closer__image"
                 loading="lazy"
+                decoding="async"
             >
             <div class="site-closer__veil"></div>
         </div>
@@ -444,8 +447,8 @@
         <div class="relative z-10">
             @stack('before-footer')
 
-            <footer>
-                <div class="mx-auto max-w-7xl px-5 py-12 lg:py-16 lg:px-8">
+            <footer class="site-footer">
+                <div class="mx-auto max-w-7xl px-5 pb-12 lg:pb-16 lg:px-8">
                     <div class="mb-12 max-w-md">
                         <p class="font-display text-3xl text-white [text-shadow:0_1px_18px_rgb(0_0_0_/_0.45)]">Pearl Pulse Safaris</p>
                         <p class="mt-3 text-white/85 text-sm leading-relaxed [text-shadow:0_1px_12px_rgb(0_0_0_/_0.4)]">{{ $footerBlurb ?? 'Private journeys through East Africa.' }}</p>

@@ -35,7 +35,7 @@
         </div>
     </a>
 @else
-    <a href="{{ route('journeys.show', $journey) }}" {{ $attributes->class(['destination-card group']) }}>
+    <a href="{{ route('journeys.show', $journey) }}" {{ $attributes->class(['destination-card destination-card--overlay group']) }}>
         <div class="overflow-hidden bg-forest/10">
             @if($cover)
                 <img src="{{ $cover }}" alt="{{ $journey->name }}" loading="lazy" decoding="async">
@@ -44,17 +44,17 @@
             @endif
         </div>
         <div class="destination-card-meta">
-            <p class="text-[11px] tracking-[0.18em] uppercase text-muted">
+            <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">
                 {{ $countries ?: 'East Africa' }}
                 @if($journey->duration_label) · {{ $journey->duration_label }}@endif
             </p>
-            <h3 class="font-display text-2xl md:text-3xl text-charcoal mt-1 group-hover:text-forest transition-colors">
+            <h3 class="font-display text-2xl md:text-3xl text-white mt-1">
                 {{ $journey->name }}
             </h3>
             @if($journey->teaser)
-                <p class="mt-2 text-sm text-muted leading-relaxed line-clamp-3">{{ $journey->teaser }}</p>
+                <p class="mt-2 text-sm text-white/80 leading-relaxed line-clamp-3">{{ $journey->teaser }}</p>
             @endif
-            <p class="mt-3 text-[11px] tracking-[0.14em] uppercase text-forest/70">Private proposal</p>
+            <p class="mt-3 text-[11px] tracking-[0.14em] uppercase text-white/65">{{ $journey->priceLabel() }}</p>
         </div>
     </a>
 @endif

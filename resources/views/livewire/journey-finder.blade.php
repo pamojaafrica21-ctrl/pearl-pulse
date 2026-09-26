@@ -20,10 +20,10 @@
             <h1 class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-forest leading-tight">Find your journey</h1>
             @if($step === 1)
                 <p class="mt-3 md:mt-4 max-w-2xl text-muted leading-relaxed text-sm sm:text-base">
-                    A short, personal quiz — destination, experiences, pace, and timing — then we match journeys or craft one around you.
+                    A considered sequence — destination, experiences, pace, and timing — then we match journeys or craft one around you.
                 </p>
             @elseif($showStepper)
-                <div class="journey-quiz__progress mt-5 md:mt-6" aria-label="Quiz progress">
+                <div class="journey-quiz__progress mt-5 md:mt-6" aria-label="Finder progress">
                     <p class="text-xs tracking-[0.16em] uppercase text-muted mb-3">
                         @if($step <= 7)
                             Step {{ $step - 1 }} of 7
@@ -59,7 +59,7 @@
                         <p class="mt-3 max-w-xl text-muted leading-relaxed text-sm sm:text-base">
                             Answer a few essentials. If what you want is not listed, you can tell us in your own words — we will shape the journey around you.
                         </p>
-                        <button type="button" wire:click="start" class="btn-primary mt-8">Begin the quiz</button>
+                        <button type="button" wire:click="start" class="btn-primary mt-8">Begin</button>
                     </div>
                 @endif
 
@@ -360,7 +360,7 @@
                 @if($step === 8)
                     <div class="journey-quiz__step" wire:key="step-8">
                         <h2 class="font-display text-2xl sm:text-3xl text-forest">How can we reach you?</h2>
-                        <p class="mt-2 text-muted text-sm sm:text-base max-w-2xl">Your quiz answers will be included so we can respond with something personal.</p>
+                        <p class="mt-2 text-muted text-sm sm:text-base max-w-2xl">Your answers will be included so we can respond with something personal.</p>
 
                         @auth
                             <p class="mt-4 text-sm text-forest bg-forest/5 border border-forest/15 px-4 py-3">
@@ -419,7 +419,7 @@
                             Thank you. Your request is with our planners now — we will be in touch shortly to shape the journey with you.
                         </p>
                         <div class="mt-8 flex flex-wrap gap-4">
-                            <button type="button" wire:click="restart" class="btn-primary">Start another quiz</button>
+                            <button type="button" wire:click="restart" class="btn-primary">Start again</button>
                             @auth
                                 <a href="{{ route('account.requests') }}" class="btn-outline-dark">View My requests</a>
                             @else
@@ -436,7 +436,7 @@
         <x-page-cta
             class="journey-quiz__talk-cta"
             heading="Prefer to talk it through?"
-            text="Skip the quiz and tell us directly — we will shape something around you."
+            text="Prefer to tell us directly — we will shape something around you."
             button="Plan your journey"
             :href="route('plan')"
         />

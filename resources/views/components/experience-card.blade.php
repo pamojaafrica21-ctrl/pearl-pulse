@@ -2,7 +2,7 @@
 
 @php $cover = $experience->coverThumbUrl() ?: $experience->coverUrl(); @endphp
 
-<a href="{{ route('experiences.show', $experience) }}" class="destination-card group">
+<a href="{{ route('experiences.show', $experience) }}" {{ $attributes->class(['destination-card destination-card--overlay group']) }}>
     <div class="overflow-hidden bg-forest/10">
         @if($cover)
             <img src="{{ $cover }}" alt="{{ $experience->name }}" loading="lazy" decoding="async">
@@ -11,12 +11,12 @@
         @endif
     </div>
     <div class="destination-card-meta">
-        <p class="text-[11px] tracking-[0.18em] uppercase text-muted">Experience</p>
-        <h3 class="font-display text-2xl md:text-3xl text-charcoal mt-1 group-hover:text-forest transition-colors">
+        <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">Experience</p>
+        <h3 class="font-display text-2xl md:text-3xl text-white mt-1">
             {{ $experience->name }}
         </h3>
         @if($experience->teaser)
-            <p class="mt-2 text-sm text-muted leading-relaxed line-clamp-2">{{ $experience->teaser }}</p>
+            <p class="mt-2 text-sm text-white/80 leading-relaxed line-clamp-2">{{ $experience->teaser }}</p>
         @endif
     </div>
 </a>

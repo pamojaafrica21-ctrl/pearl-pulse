@@ -5,7 +5,7 @@
 
 @section('content')
 @php $cover = $country->coverUrl(); @endphp
-<section class="relative min-h-[60svh] flex items-end overflow-hidden bg-forest">
+<section class="relative min-h-[68svh] flex items-end overflow-hidden bg-forest">
     @if($cover)
         <img src="{{ $cover }}" alt="{{ $country->name }}" class="absolute inset-0 h-full w-full object-cover scale-105" data-parallax="0.1">
     @endif
@@ -15,57 +15,105 @@
             ['label' => 'Destinations', 'href' => route('destinations.index')],
             ['label' => $country->name],
         ]" />
-        <h1 class="font-display text-5xl md:text-7xl text-sand mt-4 fade-up">{{ $country->name }}</h1>
+        <h1 class="font-display text-6xl md:text-8xl text-sand mt-4 fade-up leading-[0.92]">{{ $country->name }}</h1>
         @if($country->subtitle)
-            <p class="mt-3 text-lg text-sand/80 fade-up" style="animation-delay: 0.12s">{{ $country->subtitle }}</p>
+            <p class="mt-4 text-lg md:text-xl text-sand/80 fade-up max-w-2xl" style="animation-delay: 0.12s">{{ $country->subtitle }}</p>
         @endif
     </div>
 </section>
 
-<section class="bg-white py-16 lg:py-24">
-    <div class="mx-auto max-w-3xl px-5 lg:px-8 reveal">
-        <h2 class="font-display text-4xl text-charcoal">Why {{ $country->name }}?</h2>
-        <div class="prose-safari mt-6">{!! $country->description !!}</div>
+<section class="surface surface--white py-16 lg:py-24">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8 split-editorial reveal">
+        <div>
+            <p class="section-eyebrow">Why {{ $country->name }}</p>
+            <h2 class="font-display text-4xl md:text-5xl text-charcoal mt-2">Africa, deeply personal</h2>
+            <div class="prose-safari mt-6">{!! $country->description !!}</div>
+        </div>
+        <div class="split-editorial__still">
+            @if($cover)
+                <img src="{{ $cover }}" alt="" loading="lazy" decoding="async">
+            @endif
+        </div>
     </div>
 </section>
 
 @if($country->journeys->isNotEmpty())
-<section class="bg-cream py-16 lg:py-24">
+<section class="surface surface--beige py-16 lg:py-24 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <h2 class="font-display text-4xl text-charcoal mb-8 reveal">Featured journeys</h2>
-        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 reveal-stagger">
+        <div class="reveal flex flex-wrap items-end justify-between gap-4 mb-8">
+            <h2 class="font-display text-4xl text-charcoal">Featured journeys</h2>
+            <a href="{{ route('journeys.country', $country) }}" class="text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">All {{ $country->name }} journeys</a>
+        </div>
+        <div class="filmstrip reveal-stagger">
             @foreach($country->journeys as $journey)
-                <div class="lift-card">
-                    <x-journey-card :journey="$journey" />
-                </div>
+                <x-journey-card :journey="$journey" />
             @endforeach
         </div>
     </div>
 </section>
 @endif
 
-<section class="bg-white py-16 lg:py-24">
+@if($experiences->isNotEmpty())
+<section class="surface surface--white py-16 lg:py-20 overflow-hidden">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <h2 class="font-display text-4xl text-charcoal mb-8 reveal">Experiences</h2>
+        <div class="filmstrip reveal-stagger">
+            @foreach($experiences as $experience)
+                <x-experience-card :experience="$experience" />
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+<section class="surface surface--beige py-16 lg:py-24">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <h2 class="font-display text-4xl text-charcoal mb-8 reveal">Where to go</h2>
-        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 reveal-stagger">
+        <div class="grid gap-5 md:grid-cols-2 reveal-stagger">
             @foreach($country->destinations as $destination)
-                <div class="lift-card">
-                    <x-destination-card :destination="$destination" />
-                </div>
+                <a href="{{ $destination->publicUrl() }}" class="stage-link min-h-[18rem] md:min-h-[22rem]">
+                    @if($destination->coverUrl())
+                        <img src="{{ $destination->coverThumbUrl() ?: $destination->coverUrl() }}" alt="{{ $destination->name }}" loading="lazy" decoding="async">
+                    @endif
+                    <div class="stage-link__shade"></div>
+                    <div class="stage-link__copy">
+                        <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">{{ $destination->region ?: $country->name }}</p>
+                        <h3 class="font-display text-3xl md:text-4xl text-white mt-1">{{ $destination->name }}</h3>
+                        @if($destination->teaser)
+                            <p class="mt-2 text-sm text-white/85 line-clamp-2 max-w-md">{{ $destination->teaser }}</p>
+                        @endif
+                    </div>
+                </a>
             @endforeach
         </div>
     </div>
 </section>
 
+@if($stays->isNotEmpty())
+<section class="surface surface--white py-16 lg:py-20 overflow-hidden">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="reveal mb-8 max-w-2xl">
+            <h2 class="font-display text-4xl text-charcoal">Selected stays</h2>
+            <p class="mt-3 text-muted">Places we have selected — we do not own these lodges.</p>
+        </div>
+        <div class="editorial-rail reveal-stagger">
+            @foreach($stays as $stay)
+                <x-stay-card :stay="$stay" />
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
 @if($country->best_time || $country->practical)
-<section class="bg-white pb-16">
-    <div class="mx-auto max-w-3xl px-5 lg:px-8">
+<section class="surface surface--beige py-16 lg:py-20">
+    <div class="mx-auto max-w-3xl px-5 lg:px-8 reveal">
         @if($country->best_time)
             <h2 class="font-display text-3xl text-charcoal">Best time</h2>
-            <p class="mt-3 text-muted">{{ $country->best_time }}</p>
+            <p class="mt-3 text-muted leading-relaxed">{{ $country->best_time }}</p>
         @endif
         @if($country->practical)
-            <h2 class="font-display text-3xl text-charcoal mt-10">Practical information</h2>
+            <h2 class="font-display text-3xl text-charcoal {{ $country->best_time ? 'mt-10' : '' }}">Practical information</h2>
             <div class="prose-safari mt-4">{!! $country->practical !!}</div>
         @endif
     </div>
@@ -73,16 +121,21 @@
 @endif
 
 @if($pulse->isNotEmpty())
-<section class="bg-white pb-16">
+<section class="surface surface--white py-16 lg:py-20">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <h2 class="font-display text-4xl text-charcoal mb-8">True Pulse</h2>
-        <div class="grid gap-6 sm:grid-cols-3">
+        <div class="reveal flex flex-wrap items-end justify-between gap-4 mb-8">
+            <h2 class="font-display text-4xl text-charcoal">True Pulse</h2>
+            <a href="{{ route('true-pulse') }}" class="text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">Explore True Pulse</a>
+        </div>
+        <div class="pulse-mosaic reveal-stagger">
             @foreach($pulse as $item)
                 <figure>
                     @if($item->coverUrl())
-                        <img src="{{ $item->coverUrl() }}" alt="{{ $item->title }}" class="aspect-[4/5] w-full object-cover" loading="lazy">
+                        <img src="{{ $item->coverThumbUrl() ?: $item->coverUrl() }}" alt="{{ $item->title }}" loading="lazy" decoding="async">
                     @endif
-                    <figcaption class="mt-2 text-sm text-muted">{{ $item->caption }}</figcaption>
+                    @if($item->caption || $item->title)
+                        <figcaption>{{ $item->caption ?: $item->title }}</figcaption>
+                    @endif
                 </figure>
             @endforeach
         </div>
@@ -91,14 +144,14 @@
 @endif
 
 @if($faqs->isNotEmpty())
-<section class="bg-white pb-16">
+<section class="surface surface--beige py-16 lg:py-20">
     <div class="mx-auto max-w-3xl px-5 lg:px-8">
-        <h2 class="font-display text-4xl text-charcoal mb-8">FAQs</h2>
-        <dl class="space-y-6">
+        <h2 class="font-display text-4xl text-charcoal mb-8 reveal">FAQs</h2>
+        <dl class="space-y-8 reveal-stagger">
             @foreach($faqs as $faq)
-                <div>
+                <div class="border-t border-charcoal/10 pt-6">
                     <dt class="font-display text-2xl text-charcoal">{{ $faq->question }}</dt>
-                    <dd class="mt-2 text-muted">{{ $faq->answer }}</dd>
+                    <dd class="mt-2 text-muted leading-relaxed">{{ $faq->answer }}</dd>
                 </div>
             @endforeach
         </dl>
@@ -119,5 +172,8 @@
 @endpush
 @endif
 
-<x-page-cta heading="Your {{ $country->name }} journey starts here" button="Plan a {{ $country->name }} journey" />
+<x-page-cta
+    heading="Your {{ $country->name }} journey starts here"
+    button="Plan a {{ $country->name }} journey"
+/>
 @endsection

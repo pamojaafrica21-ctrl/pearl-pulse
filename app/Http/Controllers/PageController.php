@@ -39,9 +39,11 @@ class PageController extends Controller
         return view('public.about-reason');
     }
 
-    public function plan(): View
+    public function plan(SettingService $settings): View
     {
-        return view('public.plan');
+        return view('public.plan', [
+            'whatsappUrl' => $settings->whatsappUrl('Hello Pearl Pulse — I would like to plan a journey.'),
+        ]);
     }
 
     public function legal(string $page): View
