@@ -1,7 +1,7 @@
 <button
     type="button"
     wire:click="toggle"
-    class="inline-flex items-center gap-2 text-[11px] tracking-[0.14em] uppercase transition {{ $saved ? 'text-forest' : 'text-muted hover:text-forest' }}"
+    class="inline-flex items-center gap-2 text-[13px] tracking-[0.14em] uppercase transition {{ $saved ? 'text-forest' : 'text-muted hover:text-forest' }}"
     aria-pressed="{{ $saved ? 'true' : 'false' }}"
 >
     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="{{ $saved ? 'currentColor' : 'none' }}" stroke="currentColor" aria-hidden="true">

@@ -11,7 +11,7 @@
         @endif
     </div>
     <div class="destination-card-meta">
-        <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">Experience</p>
+        <p class="text-[13px] tracking-[0.18em] uppercase text-white/70">Experience</p>
         <h3 class="font-display text-2xl md:text-3xl text-white mt-1">
             {{ $experience->name }}
         </h3>

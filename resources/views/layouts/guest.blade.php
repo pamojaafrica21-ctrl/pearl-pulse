@@ -36,7 +36,7 @@
                 <div class="relative z-10 w-full px-8 py-10 lg:px-12 lg:py-16">
                     <a href="{{ route('home') }}" class="inline-block">
                         <p class="font-display text-3xl md:text-4xl text-white tracking-wide">Pearl Pulse</p>
-                        <p class="mt-1 text-[11px] tracking-[0.28em] uppercase text-white/70">Safaris</p>
+                        <p class="mt-1 text-[13px] tracking-[0.28em] uppercase text-white/70">Safaris</p>
                     </a>
                     <p class="mt-8 max-w-sm font-display text-2xl md:text-3xl text-white/95 leading-snug">
                         Save journeys. Plan privately. Travel beautifully paced.

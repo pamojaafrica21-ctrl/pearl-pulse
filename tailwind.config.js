@@ -15,20 +15,20 @@ export default {
         extend: {
             colors: {
                 forest: {
-                    DEFAULT: '#1c2b1f',
-                    light: '#2a3d2e',
+                    DEFAULT: '#254520',
+                    light: '#335525',
                 },
                 sand: {
-                    DEFAULT: '#e8dfd0',
-                    deep: '#d4c4a8',
+                    DEFAULT: '#ebe4d4',
+                    deep: '#d5c3a3',
                 },
-                cream: '#f7f4ef',
-                beige: '#e6ddd0',
-                brown: '#c2ab92',
+                cream: '#f5f2eb',
+                beige: '#e6dbc1',
+                brown: '#c3aa84',
                 surface: '#ffffff',
-                charcoal: '#1a1a18',
-                gold: '#8a7a5c',
-                muted: '#5c5c54',
+                charcoal: '#1c1b1f',
+                gold: '#a8926a',
+                muted: '#6b6560',
             },
             fontFamily: {
                 sans: ['Outfit', ...defaultTheme.fontFamily.sans],

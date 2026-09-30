@@ -47,8 +47,10 @@
             <div class="site-nav-panel__aside-links">
                 <p class="site-nav-panel__eyebrow">Popular</p>
                 <a href="{{ route('journeys.finder') }}" class="site-nav-panel__aside-link">Journey Finder</a>
+                <a href="{{ route('specialist.index') }}" class="site-nav-panel__aside-link">Specialist journeys</a>
                 <a href="{{ route('true-pulse') }}" class="site-nav-panel__aside-link">True Pulse</a>
                 <a href="{{ route('insiders.index') }}" class="site-nav-panel__aside-link">Insiders</a>
+                <a href="{{ route('faqs.index') }}" class="site-nav-panel__aside-link">FAQs</a>
                 <a href="{{ route('stays.index') }}" class="site-nav-panel__aside-link">Selected stays</a>
                 <a href="{{ route('plan') }}" class="site-nav-panel__aside-link site-nav-panel__aside-link--accent">Plan your journey</a>
             </div>

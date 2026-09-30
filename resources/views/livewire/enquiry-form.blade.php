@@ -37,7 +37,7 @@
 
             <form wire:submit="submit">
                 <div class="enquiry-flow__step" x-show="step === 1" x-transition.opacity>
-                    <p class="text-[11px] tracking-[0.18em] uppercase text-muted mb-2">Step 1 of 7</p>
+                    <p class="text-[13px] tracking-[0.18em] uppercase text-muted mb-2">Step 1 of 7</p>
                     <h2 class="font-display text-3xl text-charcoal">Where do you want to go?</h2>
                     <p class="mt-2 text-muted text-sm">Select one or more countries — or tell us somewhere else.</p>
                     <div class="mt-8 flex flex-wrap gap-3">
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="enquiry-flow__step" x-show="step === 2" x-cloak x-transition.opacity>
-                    <p class="text-[11px] tracking-[0.18em] uppercase text-muted mb-2">Step 2 of 7</p>
+                    <p class="text-[13px] tracking-[0.18em] uppercase text-muted mb-2">Step 2 of 7</p>
                     <h2 class="font-display text-3xl text-charcoal">Duration & travellers</h2>
                     <div class="mt-8 grid gap-5 sm:grid-cols-2">
                         <div>
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="enquiry-flow__step" x-show="step === 3" x-cloak x-transition.opacity>
-                    <p class="text-[11px] tracking-[0.18em] uppercase text-muted mb-2">Step 3 of 7</p>
+                    <p class="text-[13px] tracking-[0.18em] uppercase text-muted mb-2">Step 3 of 7</p>
                     <h2 class="font-display text-3xl text-charcoal">What experiences interest you?</h2>
                     <div class="mt-8 flex flex-wrap gap-3">
                         @foreach($experiences as $experience)
@@ -103,7 +103,7 @@
                 </div>
 
                 <div class="enquiry-flow__step" x-show="step === 4" x-cloak x-transition.opacity>
-                    <p class="text-[11px] tracking-[0.18em] uppercase text-muted mb-2">Step 4 of 7</p>
+                    <p class="text-[13px] tracking-[0.18em] uppercase text-muted mb-2">Step 4 of 7</p>
                     <h2 class="font-display text-3xl text-charcoal">Accommodation preference</h2>
                     <p class="mt-2 text-muted text-sm">From essential comfort to signature exclusivity — or a considered mix.</p>
                     <div class="mt-8">
@@ -127,7 +127,7 @@
                 </div>
 
                 <div class="enquiry-flow__step" x-show="step === 5" x-cloak x-transition.opacity>
-                    <p class="text-[11px] tracking-[0.18em] uppercase text-muted mb-2">Step 5 of 7</p>
+                    <p class="text-[13px] tracking-[0.18em] uppercase text-muted mb-2">Step 5 of 7</p>
                     <h2 class="font-display text-3xl text-charcoal">Approximate investment</h2>
                     <p class="mt-2 text-muted text-sm">Price never dominates the journey — this simply helps us propose the right shape.</p>
                     <div class="mt-8">
@@ -151,7 +151,7 @@
                 </div>
 
                 <div class="enquiry-flow__step" x-show="step === 6" x-cloak x-transition.opacity>
-                    <p class="text-[11px] tracking-[0.18em] uppercase text-muted mb-2">Step 6 of 7</p>
+                    <p class="text-[13px] tracking-[0.18em] uppercase text-muted mb-2">Step 6 of 7</p>
                     <h2 class="font-display text-3xl text-charcoal">Travel dates</h2>
                     <div class="mt-8 grid gap-5 sm:grid-cols-2">
                         <div>
@@ -178,7 +178,7 @@
                 </div>
 
                 <div class="enquiry-flow__step" x-show="step === 7" x-cloak x-transition.opacity>
-                    <p class="text-[11px] tracking-[0.18em] uppercase text-muted mb-2">Step 7 of 7</p>
+                    <p class="text-[13px] tracking-[0.18em] uppercase text-muted mb-2">Step 7 of 7</p>
                     <h2 class="font-display text-3xl text-charcoal">How do we reach you?</h2>
                     <div class="mt-8 space-y-5">
                         <div>

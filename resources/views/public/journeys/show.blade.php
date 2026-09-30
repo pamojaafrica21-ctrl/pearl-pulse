@@ -35,7 +35,7 @@
                 <ul class="mt-10 space-y-4">
                     @foreach($journey->highlights as $item)
                         <li class="flex gap-4 border-t border-charcoal/10 pt-4">
-                            <span class="text-[11px] tracking-[0.16em] uppercase text-muted shrink-0 w-28">{{ $item['label'] ?? 'Highlight' }}</span>
+                            <span class="text-[13px] tracking-[0.16em] uppercase text-muted shrink-0 w-28">{{ $item['label'] ?? 'Highlight' }}</span>
                             <span class="text-charcoal">{{ $item['value'] ?? '' }}</span>
                         </li>
                     @endforeach
@@ -47,7 +47,7 @@
         <aside class="lg:col-span-5 lg:pl-4">
             <div class="journey-glance surface surface--beige p-7 lg:p-8">
                 <div class="flex items-center justify-between gap-4 mb-6">
-                    <h2 class="text-[11px] tracking-[0.2em] uppercase text-muted">At a glance</h2>
+                    <h2 class="text-[13px] tracking-[0.2em] uppercase text-muted">At a glance</h2>
                     <livewire:favorite-button :journey="$journey" />
                 </div>
                 <dl class="space-y-5">

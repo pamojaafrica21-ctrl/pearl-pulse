@@ -35,7 +35,7 @@
                             @endif
 
                             @if($journeys->isNotEmpty())
-                                <p class="text-[11px] tracking-[0.18em] uppercase text-muted mb-3">Journeys</p>
+                                <p class="text-[13px] tracking-[0.18em] uppercase text-muted mb-3">Journeys</p>
                                 <ul class="space-y-1 mb-8">
                                     @foreach($journeys as $journey)
                                         <li>
@@ -51,7 +51,7 @@
                             @endif
 
                             @if($countries->isNotEmpty())
-                                <p class="text-[11px] tracking-[0.18em] uppercase text-muted mb-3">Destinations</p>
+                                <p class="text-[13px] tracking-[0.18em] uppercase text-muted mb-3">Destinations</p>
                                 <ul class="space-y-1 mb-8">
                                     @foreach($countries as $country)
                                         <li>
@@ -67,7 +67,7 @@
                             @endif
 
                             @if($experiences->isNotEmpty())
-                                <p class="text-[11px] tracking-[0.18em] uppercase text-muted mb-3">Experiences</p>
+                                <p class="text-[13px] tracking-[0.18em] uppercase text-muted mb-3">Experiences</p>
                                 <ul class="space-y-1">
                                     @foreach($experiences as $experience)
                                         <li>

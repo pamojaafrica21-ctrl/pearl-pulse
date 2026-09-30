@@ -77,7 +77,7 @@
                     @endif
                     <div class="stage-link__shade"></div>
                     <div class="stage-link__copy">
-                        <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">{{ $destination->region ?: $country->name }}</p>
+                        <p class="text-[13px] tracking-[0.18em] uppercase text-white/70">{{ $destination->region ?: $country->name }}</p>
                         <h3 class="font-display text-3xl md:text-4xl text-white mt-1">{{ $destination->name }}</h3>
                         @if($destination->teaser)
                             <p class="mt-2 text-sm text-white/85 line-clamp-2 max-w-md">{{ $destination->teaser }}</p>

@@ -20,7 +20,7 @@
     <div class="mx-auto max-w-7xl px-5 lg:px-8 grid gap-10 md:grid-cols-2">
         @foreach($articles as $article)
             <a href="{{ route('insiders.show', $article) }}" class="block group border-t border-charcoal/10 pt-6">
-                <p class="text-[11px] tracking-[0.18em] uppercase text-muted">{{ $article->typeLabel() }}</p>
+                <p class="text-[13px] tracking-[0.18em] uppercase text-muted">{{ $article->typeLabel() }}</p>
                 <h2 class="font-display text-3xl text-charcoal mt-2 group-hover:text-forest">{{ $article->title }}</h2>
                 <p class="mt-3 text-muted">{{ $article->excerpt }}</p>
             </a>

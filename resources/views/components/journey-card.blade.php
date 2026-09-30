@@ -44,7 +44,7 @@
             @endif
         </div>
         <div class="destination-card-meta">
-            <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">
+            <p class="text-[13px] tracking-[0.18em] uppercase text-white/70">
                 {{ $countries ?: 'East Africa' }}
                 @if($journey->duration_label) · {{ $journey->duration_label }}@endif
             </p>
@@ -54,7 +54,7 @@
             @if($journey->teaser)
                 <p class="mt-2 text-sm text-white/80 leading-relaxed line-clamp-3">{{ $journey->teaser }}</p>
             @endif
-            <p class="mt-3 text-[11px] tracking-[0.14em] uppercase text-white/65">{{ $journey->priceLabel() }}</p>
+            <p class="mt-3 text-[13px] tracking-[0.14em] uppercase text-white/65">{{ $journey->priceLabel() }}</p>
         </div>
     </a>
 @endif

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    @foreach(['/', '/journeys', '/journeys/finder', '/destinations', '/experiences', '/true-pulse', '/insiders', '/plan-your-journey', '/about', '/about/our-people', '/about/travel-with-a-reason', '/stays'] as $path)
+    @foreach(['/', '/journeys', '/journeys/finder', '/destinations', '/experiences', '/specialist', '/reviews', '/faqs', '/true-pulse', '/insiders', '/plan-your-journey', '/about', '/about/our-people', '/about/travel-with-a-reason', '/stays'] as $path)
     <url>
         <loc>{{ url($path) }}</loc>
         <changefreq>weekly</changefreq>
@@ -43,6 +43,14 @@
         <loc>{{ route('experiences.show', $experience) }}</loc>
         <lastmod>{{ $experience->updated_at->toAtomString() }}</lastmod>
         <changefreq>weekly</changefreq>
+        <priority>0.75</priority>
+    </url>
+    @endforeach
+    @foreach($specialists as $specialist)
+    <url>
+        <loc>{{ route('specialist.show', $specialist) }}</loc>
+        <lastmod>{{ $specialist->updated_at->toAtomString() }}</lastmod>
+        <changefreq>monthly</changefreq>
         <priority>0.75</priority>
     </url>
     @endforeach

@@ -11,6 +11,7 @@ use App\Models\Journey;
 use App\Models\Page;
 use App\Models\PulseItem;
 use App\Models\Review;
+use App\Models\Specialist;
 use App\Models\Stay;
 use App\Models\TeamMember;
 use Illuminate\Database\Seeder;
@@ -29,6 +30,7 @@ class ContentSeeder extends Seeder
         $this->articles();
         $this->pulse();
         $this->faqs();
+        $this->specialists();
         $this->pages();
         $this->attachExperiences($experiences);
     }
@@ -530,15 +532,18 @@ class ContentSeeder extends Seeder
         $uganda = Country::query()->where('slug', 'uganda')->first();
 
         $site = [
-            ['How do you price a journey?', 'We show a from-price where it helps, or invite a private proposal for highly tailored travel. Luxury is in the experience, not a catalogue number.'],
+            ['When is the best time to visit East Africa?', 'It depends on what you want to see. Dry seasons (roughly June–September and December–February) are most reliable for wildlife and trekking. We still travel in the green seasons when it suits your pace and interests.'],
+            ['Can you arrange gorilla permits?', 'Yes. Permits are limited and often sell out months ahead in peak season. We recommend starting the conversation early so we can secure the right dates and parks.'],
+            ['What is typically included in a private journey?', 'Private guiding and vehicles, lodge nights as confirmed, park fees, and the logistics that stitch each day together. Flights, visas, and personal expenses are usually separate — we spell this out clearly in your proposal.'],
+            ['Is Pearl Pulse suitable for families?', 'Yes. We design family journeys with age-appropriate pacing, quieter camps where possible, and activities that work for mixed ages — from gentle game drives to cultural visits.'],
+            ['How does payment work?', 'We outline a clear deposit and balance schedule in your proposal, tied to lodge and permit deadlines. International bank transfer is most common; we confirm details once the itinerary is agreed.'],
             ['Do you own lodges?', 'No. We select stays for location, character, and how they complement your journey.'],
-            ['Can you arrange gorilla permits?', 'Yes. Permits are limited; we recommend starting the conversation early.'],
         ];
 
         foreach ($site as $i => [$q, $a]) {
             Faq::query()->updateOrCreate(
                 ['question' => $q, 'group' => 'site'],
-                ['answer' => $a, 'status' => 'published', 'sort_order' => $i + 1]
+                ['answer' => $a, 'status' => 'published', 'sort_order' => $i + 1, 'faqable_type' => null, 'faqable_id' => null]
             );
         }
 
@@ -551,6 +556,57 @@ class ContentSeeder extends Seeder
                     'faqable_id' => $uganda->id,
                     'status' => 'published',
                     'sort_order' => 1,
+                ]
+            );
+        }
+    }
+
+    protected function specialists(): void
+    {
+        $items = [
+            [
+                'slug' => 'family',
+                'name' => 'Family journeys',
+                'subtitle' => 'Travel together',
+                'teaser' => 'Private days paced for mixed ages — wildlife without the rush, lodges that welcome children, and memories the whole family owns.',
+                'description' => '<p>A family safari should feel generous, not exhausting. We shape routes around nap windows, shorter drives when needed, and camps where young travellers are welcomed rather than merely tolerated.</p><p>Gorilla trekking has age rules; chimpanzee forest and savannah days can be gentler. We balance iconic encounters with swimming holes, boat time, and evenings that do not run late.</p><p>Tell us the ages in your group and the kind of days that keep everyone happy — we will build from there.</p>',
+            ],
+            [
+                'slug' => 'honeymoon',
+                'name' => 'Honeymoon journeys',
+                'subtitle' => 'Quiet romance',
+                'teaser' => 'Private vehicles, secluded camps, and unhurried mornings — East Africa as a shared chapter, not a checklist.',
+                'description' => '<p>Honeymoons with Pearl Pulse favour privacy: your own vehicle, carefully chosen suites, and space between activities so the trip feels like time together rather than a schedule.</p><p>Many couples combine a primate chapter in Uganda or Rwanda with open plains in Kenya or Tanzania, then finish with water — a lakeshore, or the coast.</p><p>We handle permits and logistics quietly so you can stay in the moment.</p>',
+            ],
+            [
+                'slug' => 'photography',
+                'name' => 'Photography journeys',
+                'subtitle' => 'Light first',
+                'teaser' => 'Vehicles, guides, and timing shaped around the image — golden hours protected, not rushed past.',
+                'description' => '<p>Photography trips need different logistics: flexible departure times, fewer travellers in the vehicle, and guides who understand composition as well as behaviour.</p><p>We draw on our <a href="/experiences/wildlife-photography">Wildlife Photography</a> and <a href="/experiences/birding-shoebill">Birding</a> experience pages when shaping the brief — then tailor parks and seasons to the subjects you care about most.</p><p>Bring your shot list. We will protect the light.</p>',
+            ],
+            [
+                'slug' => 'wellness',
+                'name' => 'Wellness journeys',
+                'subtitle' => 'A slower pulse',
+                'teaser' => 'Rest between wildlife days — spa, water, highland air, and itineraries that leave room to breathe.',
+                'description' => '<p>Not every chapter needs to be full. Wellness journeys weave wildlife with recovery: spa mornings, lakeshore nights, and fewer transfers so the body can keep up with the wonder.</p><p>Explore our <a href="/experiences/pure-pulse-wellness">Pure Pulse / Wellness</a> experience for the tone we aim for — then we place it inside a private route that still delivers the Africa you came for.</p><p>Tell us how you want to feel at the end of each day. We will design toward that.</p>',
+            ],
+        ];
+
+        foreach ($items as $i => $item) {
+            Specialist::query()->updateOrCreate(
+                ['slug' => $item['slug']],
+                [
+                    'name' => $item['name'],
+                    'subtitle' => $item['subtitle'],
+                    'teaser' => $item['teaser'],
+                    'description' => $item['description'],
+                    'cover_path' => SeedImage::photo('specialist-'.$item['slug'], 'seed/specialist-'.$item['slug'].'.jpg', 1800, 1200),
+                    'meta_title' => $item['name'].' | Pearl Pulse Safaris',
+                    'meta_description' => $item['teaser'],
+                    'status' => 'published',
+                    'sort_order' => $i + 1,
                 ]
             );
         }

@@ -12,7 +12,7 @@
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         @if($enquiries->isEmpty())
             <div class="max-w-xl">
-                <p class="text-[11px] tracking-[0.18em] uppercase text-muted">Empty for now</p>
+                <p class="text-[13px] tracking-[0.18em] uppercase text-muted">Empty for now</p>
                 <h2 class="font-display text-3xl md:text-4xl text-charcoal mt-2">No requests yet</h2>
                 <p class="mt-4 text-muted leading-relaxed">
                     When you submit the Journey Finder quiz or a plan request while signed in, it will appear here.
@@ -24,7 +24,7 @@
             </div>
         @else
             <div class="mb-10">
-                <p class="text-[11px] tracking-[0.18em] uppercase text-muted">History</p>
+                <p class="text-[13px] tracking-[0.18em] uppercase text-muted">History</p>
                 <p class="font-display text-2xl text-charcoal mt-1">
                     {{ $enquiries->count() }} {{ \Illuminate\Support\Str::plural('request', $enquiries->count()) }}
                 </p>
@@ -35,7 +35,7 @@
                     <article class="bg-white border border-charcoal/10 p-5 sm:p-6">
                         <div class="flex flex-wrap items-start justify-between gap-3">
                             <div>
-                                <p class="text-[11px] tracking-[0.14em] uppercase text-muted">
+                                <p class="text-[13px] tracking-[0.14em] uppercase text-muted">
                                     {{ $enquiry->created_at->format('d M Y · H:i') }}
                                     · {{ $enquiry->channelLabel() }}
                                 </p>
@@ -43,7 +43,7 @@
                                     {{ $enquiry->booking?->reference ? $enquiry->booking->reference.' · ' : '' }}{{ $enquiry->journey?->name ?? (is_array($enquiry->preferred_destinations) && $enquiry->preferred_destinations !== [] ? implode(', ', $enquiry->preferred_destinations) : 'Custom journey request') }}
                                 </h2>
                             </div>
-                            <span class="text-[10px] tracking-[0.12em] uppercase px-2 py-1 border border-charcoal/15 text-muted">{{ $enquiry->guestStatusLabel() }}</span>
+                            <span class="text-[12px] tracking-[0.12em] uppercase px-2 py-1 border border-charcoal/15 text-muted">{{ $enquiry->guestStatusLabel() }}</span>
                         </div>
 
                         @if($enquiry->booking)

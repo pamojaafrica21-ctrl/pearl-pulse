@@ -30,7 +30,7 @@
                     <img src="{{ $item->coverUrl() }}" alt="{{ $item->title ?: 'True Pulse' }}" class="aspect-[4/5] w-full object-cover" loading="lazy">
                 @endif
                 <figcaption class="mt-3">
-                    <p class="text-[11px] tracking-[0.18em] uppercase text-muted">{{ $item->type }}</p>
+                    <p class="text-[13px] tracking-[0.18em] uppercase text-muted">{{ $item->type }}</p>
                     @if($item->title)
                         <p class="font-display text-2xl text-charcoal mt-1">{{ $item->title }}</p>
                     @endif

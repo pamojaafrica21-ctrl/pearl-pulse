@@ -50,7 +50,7 @@
                     @endif
                     <div class="stage-link__shade"></div>
                     <div class="stage-link__copy">
-                        <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">{{ $destination->country?->name }}</p>
+                        <p class="text-[13px] tracking-[0.18em] uppercase text-white/70">{{ $destination->country?->name }}</p>
                         <h3 class="font-display text-3xl text-white mt-1">{{ $destination->name }}</h3>
                     </div>
                 </a>

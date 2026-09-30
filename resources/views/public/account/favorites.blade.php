@@ -21,14 +21,14 @@
                         @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/20 to-transparent"></div>
                         <div class="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-                            <p class="text-[11px] tracking-[0.18em] uppercase text-white/70">Start here</p>
+                            <p class="text-[13px] tracking-[0.18em] uppercase text-white/70">Start here</p>
                             <p class="font-display text-3xl text-white mt-2 leading-tight">Save journeys that speak to you</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="lg:col-span-6 lg:col-start-7">
-                    <p class="text-[11px] tracking-[0.18em] uppercase text-muted">Empty for now</p>
+                    <p class="text-[13px] tracking-[0.18em] uppercase text-muted">Empty for now</p>
                     <h2 class="font-display text-3xl md:text-4xl text-charcoal mt-2">You have not saved any journeys yet</h2>
                     <p class="mt-4 text-muted leading-relaxed max-w-lg">
                         Browse signature itineraries and tap <span class="text-charcoal">Save journey</span> on any that feel right.
@@ -48,14 +48,14 @@
         @else
             <div class="flex flex-wrap items-end justify-between gap-4 mb-10">
                 <div>
-                    <p class="text-[11px] tracking-[0.18em] uppercase text-muted">Shortlist</p>
+                    <p class="text-[13px] tracking-[0.18em] uppercase text-muted">Shortlist</p>
                     <p class="font-display text-2xl text-charcoal mt-1">
                         {{ $journeys->count() }} {{ \Illuminate\Support\Str::plural('journey', $journeys->count()) }} saved
                     </p>
                 </div>
                 <div class="flex flex-wrap gap-3">
                     <a href="{{ route('journeys.index') }}" class="text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">Browse more →</a>
-                    <a href="{{ route('plan') }}" class="btn-primary !py-2.5 !px-5 text-[11px]">Plan from these</a>
+                    <a href="{{ route('plan') }}" class="btn-primary !py-2.5 !px-5 text-[13px]">Plan from these</a>
                 </div>
             </div>
 
@@ -65,7 +65,7 @@
                         <x-journey-card :journey="$journey" />
                         <div class="mt-4 flex items-center justify-between gap-3">
                             <livewire:favorite-button :journey="$journey" :key="'fav-'.$journey->id" />
-                            <a href="{{ route('plan', ['journey' => $journey->slug]) }}" class="text-[11px] tracking-[0.14em] uppercase text-muted hover:text-forest transition">
+                            <a href="{{ route('plan', ['journey' => $journey->slug]) }}" class="text-[13px] tracking-[0.14em] uppercase text-muted hover:text-forest transition">
                                 Enquire →
                             </a>
                         </div>
@@ -75,7 +75,7 @@
 
             <div class="mt-16 border border-charcoal/10 bg-white p-8 sm:p-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <p class="text-[11px] tracking-[0.18em] uppercase text-muted">Next step</p>
+                    <p class="text-[13px] tracking-[0.18em] uppercase text-muted">Next step</p>
                     <h2 class="font-display text-3xl text-charcoal mt-2">Ready to shape a private proposal?</h2>
                     <p class="mt-2 text-sm text-muted max-w-lg">Share what you saved — we will refine pace, parks, and stays around how you want to travel.</p>
                 </div>

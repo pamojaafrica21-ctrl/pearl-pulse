@@ -3,12 +3,15 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ExperienceController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InsiderController;
 use App\Http\Controllers\JourneyController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PulseController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\SpecialistController;
 use App\Http\Controllers\StayController;
 use App\Livewire\Actions\Logout;
 use App\Livewire\Admin\Articles\Form as ArticleForm;
@@ -35,6 +38,8 @@ use App\Livewire\Admin\PulseItems\Index as PulseIndex;
 use App\Livewire\Admin\Reviews\Form as ReviewForm;
 use App\Livewire\Admin\Reviews\Index as ReviewsIndex;
 use App\Livewire\Admin\Settings\Edit as SettingsEdit;
+use App\Livewire\Admin\Specialists\Form as SpecialistForm;
+use App\Livewire\Admin\Specialists\Index as SpecialistsIndex;
 use App\Livewire\Admin\Stays\Form as StayForm;
 use App\Livewire\Admin\Stays\Index as StaysIndex;
 use App\Livewire\Admin\TeamMembers\Form as TeamForm;
@@ -55,6 +60,12 @@ Route::middleware('site.public')->group(function () {
 
     Route::get('/experiences', [ExperienceController::class, 'index'])->name('experiences.index');
     Route::get('/experiences/{experience:slug}', [ExperienceController::class, 'show'])->name('experiences.show');
+
+    Route::get('/specialist', [SpecialistController::class, 'index'])->name('specialist.index');
+    Route::get('/specialist/{specialist:slug}', [SpecialistController::class, 'show'])->name('specialist.show');
+
+    Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
+    Route::get('/faqs', [FaqController::class, 'index'])->name('faqs.index');
 
     Route::get('/true-pulse', PulseController::class)->name('true-pulse');
 
@@ -110,6 +121,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/experiences', ExperiencesIndex::class)->name('experiences.index');
     Route::get('/experiences/create', ExperienceForm::class)->name('experiences.create');
     Route::get('/experiences/{experience}/edit', ExperienceForm::class)->name('experiences.edit');
+    Route::get('/specialists', SpecialistsIndex::class)->name('specialists.index');
+    Route::get('/specialists/create', SpecialistForm::class)->name('specialists.create');
+    Route::get('/specialists/{specialist}/edit', SpecialistForm::class)->name('specialists.edit');
     Route::get('/stays', StaysIndex::class)->name('stays.index');
     Route::get('/stays/create', StayForm::class)->name('stays.create');
     Route::get('/stays/{stay}/edit', StayForm::class)->name('stays.edit');

@@ -7,10 +7,29 @@
 @php
     $slideCount = count($heroSlides);
     $heroDuration = 8000;
+    $trustItems = $trustItems ?? [];
+    if ($trustItems === []) {
+        $trustItems = [
+            ['title' => 'Gorilla permits secured'],
+            ['title' => 'Private vehicles only'],
+            ['title' => 'Local expert guides'],
+            ['title' => 'Uganda-based'],
+        ];
+    }
+    $mobileTrust = array_slice($trustItems, 0, 3);
+    $defaultPillars = [
+        ['title' => 'Private by design', 'text' => 'Your vehicle, your pace, your group — never shared seat sales.'],
+        ['title' => 'Local knowledge', 'text' => 'Uganda-based specialists with deep East Africa relationships.'],
+        ['title' => 'Seamless logistics', 'text' => 'Permits, lodges, transfers, and timing handled end to end.'],
+        ['title' => 'Conservation-minded', 'text' => 'Travel that supports communities and wild places.'],
+        ['title' => 'Honest counsel', 'text' => 'We say no when a trip does not fit — and reshape when it can.'],
+    ];
+    $pillars = ($homePillars ?? []) !== [] ? $homePillars : $defaultPillars;
 @endphp
 
+{{-- 1. Hero --}}
 <section
-    class="home-hero relative flex flex-col justify-end overflow-hidden bg-forest"
+    class="home-hero relative flex flex-col overflow-hidden bg-forest"
     x-data="{
         index: 0,
         count: {{ $slideCount }},
@@ -93,496 +112,288 @@
             @else
                 <div class="absolute inset-0 bg-gradient-to-br from-forest via-forest-light to-[#3d4f35]"></div>
             @endif
-            <div class="absolute inset-0 bg-gradient-to-t from-charcoal/45 via-charcoal/20 to-black/15"></div>
+            <div class="hero-slide__shade absolute inset-0 bg-gradient-to-t from-charcoal/55 via-charcoal/25 to-black/15"></div>
         </div>
     @endforeach
 
-    <div class="home-hero__content relative z-10 mx-auto w-full max-w-7xl px-5 lg:px-8">
-        @foreach($heroSlides as $i => $slide)
-            <div x-show="index === {{ $i }}" @if($i !== 0) x-cloak @endif>
-                @if($slide['label'])
-                    <p class="text-[11px] tracking-[0.22em] uppercase text-white/70 fade-up">{{ $slide['label'] }}</p>
-                @endif
-                <h1 class="home-hero__title font-display text-white leading-[0.95] max-w-4xl fade-up mt-3 sm:mt-4" style="animation-delay: 0.08s">
-                    {{ $slide['headline'] }}
-                </h1>
-                @if($slide['tagline'])
-                    <p class="home-hero__tagline mt-4 sm:mt-6 max-w-xl text-white/85 font-light leading-relaxed fade-up" style="animation-delay: 0.18s">
-                        {{ $slide['tagline'] }}
-                    </p>
-                @endif
+    <div class="relative z-10 flex min-h-[inherit] flex-1 flex-col justify-end">
+        <div class="home-hero__content relative mx-auto w-full max-w-7xl px-5 lg:px-8">
+            @foreach($heroSlides as $i => $slide)
+                <div x-show="index === {{ $i }}" @if($i !== 0) x-cloak @endif>
+                    <p class="text-[11px] tracking-[0.22em] uppercase text-white/70 fade-up">{{ $slide['label'] ?: 'Pearl Pulse Safaris' }}</p>
+                    <h1 class="home-hero__title font-display text-white leading-[0.95] max-w-4xl fade-up mt-3 sm:mt-4" style="animation-delay: 0.08s">
+                        {{ $slide['headline'] ?: "Private journeys into Africa's wild heart" }}
+                    </h1>
+                    @if($slide['tagline'] || $i === 0)
+                        <p class="home-hero__tagline mt-4 sm:mt-6 max-w-xl text-white/85 font-light leading-relaxed fade-up" style="animation-delay: 0.18s">
+                            {{ $slide['tagline'] ?: 'Uganda-based specialists. East Africa, designed around you.' }}
+                        </p>
+                    @endif
+                </div>
+            @endforeach
+
+            <div class="home-hero__actions fade-up" style="animation-delay: 0.28s">
+                <a href="{{ route('plan') }}" class="btn-outline home-hero__btn">Plan Your Journey</a>
+                <a href="{{ route('journeys.finder') }}" class="btn-outline home-hero__btn home-hero__btn--ghost">Find Your Journey</a>
             </div>
-        @endforeach
 
-        <div class="mt-8 sm:mt-10 flex flex-wrap gap-4 fade-up" style="animation-delay: 0.28s">
-            <a href="{{ route('plan') }}" class="btn-outline">Plan your journey</a>
-            <a href="{{ route('journeys.index') }}" class="text-sm tracking-[0.14em] uppercase text-white/80 hover:text-white self-center transition">
-                Explore journeys
-            </a>
-        </div>
-
-        @if($slideCount > 1)
-            @php
-                $nextLabels = collect($heroSlides)->map(fn ($s) => $s['label'] ?: $s['headline'])->values()->all();
-            @endphp
-            <div class="mt-10 sm:mt-14 flex flex-wrap items-end justify-between gap-6 fade-up" style="animation-delay: 0.4s">
-                <div class="min-w-[12rem] max-w-sm flex-1">
-                    <p class="text-[10px] tracking-[0.2em] uppercase text-white/55 mb-2">Next up</p>
-                    <p class="text-sm text-white/90 font-light truncate">
-                        <span x-text="{{ Js::from($nextLabels) }}[(index + 1) % count]"></span>
-                    </p>
-                    <div class="hero-progress mt-3" style="--hero-duration: {{ $heroDuration }}ms">
-                        <span :key="index"></span>
+            @if($slideCount > 1)
+                @php
+                    $nextLabels = collect($heroSlides)->map(fn ($s) => $s['label'] ?: $s['headline'])->values()->all();
+                @endphp
+                <div class="home-hero__meta fade-up" style="animation-delay: 0.4s">
+                    <div class="home-hero__next">
+                        <p class="text-[10px] tracking-[0.2em] uppercase text-white/55 mb-2">Next up</p>
+                        <p class="text-sm text-white/90 font-light truncate">
+                            <span x-text="{{ Js::from($nextLabels) }}[(index + 1) % count]"></span>
+                        </p>
+                        <div class="hero-progress mt-3" style="--hero-duration: {{ $heroDuration }}ms">
+                            <span :key="index"></span>
+                        </div>
+                    </div>
+                    <div class="home-hero__nav">
+                        <button type="button" @click="prev()" class="home-hero__nav-btn" aria-label="Previous slide">‹</button>
+                        <button type="button" @click="next()" class="home-hero__nav-btn" aria-label="Next slide">›</button>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button type="button" @click="prev()" class="h-10 w-10 rounded-full border border-white/40 text-white hover:bg-white hover:text-forest transition" aria-label="Previous slide">‹</button>
-                    <button type="button" @click="next()" class="h-10 w-10 rounded-full border border-white/40 text-white hover:bg-white hover:text-forest transition" aria-label="Next slide">›</button>
-                </div>
+            @endif
+        </div>
+
+        {{-- 2. Trust bar --}}
+        <div class="home-hero__trust home-hero__trust--forest relative z-10 mt-auto">
+            <div class="home-hero__trust-row mx-auto max-w-7xl">
+                @foreach($mobileTrust as $item)
+                    <span class="md:hidden">{{ $item['title'] }}</span>
+                @endforeach
+                @foreach($trustItems as $item)
+                    <span class="hidden md:inline{{ strlen($item['title']) > 22 ? ' home-hero__trust-item--wide' : '' }}">{{ $item['title'] }}</span>
+                @endforeach
             </div>
-        @endif
+        </div>
     </div>
 </section>
 
-<div class="trust-band surface surface--white">
-    <div class="trust-band__row mx-auto max-w-7xl px-5 lg:px-8">
-        <span>Gorilla tracking</span>
-        <span>Great migration</span>
-        <span>Uganda · Rwanda · Kenya · Tanzania</span>
-        <span>Private journeys</span>
-    </div>
-</div>
-
+{{-- 3. Short intro --}}
 @if($homeIntroHeading || $homeIntroBody)
 <section class="surface surface--white py-14 lg:py-20">
-    <div class="mx-auto max-w-3xl px-5 lg:px-8 text-center reveal">
-        @if($homeIntroEyebrow)
-            <p class="section-eyebrow">{{ $homeIntroEyebrow }}</p>
-        @endif
-        @if($homeIntroHeading)
-            <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-charcoal leading-snug">{{ $homeIntroHeading }}</h2>
-        @endif
-        @if($homeIntroBody)
-            <p class="mt-6 text-muted text-lg leading-relaxed whitespace-pre-line">{{ $homeIntroBody }}</p>
-        @endif
-        <div class="mt-8">
-            <a href="{{ route('about') }}" class="btn-outline-dark">Discover Pearl Pulse</a>
+    <div class="mx-auto grid max-w-7xl items-center gap-10 px-5 lg:grid-cols-12 lg:gap-14 lg:px-8">
+        <div class="reveal lg:col-span-7 @if(!($introImage ?? null)) lg:col-span-12 lg:mx-auto lg:max-w-3xl lg:text-center @endif">
+            @if($homeIntroEyebrow)
+                <p class="section-eyebrow">{{ $homeIntroEyebrow }}</p>
+            @endif
+            @if($homeIntroHeading)
+                <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-charcoal leading-snug">{{ $homeIntroHeading }}</h2>
+            @endif
+            @if($homeIntroBody)
+                <p class="mt-6 text-muted text-lg leading-relaxed whitespace-pre-line">{{ $homeIntroBody }}</p>
+            @endif
+            <div class="mt-8">
+                <a href="{{ route('about') }}" class="btn-outline-dark">Discover Pearl Pulse</a>
+            </div>
         </div>
+        @if(!empty($introImage))
+            <div class="reveal hidden overflow-hidden lg:col-span-5 lg:block" style="transition-delay:120ms">
+                <div class="aspect-[4/5] overflow-hidden bg-sand">
+                    <img src="{{ $introImage }}" alt="" class="h-full w-full object-cover transition duration-[1.4s] ease-out hover:scale-[1.04]" loading="lazy" decoding="async">
+                </div>
+            </div>
+        @endif
     </div>
 </section>
 @endif
 
-<section class="surface surface--beige relative py-16 lg:py-20 overflow-hidden">
-    <x-section-edge placement="top" variant="wave" class="text-beige" />
+{{-- 4. Destinations — country card grid --}}
+<section class="surface surface--beige relative py-16 lg:py-24 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <div class="reveal mx-auto max-w-5xl text-center max-lg:mx-0 max-lg:text-left">
-            <div class="mb-4 flex justify-center max-lg:justify-start">
-                <x-path-accent />
-            </div>
+        <div class="reveal mx-auto max-w-3xl text-center">
             <p class="section-eyebrow">{{ $destinationsEyebrow }}</p>
-            <h2 class="font-display text-[clamp(1.85rem,4.6vw,3.15rem)] text-charcoal whitespace-nowrap">{{ $destinationsHeading }}</h2>
+            <h2 class="font-display text-4xl md:text-5xl text-charcoal">{{ $destinationsHeading }}</h2>
             @if($destinationsIntro)
-                <p class="mt-4 text-muted leading-relaxed max-lg:max-w-xl">{{ $destinationsIntro }}</p>
+                <p class="mt-4 text-muted leading-relaxed">{{ $destinationsIntro }}</p>
             @endif
         </div>
 
-        @if($destinationPanels->isNotEmpty())
-            <div
-                class="mt-10"
-                x-data="{
-                    active: '{{ $destinationPanels->first()['key'] }}',
-                    seen: { '{{ $destinationPanels->first()['key'] }}': true }
-                }"
-            >
-                <nav class="country-navbar reveal" aria-label="Countries">
-                    <div class="country-navbar__track" role="tablist">
-                        @foreach($destinationPanels as $panel)
-                            <button
-                                type="button"
-                                id="country-tab-{{ $panel['key'] }}"
-                                class="country-navbar__tab{{ $loop->first ? ' is-active' : '' }}"
-                                role="tab"
-                                :class="{ 'is-active': active === '{{ $panel['key'] }}' }"
-                                :aria-selected="(active === '{{ $panel['key'] }}').toString()"
-                                aria-controls="country-panel-{{ $panel['key'] }}"
-                                @click="
-                                    active = '{{ $panel['key'] }}';
-                                    seen['{{ $panel['key'] }}'] = true;
-                                    $el.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
-                                    $nextTick(() => document.getElementById('country-carousel-{{ $panel['key'] }}')?.scrollTo({ left: 0 }));
-                                "
-                            >{{ $panel['label'] }}</button>
-                        @endforeach
+        <div class="destination-country-grid reveal-stagger mt-12">
+            @foreach($countries as $country)
+                <a href="{{ route('destinations.country', $country) }}" class="destination-country-card group">
+                    <div class="destination-country-card__media">
+                        @if($country->coverUrl())
+                            <img src="{{ $country->coverThumbUrl() ?: $country->coverUrl() }}" alt="" loading="lazy" decoding="async">
+                        @endif
                     </div>
-                </nav>
-
-                @foreach($destinationPanels as $panel)
-                    @php
-                        $items = $panel['items'];
-                        $slideCount = $items->count();
-                    @endphp
-                    <div
-                        id="country-panel-{{ $panel['key'] }}"
-                        role="tabpanel"
-                        aria-labelledby="country-tab-{{ $panel['key'] }}"
-                        x-show="active === '{{ $panel['key'] }}'"
-                        @if(! $loop->first) x-cloak @endif
-                    >
-                        <div
-                            id="country-carousel-{{ $panel['key'] }}"
-                            class="destination-carousel lg:hidden"
-                        >
-                            @foreach($items as $item)
-                                <a href="{{ $item['href'] }}" class="destination-slide">
-                                    @if($item['thumb'] ?? $item['image'])
-                                        <img
-                                            @if($loop->parent->first)
-                                                src="{{ $item['thumb'] ?? $item['image'] }}"
-                                            @else
-                                                x-bind:src="seen['{{ $panel['key'] }}'] ? @js($item['thumb'] ?? $item['image']) : null"
-                                            @endif
-                                            alt="{{ $item['title'] }}"
-                                            loading="lazy"
-                                            decoding="async"
-                                        >
-                                    @else
-                                        <div class="absolute inset-0 bg-gradient-to-br from-forest to-forest-light"></div>
-                                    @endif
-                                    <div class="destination-slide__shade"></div>
-                                    <div class="destination-slide__copy">
-                                        <p class="text-[11px] tracking-[0.18em] uppercase text-white/80">{{ $item['kicker'] }}</p>
-                                        <h3 class="font-display text-3xl text-white leading-tight mt-1">{{ $item['title'] }}</h3>
-                                        @if($item['teaser'])
-                                            <p class="mt-2 text-sm text-white/90 leading-relaxed line-clamp-3">{{ $item['teaser'] }}</p>
-                                        @endif
-                                        <span class="destination-slide__cta" aria-hidden="true">Explore</span>
-                                    </div>
-                                </a>
-                            @endforeach
-                        </div>
-
-                        <div class="mt-5 lg:hidden">
-                            <a href="{{ $panel['href'] }}" class="text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">
-                                {{ $panel['explore'] }}
-                            </a>
-                        </div>
-
-                        <div
-                            class="destination-block hidden lg:grid grid-cols-2 gap-10 xl:gap-14 items-start"
-                            x-data="{
-                                index: 0,
-                                count: {{ $slideCount }},
-                                timer: null,
-                                duration: 4000,
-                                paused: false,
-                                next() { this.index = (this.index + 1) % this.count; this.restart() },
-                                prev() { this.index = (this.index - 1 + this.count) % this.count; this.restart() },
-                                go(i) { this.index = i; this.restart() },
-                                restart() {
-                                    clearInterval(this.timer);
-                                    if (this.count > 1 && !this.paused) {
-                                        this.timer = setInterval(() => { this.index = (this.index + 1) % this.count }, this.duration);
-                                    }
-                                },
-                                pause() { this.paused = true; clearInterval(this.timer) },
-                                resume() { this.paused = false; this.restart() }
-                            }"
-                            x-init="restart()"
-                            @mouseenter="pause()"
-                            @mouseleave="resume()"
-                            @focusin="pause()"
-                            @focusout="resume()"
-                        >
-                            <div class="country-panel__media relative overflow-hidden bg-forest aspect-[4/5] min-h-[36rem]">
-                                @foreach($items as $i => $item)
-                                    <a
-                                        href="{{ $item['href'] }}"
-                                        class="absolute inset-0 block"
-                                        x-show="index === {{ $i }}"
-                                        x-transition:enter="transition ease-out duration-700"
-                                        x-transition:enter-start="opacity-0"
-                                        x-transition:enter-end="opacity-100"
-                                        x-transition:leave="transition ease-in duration-500"
-                                        x-transition:leave-start="opacity-100"
-                                        x-transition:leave-end="opacity-0"
-                                        @if($i !== 0) x-cloak @endif
-                                    >
-                                        @if($item['image'] || $item['thumb'])
-                                            <img
-                                                @if($loop->parent->first && $i === 0)
-                                                    src="{{ $item['thumb'] ?? $item['image'] }}"
-                                                    fetchpriority="low"
-                                                @else
-                                                    x-bind:src="(active === '{{ $panel['key'] }}' && (index === {{ $i }} || seen['{{ $panel['key'] }}'])) ? @js($item['thumb'] ?? $item['image']) : null"
-                                                @endif
-                                                alt="{{ $item['title'] }}"
-                                                class="absolute inset-0 h-full w-full object-cover scale-105"
-                                                loading="lazy"
-                                                decoding="async"
-                                            >
-                                        @else
-                                            <div class="absolute inset-0 bg-gradient-to-br from-forest to-forest-light"></div>
-                                        @endif
-                                        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/35 to-transparent"></div>
-                                        <div class="absolute inset-x-0 bottom-0 flex flex-col items-start p-7 pb-9">
-                                            <p class="text-[11px] tracking-[0.18em] uppercase text-white/80">{{ $item['kicker'] }}</p>
-                                            <h3 class="font-display text-3xl md:text-4xl text-white leading-tight mt-1 [text-shadow:0_1px_18px_rgb(0_0_0_/_0.35)]">{{ $item['title'] }}</h3>
-                                            @if($item['meta'])
-                                                <p class="mt-2 text-[11px] tracking-[0.16em] uppercase text-white/75">{{ $item['meta'] }}</p>
-                                            @endif
-                                            @if($item['teaser'])
-                                                <p class="mt-2 text-sm text-white/90 leading-relaxed line-clamp-3">{{ $item['teaser'] }}</p>
-                                            @endif
-                                            <span class="destination-slide__cta mt-5">Explore</span>
-                                        </div>
-                                    </a>
-                                @endforeach
-
-                                @if($slideCount > 1)
-                                    <div class="absolute top-4 right-4 z-10 flex gap-2">
-                                        <button type="button" class="country-panel__nav" @click.prevent="prev()" aria-label="Previous destination">
-                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"/></svg>
-                                        </button>
-                                        <button type="button" class="country-panel__nav" @click.prevent="next()" aria-label="Next destination">
-                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
-                                        </button>
-                                    </div>
-                                @endif
-                            </div>
-
-                            <div class="flex flex-col min-h-0 pt-1">
-                                <div class="flex flex-wrap items-baseline justify-between gap-3 mb-6">
-                                    <div>
-                                        <p class="text-[11px] tracking-[0.18em] uppercase text-muted">Destinations</p>
-                                        <h3 class="font-display text-3xl text-charcoal mt-1">{{ $panel['label'] }}</h3>
-                                    </div>
-                                    <a href="{{ $panel['href'] }}" class="text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">
-                                        {{ $panel['explore'] }}
-                                    </a>
-                                </div>
-
-                                <div class="flex flex-col gap-4">
-                                    @foreach($items as $dIndex => $item)
-                                        <a
-                                            href="{{ $item['href'] }}"
-                                            class="destination-pick group"
-                                            :class="index === {{ $dIndex }} ? 'is-active' : ''"
-                                            @mouseenter="go({{ $dIndex }})"
-                                            @focus="go({{ $dIndex }})"
-                                        >
-                                            <div class="destination-pick__media">
-                                                @if($item['thumb'])
-                                                    <img
-                                                        @if($loop->parent->first)
-                                                            src="{{ $item['thumb'] }}"
-                                                        @else
-                                                            x-bind:src="seen['{{ $panel['key'] }}'] ? @js($item['thumb']) : null"
-                                                        @endif
-                                                        alt=""
-                                                        loading="lazy"
-                                                        decoding="async"
-                                                    >
-                                                @endif
-                                            </div>
-                                            <div class="destination-pick__body min-w-0 flex-1">
-                                                <h4 class="font-display text-2xl text-charcoal group-hover:text-forest transition">{{ $item['title'] }}</h4>
-                                                @if($item['meta'])
-                                                    <p class="mt-1.5 text-[11px] tracking-[0.16em] uppercase text-muted">{{ $item['meta'] }}</p>
-                                                @endif
-                                                @if($item['teaser'])
-                                                    <p class="mt-2 text-sm text-muted leading-relaxed line-clamp-2">{{ $item['teaser'] }}</p>
-                                                @endif
-                                                <span class="destination-pick__cta">Explore</span>
-                                            </div>
-                                        </a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
+                    <div class="destination-country-card__copy">
+                        <h3 class="font-display text-3xl md:text-4xl text-white">{{ $country->name }}</h3>
+                        <p class="mt-2 line-clamp-2 text-sm text-white/80 leading-relaxed">
+                            {{ $country->teaser ?: \Illuminate\Support\Str::limit(strip_tags((string) $country->description), 90) }}
+                        </p>
+                        <span class="destination-country-card__cta">Explore</span>
                     </div>
-                @endforeach
-            </div>
-        @endif
+                </a>
+            @endforeach
 
-        <div class="mt-10 flex justify-center reveal">
+            @if($hasMultiCountry)
+                <a href="{{ route('journeys.index', ['type' => 'multi']) }}" class="destination-country-card destination-country-card--multi group">
+                    <div class="destination-country-card__media destination-country-card__media--pattern" aria-hidden="true"></div>
+                    <div class="destination-country-card__copy">
+                        <p class="text-[11px] tracking-[0.2em] uppercase text-sand/85">Multi-country</p>
+                        <h3 class="font-display text-3xl md:text-4xl text-white mt-2">Around East Africa</h3>
+                        <p class="mt-2 text-sm text-white/85 leading-relaxed">Cross borders in one private journey — Uganda, Rwanda, Kenya, Tanzania as one narrative.</p>
+                        <span class="destination-country-card__cta">View journeys</span>
+                    </div>
+                </a>
+            @endif
+        </div>
+
+        <div class="mt-10 text-center reveal">
             <a href="{{ route('destinations.index') }}" class="btn-outline-dark">All destinations</a>
         </div>
     </div>
-    <x-section-edge variant="ridge" class="text-white" />
 </section>
 
-<section class="signature-rail surface surface--white relative pt-16 pb-20 lg:pt-20 lg:pb-28 overflow-hidden">
-    <div
-        class="signature-rail__layout mx-auto max-w-7xl"
-        data-card-scroller-wrap
-    >
-        <div class="signature-rail__intro reveal px-5 lg:px-8">
-            <p class="section-eyebrow">{{ $featuredEyebrow }}</p>
-            <h2 class="font-display text-4xl md:text-5xl text-charcoal leading-tight">{{ $featuredHeading }}</h2>
-            @if($featuredIntro)
-                <p class="mt-4 text-muted leading-relaxed max-w-md">{{ $featuredIntro }}</p>
-            @endif
-
-            @if($journeys->count() > 1)
-                <div class="signature-rail__controls mt-8 lg:mt-auto pt-6">
-                    <button
-                        type="button"
-                        class="signature-rail__btn"
-                        data-card-scroller-prev
-                        aria-label="Previous journeys"
-                    >
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"/></svg>
-                    </button>
-                    <button
-                        type="button"
-                        class="signature-rail__btn"
-                        data-card-scroller-next
-                        aria-label="Next journeys"
-                    >
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
-                    </button>
-                </div>
-            @endif
-
-            <div class="mt-8 hidden lg:block">
-                <a href="{{ route('journeys.index') }}" class="btn-outline-dark">All journeys</a>
-            </div>
-        </div>
-
-        @if($journeys->isNotEmpty())
-            <div
-                class="signature-rail__scroller"
-                data-card-scroller
-                data-manual
-            >
-                <div class="signature-rail__track" data-card-scroller-track>
-                    @foreach($journeys as $journey)
-                        <x-journey-card :journey="$journey" variant="signature" />
-                    @endforeach
-                </div>
-            </div>
-        @endif
-    </div>
-
-    <div class="mx-auto max-w-7xl px-5 lg:px-8 mt-10 lg:hidden reveal">
-        <a href="{{ route('journeys.index') }}" class="btn-outline-dark">All journeys</a>
-    </div>
-
-    <x-section-edge variant="ridge" class="text-forest" />
-</section>
-
-
-<section class="surface surface--green text-sand py-20 lg:py-24 overflow-hidden relative surface-nature">
-    <div class="relative mx-auto max-w-3xl px-5 lg:px-8 reveal text-center">
-        <p class="text-[11px] tracking-[0.22em] uppercase text-sand/50 mb-3">Journey Finder</p>
-        <h2 class="font-display text-4xl md:text-5xl text-white">Not sure where to begin?</h2>
-        <p class="mt-4 text-sand/75 leading-relaxed">Find the Pearl Pulse journey that fits the way you want to experience Africa.</p>
-        <div class="mt-10 flex flex-wrap justify-center gap-4">
-            <a href="{{ route('journeys.finder') }}" class="btn-outline">Find your journey</a>
-            <button type="button" @click="$dispatch('open-journey-search')" class="text-sm tracking-[0.14em] uppercase text-sand/80 hover:text-white self-center transition">Quick search</button>
-        </div>
-    </div>
-    <x-section-edge variant="ridge" class="text-beige" />
-</section>
-<section class="surface surface--beige relative pt-24 pb-20 lg:pt-32 lg:pb-28 overflow-hidden">
+{{-- 5. Experiences — full photo grid --}}
+<section class="surface surface--white relative py-16 lg:py-24">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <div class="reveal mx-auto max-w-3xl text-center">
-            <div class="mb-4 flex justify-center">
-                <x-path-accent class="opacity-70" />
-            </div>
+        <div class="reveal mx-auto max-w-3xl text-center mb-12">
             <p class="section-eyebrow">{{ $experiencesEyebrow }}</p>
             <h2 class="font-display text-4xl md:text-5xl text-charcoal">{{ $experiencesHeading }}</h2>
             @if($experiencesIntro)
                 <p class="mt-4 text-muted leading-relaxed">{{ $experiencesIntro }}</p>
             @endif
         </div>
-    </div>
 
-    @if($experiences->isNotEmpty())
-        <div class="experience-scroller-wrap mt-12" data-card-scroller-wrap>
-            <div
-                class="experience-scroller"
-                data-card-scroller
-                data-pause="3200"
-            >
-                <div class="experience-scroller__track" data-card-scroller-track>
-                    @foreach($experiences as $experience)
-                        <a
-                            href="{{ route('experiences.show', $experience) }}"
-                            class="experience-tile group relative block overflow-hidden min-h-[20rem] w-[78vw] sm:w-[42vw] lg:w-[22rem] xl:w-[26rem] shrink-0 bg-forest"
-                            data-card-scroller-item
-                        >
-                            @if($experience->coverThumbUrl() || $experience->coverUrl())
-                                <img src="{{ $experience->coverThumbUrl() ?: $experience->coverUrl() }}" alt="{{ $experience->name }}" class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy" decoding="async">
-                            @endif
-                            <div class="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/25 to-transparent"></div>
-                            <div class="tile-copy relative z-10 flex h-full min-h-[20rem] flex-col justify-end p-6">
-                                <span class="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/55 text-white transition group-hover:bg-white group-hover:text-charcoal" aria-hidden="true">→</span>
-                                <h3 class="font-display text-3xl text-white">{{ $experience->name }}</h3>
-                                @if($experience->teaser)
-                                    <p class="mt-2 text-sm text-white/75 line-clamp-2">{{ $experience->teaser }}</p>
-                                @endif
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
+        @if($experiences->isNotEmpty())
+            <div class="experience-photo-grid reveal-stagger">
+                @foreach($experiences as $experience)
+                    <a href="{{ route('experiences.show', $experience) }}" class="experience-tile experience-tile--grid group relative block overflow-hidden aspect-[3/4] bg-forest">
+                        @if($experience->coverUrl())
+                            <img src="{{ $experience->coverThumbUrl() ?: $experience->coverUrl() }}" alt="{{ $experience->name }}" class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy" decoding="async">
+                        @endif
+                        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/25 to-transparent"></div>
+                        <div class="tile-copy relative z-10 flex h-full flex-col justify-end p-5">
+                            <h3 class="font-display text-xl md:text-2xl text-white">{{ $experience->name }}</h3>
+                        </div>
+                    </a>
+                @endforeach
             </div>
-
-            <div class="experience-scroller__controls">
-                <button
-                    type="button"
-                    class="experience-scroller__btn"
-                    data-card-scroller-prev
-                    aria-label="Previous experiences"
-                >
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"/></svg>
-                </button>
-                <button
-                    type="button"
-                    class="experience-scroller__btn"
-                    data-card-scroller-next
-                    aria-label="Next experiences"
-                >
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
-                </button>
+            <div class="mt-10 text-center reveal">
+                <a href="{{ route('experiences.index') }}" class="btn-outline-dark">All experiences</a>
             </div>
-        </div>
-    @endif
-
-    <div class="mx-auto max-w-7xl px-5 lg:px-8 mt-12 flex justify-center reveal">
-        <a href="{{ route('experiences.index') }}" class="btn-outline-dark">All experiences</a>
+        @endif
     </div>
-    <x-section-edge variant="ridge" class="text-white" />
 </section>
 
-
-@if(count($homePillars))
-<section class="surface surface--white relative py-20 lg:py-24">
+{{-- 6. Specialist Journeys --}}
+@if($specialists->isNotEmpty())
+<section class="surface surface--green text-sand relative py-16 lg:py-24 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <div class="reveal mx-auto max-w-3xl text-center mb-12">
-            <p class="section-eyebrow">Why Pearl Pulse</p>
-            <h2 class="font-display text-4xl md:text-5xl text-charcoal">Real differentiators</h2>
+        <div class="reveal max-w-3xl mb-12">
+            <p class="section-eyebrow text-sand/70">{{ $specialistsEyebrow }}</p>
+            <h2 class="font-display text-4xl md:text-5xl text-white">{{ $specialistsHeading }}</h2>
+            @if($specialistsIntro)
+                <p class="mt-4 text-sand/80 leading-relaxed">{{ $specialistsIntro }}</p>
+            @endif
         </div>
-        <div class="feature-strip reveal-stagger">
-            @foreach($homePillars as $index => $pillar)
-                <div class="feature-strip__item">
-                    <span class="feature-strip__mark">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</span>
-                    <h3 class="font-display text-2xl text-charcoal">{{ $pillar['title'] }}</h3>
-                    <p class="mt-3 text-sm text-muted leading-relaxed">{{ $pillar['text'] }}</p>
-                </div>
+
+        <div class="specialist-mosaic reveal-stagger">
+            @foreach($specialists as $specialist)
+                <a href="{{ route('specialist.show', $specialist) }}" class="specialist-panel group specialist-panel--{{ $loop->iteration }}">
+                    <div class="specialist-panel__media">
+                        @if($specialist->coverUrl())
+                            <img src="{{ $specialist->coverThumbUrl() ?: $specialist->coverUrl() }}" alt="{{ $specialist->name }}" loading="lazy" decoding="async">
+                        @endif
+                    </div>
+                    <div class="specialist-panel__copy">
+                        @if($specialist->subtitle)
+                            <p class="text-[11px] tracking-[0.2em] uppercase text-sand/80">{{ $specialist->subtitle }}</p>
+                        @endif
+                        <h3 class="font-display text-3xl md:text-4xl text-white mt-2">{{ $specialist->name }}</h3>
+                        @if($specialist->teaser)
+                            <p class="mt-3 max-w-md text-sm text-white/85 leading-relaxed">{{ $specialist->teaser }}</p>
+                        @endif
+                        <span class="mt-5 inline-flex text-[13px] tracking-[0.14em] uppercase text-sand">Explore this journey</span>
+                    </div>
+                </a>
             @endforeach
+        </div>
+
+        <div class="mt-10 reveal">
+            <a href="{{ route('specialist.index') }}" class="btn-outline">All specialist journeys</a>
         </div>
     </div>
 </section>
 @endif
 
+{{-- 7. Signature Journeys --}}
+<section class="surface surface--beige relative py-16 lg:py-24 overflow-hidden">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="reveal flex flex-wrap items-end justify-between gap-6 mb-12">
+            <div class="max-w-2xl">
+                <p class="section-eyebrow">{{ $featuredEyebrow }}</p>
+                <h2 class="font-display text-4xl md:text-5xl text-charcoal">{{ $featuredHeading }}</h2>
+                @if($featuredIntro)
+                    <p class="mt-4 text-muted leading-relaxed">{{ $featuredIntro }}</p>
+                @endif
+            </div>
+            <a href="{{ route('journeys.index') }}" class="text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">All journeys</a>
+        </div>
+
+        <div class="signature-grid reveal-stagger">
+            @foreach($journeys as $journey)
+                <article class="signature-card group">
+                    <a href="{{ route('journeys.show', $journey) }}" class="signature-card__media">
+                        @if($journey->coverUrl())
+                            <img src="{{ $journey->coverThumbUrl() ?: $journey->coverUrl() }}" alt="{{ $journey->name }}" loading="lazy" decoding="async">
+                        @endif
+                        @if($journey->duration_label || $journey->days)
+                            <span class="signature-card__badge">{{ $journey->duration_label ?: ($journey->days.' days') }}</span>
+                        @endif
+                    </a>
+                    <div class="signature-card__body">
+                        <h3 class="font-display text-2xl text-charcoal">
+                            <a href="{{ route('journeys.show', $journey) }}" class="hover:text-forest transition">{{ $journey->name }}</a>
+                        </h3>
+                        @if($journey->teaser)
+                            <p class="mt-2 text-sm text-muted leading-relaxed line-clamp-2">{{ $journey->teaser }}</p>
+                        @endif
+                        <div class="mt-5 flex flex-col gap-2">
+                            <a href="{{ route('plan', ['journey' => $journey->slug]) }}" class="btn-primary text-center text-xs">Request private proposal</a>
+                            <a href="{{ route('journeys.show', $journey) }}" class="text-center text-sm tracking-[0.12em] uppercase text-forest hover:opacity-70 transition">View itinerary</a>
+                        </div>
+                    </div>
+                </article>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+{{-- 8. Why Pearl Pulse --}}
+<section class="surface surface--white relative py-20 lg:py-24">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="reveal mx-auto max-w-3xl text-center mb-12">
+            <p class="section-eyebrow">Why Pearl Pulse</p>
+            <h2 class="font-display text-4xl md:text-5xl text-charcoal">What sets a private journey apart</h2>
+        </div>
+        <div class="feature-strip reveal-stagger">
+            @foreach($pillars as $index => $pillar)
+                <div class="feature-strip__item">
+                    <span class="feature-strip__mark">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</span>
+                    <h3 class="font-display text-2xl text-charcoal">{{ $pillar['title'] }}</h3>
+                    @if(!empty($pillar['text']))
+                        <p class="mt-3 text-sm text-muted leading-relaxed">{{ $pillar['text'] }}</p>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+{{-- 9. Our People --}}
 @if($team->isNotEmpty())
 <section class="surface surface--beige relative py-20 lg:py-28 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="reveal text-center mb-14">
             <p class="section-eyebrow">Our people</p>
-            <h2 class="font-display text-4xl md:text-5xl text-charcoal">Your journey. Our people.</h2>
-            <p class="mt-4 text-muted max-w-xl mx-auto">The guides and planners behind Pearl Pulse — visible, local, and with you from the first conversation.</p>
+            <h2 class="font-display text-4xl md:text-5xl text-charcoal">Meet the people who will look after you</h2>
         </div>
         <div class="people-row reveal-stagger">
             @foreach($team as $member)
@@ -606,6 +417,7 @@
 </section>
 @endif
 
+{{-- 10. Conservation --}}
 <section class="reason-stage">
     @if($reasonImage)
         <div class="reason-stage__media" aria-hidden="true">
@@ -614,15 +426,16 @@
     @endif
     <div class="reason-stage__veil" aria-hidden="true"></div>
     <div class="reason-stage__copy reveal">
-        <p class="text-[11px] tracking-[0.22em] uppercase text-sand/55 mb-3">Travel with a reason</p>
-        <h2 class="font-display text-4xl md:text-5xl text-white leading-tight">Conservation, community, local people</h2>
-        <p class="mt-5 text-sand/80 leading-relaxed max-w-lg">Our journeys connect places and people — so travelling with us can contribute to the land that makes these days possible.</p>
+        <p class="text-[11px] tracking-[0.22em] uppercase text-sand/55 mb-3">Conservation</p>
+        <h2 class="font-display text-4xl md:text-5xl text-white leading-tight">Travel with a reason</h2>
+        <p class="mt-5 text-sand/80 leading-relaxed max-w-lg">Permits fund protection. Local guides and camps create employment. Low-impact routing keeps wild places wild. Every journey can leave more than footprints.</p>
         <div class="mt-8">
-            <a href="{{ route('travel-with-a-reason') }}" class="btn-outline">Discover our approach</a>
+            <a href="{{ route('travel-with-a-reason') }}" class="btn-outline">See how we give back</a>
         </div>
     </div>
 </section>
 
+{{-- 11. True Pulse --}}
 @if($pulseItems->isNotEmpty())
 <section class="surface surface--white relative py-20 lg:py-28">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
@@ -649,6 +462,7 @@
 </section>
 @endif
 
+{{-- 12. Selected stays --}}
 @if($stays->isNotEmpty())
 <section class="surface surface--beige relative py-20 lg:py-28 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
@@ -669,55 +483,47 @@
 </section>
 @endif
 
+{{-- 13. Guest Voices --}}
 @if($reviews->isNotEmpty())
-<section class="surface surface--brown relative py-24 lg:py-32">
+<section class="surface surface--brown relative py-20 lg:py-28">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <div class="flex flex-wrap items-end justify-between gap-4 mb-12 reveal">
+        <div class="reveal flex flex-wrap items-end justify-between gap-4 mb-12">
             <div>
-                <p class="section-eyebrow">Guest reviews</p>
-                <h2 class="font-display text-4xl md:text-5xl text-charcoal">The journeys our guests remember</h2>
+                <p class="section-eyebrow">Guest voices</p>
+                <h2 class="font-display text-4xl md:text-5xl text-charcoal">What travellers say</h2>
             </div>
-            <div class="flex gap-4 text-sm">
-                @if(!empty($reviewLinks['google']))
-                    <a href="{{ $reviewLinks['google'] }}" class="tracking-[0.12em] uppercase text-forest hover:opacity-70 transition" target="_blank" rel="noopener">Google reviews</a>
-                @endif
-                @if(!empty($reviewLinks['tripadvisor']))
-                    <a href="{{ $reviewLinks['tripadvisor'] }}" class="tracking-[0.12em] uppercase text-forest hover:opacity-70 transition" target="_blank" rel="noopener">Tripadvisor</a>
-                @endif
-            </div>
+            <a href="{{ route('reviews.index') }}" class="text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">Read all guest reviews</a>
         </div>
-        <div class="marquee reveal" data-marquee>
-            <div class="marquee__track" data-marquee-inner>
-                @foreach([false, true] as $isClone)
-                    <div class="marquee__group" @if($isClone) aria-hidden="true" @endif>
-                        @foreach($reviews as $review)
-                            <blockquote class="w-[82vw] shrink-0 sm:w-[28rem] lg:w-[32rem] px-2">
-                                <p class="font-display text-2xl md:text-3xl text-charcoal leading-snug">“{{ $review->quote }}”</p>
-                                <footer class="mt-6 pt-4 border-t border-forest/15 text-sm text-muted">
-                                    <span class="text-charcoal">{{ $review->guest_name }}</span>
-                                    @if($review->guest_country)
-                                        · {{ $review->guest_country }}
-                                    @endif
-                                    @if($review->journey)
-                                        · <a href="{{ route('journeys.show', $review->journey) }}" class="hover:text-forest transition" @if($isClone) tabindex="-1" @endif>{{ $review->journey->name }}</a>
-                                    @endif
-                                </footer>
-                            </blockquote>
-                        @endforeach
-                    </div>
-                @endforeach
-            </div>
+        <div class="guest-voices reveal-stagger">
+            @foreach($reviews as $review)
+                <blockquote class="guest-voices__card">
+                    <p class="font-display text-2xl md:text-3xl text-charcoal leading-snug">“{{ $review->quote }}”</p>
+                    <footer class="mt-6 pt-4 border-t border-forest/15 text-sm text-muted">
+                        <span class="text-charcoal">{{ $review->guest_name }}</span>
+                        @if($review->guest_country)
+                            · {{ $review->guest_country }}
+                        @endif
+                        @if($review->journey)
+                            · <a href="{{ route('journeys.show', $review->journey) }}" class="hover:text-forest transition">{{ $review->journey->name }}</a>
+                        @endif
+                    </footer>
+                </blockquote>
+            @endforeach
         </div>
     </div>
 </section>
 @endif
 
+{{-- 14. From the Field --}}
 @if($fieldNotes->isNotEmpty())
 <section class="surface surface--white py-20 lg:py-24">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <div class="reveal mb-10">
-            <p class="section-eyebrow">From the Field</p>
-            <h2 class="font-display text-4xl md:text-5xl text-charcoal">Practical answers from the ground</h2>
+        <div class="reveal mb-10 flex flex-wrap items-end justify-between gap-4">
+            <div>
+                <p class="section-eyebrow">From the Field</p>
+                <h2 class="font-display text-4xl md:text-5xl text-charcoal">Notes from East Africa</h2>
+            </div>
+            <a href="{{ route('insiders.index', ['type' => 'field']) }}" class="text-sm tracking-[0.14em] uppercase text-forest hover:opacity-70 transition">All field notes</a>
         </div>
         <div class="field-notes reveal-stagger">
             @foreach($fieldNotes as $article)
@@ -734,7 +540,48 @@
 </section>
 @endif
 
-<x-page-cta :heading="$homeCtaHeading" :text="$homeCtaText" :button="$homeCtaButton">
+{{-- 15. Quick FAQs --}}
+@if($faqs->isNotEmpty())
+<section class="surface surface--beige relative py-16 lg:py-24">
+    <div class="mx-auto max-w-3xl px-5 lg:px-8">
+        <div class="reveal text-center mb-10">
+            <p class="section-eyebrow">Quick FAQs</p>
+            <h2 class="font-display text-4xl md:text-5xl text-charcoal">Questions guests ask first</h2>
+        </div>
+        <div class="faq-list" x-data="{ open: 0 }">
+            @foreach($faqs as $i => $faq)
+                <div class="faq-item">
+                    <button
+                        type="button"
+                        class="faq-item__trigger"
+                        @click="open = open === {{ $i }} ? null : {{ $i }}"
+                        :aria-expanded="(open === {{ $i }}).toString()"
+                    >
+                        <span>{{ $faq->question }}</span>
+                        <span class="faq-item__icon" x-text="open === {{ $i }} ? '−' : '+'" aria-hidden="true"></span>
+                    </button>
+                    <div class="faq-item__panel" x-show="open === {{ $i }}" x-cloak>
+                        <p>{{ $faq->answer }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        <div class="mt-10 text-center reveal">
+            <a href="{{ route('faqs.index') }}" class="btn-outline-dark">View all FAQs</a>
+        </div>
+    </div>
+</section>
+@endif
+
+{{-- 16. Final CTA --}}
+<x-page-cta
+    :heading="$homeCtaHeading"
+    :text="$homeCtaText"
+    button="Journey Finder"
+    :href="route('journeys.finder')"
+    :secondary="route('plan')"
+    :secondary-label="$homeCtaButton"
+>
     @if($whatsappUrl)
         <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener" class="text-sm tracking-[0.14em] uppercase text-white/75 hover:text-white transition [text-shadow:0_1px_12px_rgb(0_0_0_/_0.4)]">WhatsApp</a>
     @endif

@@ -17,7 +17,7 @@
     @stack('head')
 </head>
 <body
-    class="min-h-screen flex flex-col bg-white"
+    class="min-h-screen flex flex-col bg-cream"
     x-data="{
         mobileOpen: false,
         mobilePanel: null,
@@ -123,29 +123,29 @@
 >
     <div class="sticky top-0 z-50" data-site-chrome x-init="$nextTick(() => { const set = () => document.documentElement.style.setProperty('--site-chrome-height', $el.offsetHeight + 'px'); set(); new ResizeObserver(set).observe($el); })">
     {{-- Utility bar (AST trust cues) --}}
-    <div class="hidden md:block bg-forest text-white">
-        <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-2 lg:px-8">
-            <div class="flex flex-wrap items-center gap-x-5 gap-y-1">
+    <div class="site-utility bg-forest text-white">
+        <div class="site-utility__inner mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-1.5 sm:gap-4 sm:px-5 sm:py-2 lg:px-8">
+            <div class="flex min-w-0 items-center gap-x-3 sm:gap-x-5">
                 @if($siteContact['phone'] ?? null)
-                    <a class="utility-link" href="tel:{{ preg_replace('/\s+/', '', $siteContact['phone']) }}">{{ $siteContact['phone'] }}</a>
+                    <a class="utility-link shrink-0" href="tel:{{ preg_replace('/\s+/', '', $siteContact['phone']) }}">{{ $siteContact['phone'] }}</a>
                 @endif
                 @if($siteContact['email'] ?? null)
-                    <a class="utility-link" href="mailto:{{ $siteContact['email'] }}">{{ $siteContact['email'] }}</a>
+                    <a class="utility-link site-utility__email truncate" href="mailto:{{ $siteContact['email'] }}">{{ $siteContact['email'] }}</a>
                 @endif
             </div>
-            <div class="flex flex-wrap items-center gap-x-5 gap-y-1">
+            <div class="flex shrink-0 items-center gap-x-3 sm:gap-x-5">
                 @if(!empty($reviewLinks['google'] ?? null))
-                    <a class="utility-link" href="{{ $reviewLinks['google'] }}" target="_blank" rel="noopener">Google reviews</a>
+                    <a class="utility-link site-utility__review" href="{{ $reviewLinks['google'] }}" target="_blank" rel="noopener">Google reviews</a>
                 @endif
                 @if(!empty($reviewLinks['tripadvisor'] ?? null))
-                    <a class="utility-link" href="{{ $reviewLinks['tripadvisor'] }}" target="_blank" rel="noopener">Tripadvisor</a>
+                    <a class="utility-link site-utility__review" href="{{ $reviewLinks['tripadvisor'] }}" target="_blank" rel="noopener">Tripadvisor</a>
                 @endif
                 @auth
                     @if(auth()->user()->isAdmin())
                         <a class="utility-link" href="{{ route('admin.dashboard') }}">Admin</a>
                     @else
-                        <a class="utility-link" href="{{ route('account.favorites') }}">My journeys</a>
-                        <a class="utility-link" href="{{ route('account.requests') }}">My requests</a>
+                        <a class="utility-link site-utility__account" href="{{ route('account.favorites') }}">My journeys</a>
+                        <a class="utility-link site-utility__account" href="{{ route('account.requests') }}">My requests</a>
                         <a class="utility-link" href="{{ route('account.profile') }}">Profile</a>
                     @endif
                     <form method="POST" action="{{ route('logout') }}" class="inline">
@@ -185,7 +185,7 @@
                     <svg class="h-5 w-5 lg:h-4 lg:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.3-4.3M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/>
                     </svg>
-                    <span class="hidden sm:inline text-[11px] tracking-[0.16em] uppercase">Find your journey</span>
+                    <span class="hidden sm:inline text-[13px] tracking-[0.16em] uppercase">Find your journey</span>
                 </button>
             </div>
 
@@ -194,7 +194,7 @@
             </a>
 
             <div class="flex items-center justify-end gap-4 justify-self-end">
-                <a href="{{ route('plan') }}" class="btn-primary !px-3.5 !py-2 text-[10px] sm:!px-5 sm:!py-2.5 sm:text-[11px] lg:!px-6 lg:!py-3 whitespace-nowrap" @click="closeNav(); closeMobile()">
+                <a href="{{ route('plan') }}" class="btn-primary !px-3.5 !py-2 text-[12px] sm:!px-5 sm:!py-2.5 sm:text-[13px] lg:!px-6 lg:!py-3 whitespace-nowrap" @click="closeNav(); closeMobile()">
                     <span class="sm:hidden">Plan</span>
                     <span class="hidden sm:inline">Plan your journey</span>
                 </a>
@@ -457,7 +457,7 @@
                     {{-- Desktop columns --}}
                     <div class="hidden md:grid gap-10 md:grid-cols-3">
                         <div>
-                            <p class="text-[11px] tracking-[0.2em] uppercase text-white/60 mb-4">Explore</p>
+                            <p class="text-[13px] tracking-[0.2em] uppercase text-white/60 mb-4">Explore</p>
                             <div class="space-y-2 text-sm text-white/90">
                                 <a href="{{ route('journeys.index') }}" class="block hover:text-white transition">Journeys</a>
                                 <a href="{{ route('destinations.index') }}" class="block hover:text-white transition">Destinations</a>
@@ -468,7 +468,7 @@
                             </div>
                         </div>
                         <div>
-                            <p class="text-[11px] tracking-[0.2em] uppercase text-white/60 mb-4">Contact</p>
+                            <p class="text-[13px] tracking-[0.2em] uppercase text-white/60 mb-4">Contact</p>
                             @if($siteContact['address'] ?? null)
                                 <p class="text-sm text-white/90 whitespace-pre-line">{{ $siteContact['address'] }}</p>
                             @endif
@@ -483,7 +483,7 @@
                             @endif
                         </div>
                         <div>
-                            <p class="text-[11px] tracking-[0.2em] uppercase text-white/60 mb-4">Follow</p>
+                            <p class="text-[13px] tracking-[0.2em] uppercase text-white/60 mb-4">Follow</p>
                             <div class="flex flex-wrap gap-4 text-sm text-white/90">
                                 @if(!empty($siteSocial['instagram']))
                                     <a href="{{ $siteSocial['instagram'] }}" class="hover:text-white transition" target="_blank" rel="noopener">Instagram</a>
@@ -507,7 +507,7 @@
                     {{-- Mobile accordion footer --}}
                     <div class="md:hidden divide-y divide-white/15 border-y border-white/15">
                         <div>
-                            <button type="button" class="flex w-full items-center justify-between py-4 text-[11px] tracking-[0.2em] uppercase text-white/80" @click="footerOpen = footerOpen === 'explore' ? null : 'explore'">
+                            <button type="button" class="flex w-full items-center justify-between py-4 text-[13px] tracking-[0.2em] uppercase text-white/80" @click="footerOpen = footerOpen === 'explore' ? null : 'explore'">
                                 Explore
                                 <span x-text="footerOpen === 'explore' ? '−' : '+'"></span>
                             </button>
@@ -520,7 +520,7 @@
                             </div>
                         </div>
                         <div>
-                            <button type="button" class="flex w-full items-center justify-between py-4 text-[11px] tracking-[0.2em] uppercase text-white/80" @click="footerOpen = footerOpen === 'contact' ? null : 'contact'">
+                            <button type="button" class="flex w-full items-center justify-between py-4 text-[13px] tracking-[0.2em] uppercase text-white/80" @click="footerOpen = footerOpen === 'contact' ? null : 'contact'">
                                 Contact
                                 <span x-text="footerOpen === 'contact' ? '−' : '+'"></span>
                             </button>
@@ -537,7 +537,7 @@
                             </div>
                         </div>
                         <div>
-                            <button type="button" class="flex w-full items-center justify-between py-4 text-[11px] tracking-[0.2em] uppercase text-white/80" @click="footerOpen = footerOpen === 'legal' ? null : 'legal'">
+                            <button type="button" class="flex w-full items-center justify-between py-4 text-[13px] tracking-[0.2em] uppercase text-white/80" @click="footerOpen = footerOpen === 'legal' ? null : 'legal'">
                                 Legal &amp; social
                                 <span x-text="footerOpen === 'legal' ? '−' : '+'"></span>
                             </button>

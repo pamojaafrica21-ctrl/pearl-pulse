@@ -14,7 +14,7 @@
         @endif
     </div>
     <div class="destination-card-meta">
-        <p class="text-[11px] tracking-[0.18em] uppercase text-muted">Destination</p>
+        <p class="text-[13px] tracking-[0.18em] uppercase text-muted">Destination</p>
         <h3 class="font-display text-2xl md:text-3xl text-charcoal mt-1 group-hover:text-forest transition-colors">
             {{ $country->name }}
         </h3>

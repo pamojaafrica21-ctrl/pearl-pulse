@@ -45,7 +45,7 @@
                     <a
                         href="{{ $link['href'] }}"
                         @class([
-                            'px-4 py-2.5 text-[11px] tracking-[0.14em] uppercase transition border',
+                            'px-4 py-2.5 text-[13px] tracking-[0.14em] uppercase transition border',
                             'border-forest bg-forest text-white' => $active === $key,
                             'border-charcoal/15 text-charcoal/70 hover:border-forest hover:text-forest' => $active !== $key,
                         ])
@@ -53,7 +53,7 @@
                         {{ $link['label'] }}
                     </a>
                 @endforeach
-                <a href="{{ route('plan') }}" class="px-4 py-2.5 text-[11px] tracking-[0.14em] uppercase border border-charcoal/15 text-charcoal/70 hover:border-forest hover:text-forest transition">
+                <a href="{{ route('plan') }}" class="px-4 py-2.5 text-[13px] tracking-[0.14em] uppercase border border-charcoal/15 text-charcoal/70 hover:border-forest hover:text-forest transition">
                     Plan a journey
                 </a>
             </nav>

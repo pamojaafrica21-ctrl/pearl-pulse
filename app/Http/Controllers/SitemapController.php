@@ -8,6 +8,7 @@ use App\Models\Destination;
 use App\Models\Experience;
 use App\Models\Journey;
 use App\Models\Page;
+use App\Models\Specialist;
 use App\Models\Stay;
 use Illuminate\Http\Response;
 
@@ -20,6 +21,7 @@ class SitemapController extends Controller
             'destinations' => Destination::query()->published()->with('country')->orderBy('updated_at', 'desc')->get(),
             'journeys' => Journey::query()->published()->orderBy('updated_at', 'desc')->get(),
             'experiences' => Experience::query()->published()->orderBy('updated_at', 'desc')->get(),
+            'specialists' => Specialist::query()->published()->orderBy('updated_at', 'desc')->get(),
             'articles' => Article::query()->published()->orderBy('updated_at', 'desc')->get(),
             'stays' => Stay::query()->published()->orderBy('updated_at', 'desc')->get(),
             'pages' => Page::query()->published()->get(),
