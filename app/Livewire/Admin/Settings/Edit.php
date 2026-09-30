@@ -81,6 +81,22 @@ class Edit extends Component
 
     public string $about_cta_text = '';
 
+    public string $reason_eyebrow = '';
+
+    public string $reason_title = '';
+
+    public string $reason_lead = '';
+
+    public string $reason_intro = '';
+
+    public array $reason_pillars = [];
+
+    public array $reason_partners = [];
+
+    public string $reason_cta_heading = '';
+
+    public string $reason_cta_text = '';
+
     public string $footer_blurb = '';
 
     public string $contact_address = '';
@@ -88,6 +104,8 @@ class Edit extends Component
     public string $contact_phone = '';
 
     public string $contact_email = '';
+
+    public string $contact_map_embed = '';
 
     public string $admin_email = '';
 
@@ -173,11 +191,20 @@ class Edit extends Component
         $this->about_approach_body = (string) $settings->get('about_approach_body', '');
         $this->about_cta_heading = (string) $settings->get('about_cta_heading', '');
         $this->about_cta_text = (string) $settings->get('about_cta_text', '');
+        $this->reason_eyebrow = (string) $settings->get('reason_eyebrow', '');
+        $this->reason_title = (string) $settings->get('reason_title', '');
+        $this->reason_lead = (string) $settings->get('reason_lead', '');
+        $this->reason_intro = (string) $settings->get('reason_intro', '');
+        $this->reason_pillars = $this->decodeList($settings->get('reason_pillars'), 4);
+        $this->reason_partners = $this->decodeList($settings->get('reason_partners'), 4);
+        $this->reason_cta_heading = (string) $settings->get('reason_cta_heading', '');
+        $this->reason_cta_text = (string) $settings->get('reason_cta_text', '');
         $this->footer_blurb = (string) $settings->get('footer_blurb', '');
         $this->contact_address = (string) $settings->get('contact_address', '');
         $this->contact_phone = (string) $settings->get('contact_phone', '');
         $this->contact_whatsapp = (string) $settings->get('contact_whatsapp', '');
         $this->contact_email = (string) $settings->get('contact_email', '');
+        $this->contact_map_embed = (string) $settings->get('contact_map_embed', '');
         $this->admin_email = (string) $settings->get('admin_email', '');
         $this->social_instagram = (string) $settings->get('social_instagram', '');
         $this->social_facebook = (string) $settings->get('social_facebook', '');
@@ -312,10 +339,23 @@ class Edit extends Component
             'about_approach_body' => ['nullable', 'string', 'max:2000'],
             'about_cta_heading' => ['nullable', 'string', 'max:180'],
             'about_cta_text' => ['nullable', 'string', 'max:500'],
+            'reason_eyebrow' => ['nullable', 'string', 'max:120'],
+            'reason_title' => ['nullable', 'string', 'max:180'],
+            'reason_lead' => ['nullable', 'string', 'max:500'],
+            'reason_intro' => ['nullable', 'string', 'max:5000'],
+            'reason_pillars' => ['array'],
+            'reason_pillars.*.title' => ['nullable', 'string', 'max:120'],
+            'reason_pillars.*.text' => ['nullable', 'string', 'max:500'],
+            'reason_partners' => ['array'],
+            'reason_partners.*.title' => ['nullable', 'string', 'max:120'],
+            'reason_partners.*.text' => ['nullable', 'string', 'max:500'],
+            'reason_cta_heading' => ['nullable', 'string', 'max:180'],
+            'reason_cta_text' => ['nullable', 'string', 'max:500'],
             'footer_blurb' => ['nullable', 'string', 'max:500'],
             'contact_address' => ['nullable', 'string', 'max:500'],
             'contact_phone' => ['nullable', 'string', 'max:60'],
             'contact_email' => ['nullable', 'email', 'max:255'],
+            'contact_map_embed' => ['nullable', 'url', 'max:2000'],
             'admin_email' => ['nullable', 'email', 'max:255'],
             'social_instagram' => ['nullable', 'url', 'max:500'],
             'social_facebook' => ['nullable', 'url', 'max:500'],
@@ -366,8 +406,10 @@ class Edit extends Component
             'about_eyebrow', 'about_title', 'about_lead', 'about_content',
             'about_approach_heading', 'about_approach_body',
             'about_cta_heading', 'about_cta_text',
+            'reason_eyebrow', 'reason_title', 'reason_lead', 'reason_intro',
+            'reason_cta_heading', 'reason_cta_text',
             'footer_blurb',
-            'contact_address', 'contact_phone', 'contact_whatsapp', 'contact_email', 'admin_email',
+            'contact_address', 'contact_phone', 'contact_whatsapp', 'contact_email', 'contact_map_embed', 'admin_email',
             'social_instagram', 'social_facebook', 'social_twitter',
             'review_google_url', 'review_tripadvisor_url',
         ];
@@ -411,6 +453,8 @@ class Edit extends Component
 
         $settings->set('home_pillars', json_encode(array_values($this->home_pillars)));
         $settings->set('about_values', json_encode(array_values($this->about_values)));
+        $settings->set('reason_pillars', json_encode(array_values($this->reason_pillars)));
+        $settings->set('reason_partners', json_encode(array_values($this->reason_partners)));
         $settings->set('hero_slides', json_encode(array_values($slides)));
 
         session()->flash('status', 'Settings saved.');

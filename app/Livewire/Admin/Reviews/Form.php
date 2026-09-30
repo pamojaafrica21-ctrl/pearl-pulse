@@ -4,10 +4,14 @@ namespace App\Livewire\Admin\Reviews;
 
 use App\Models\Journey;
 use App\Models\Review;
+use App\Services\ImageUploader;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Form extends Component
 {
+    use WithFileUploads;
+
     public ?Review $review = null;
 
     public string $guest_name = '';
@@ -22,6 +26,8 @@ class Form extends Component
 
     public int $sort_order = 0;
 
+    public $cover;
+
     public function mount(?Review $review = null): void
     {
         if ($review?->exists) {
@@ -35,9 +41,13 @@ class Form extends Component
         }
     }
 
-    public function save()
+    public function save(ImageUploader $uploader)
     {
-        $this->validate(['guest_name' => ['required'], 'quote' => ['required']]);
+        $this->validate([
+            'guest_name' => ['required'],
+            'quote' => ['required'],
+            'cover' => ['nullable', 'image', 'max:5120'],
+        ]);
 
         $data = [
             'guest_name' => $this->guest_name,
@@ -49,6 +59,11 @@ class Form extends Component
         ];
 
         $this->review = $this->review?->exists ? tap($this->review)->update($data) : Review::query()->create($data);
+
+        if ($this->cover) {
+            $uploader->delete($this->review->cover_path);
+            $this->review->update(['cover_path' => $uploader->store($this->cover, 'reviews/'.$this->review->id)]);
+        }
 
         session()->flash('status', 'Review saved.');
 

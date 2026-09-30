@@ -15,6 +15,8 @@ class Form extends Component
 
     public string $group = 'site';
 
+    public string $topic = '';
+
     public string $status = 'published';
 
     public int $sort_order = 0;
@@ -26,6 +28,7 @@ class Form extends Component
             $this->question = (string) $faq->question;
             $this->answer = (string) $faq->answer;
             $this->group = (string) $faq->group;
+            $this->topic = (string) ($faq->topic ?? '');
             $this->status = (string) $faq->status;
             $this->sort_order = (int) $faq->sort_order;
         }
@@ -33,12 +36,16 @@ class Form extends Component
 
     public function save()
     {
-        $this->validate(['question' => ['required']]);
+        $this->validate([
+            'question' => ['required'],
+            'topic' => ['nullable', 'in:'.implode(',', array_keys(Faq::TOPICS))],
+        ]);
 
         $data = [
             'question' => $this->question,
             'answer' => $this->answer ?: null,
             'group' => $this->group,
+            'topic' => $this->group === 'site' ? ($this->topic ?: null) : null,
             'status' => $this->status,
             'sort_order' => $this->sort_order,
         ];
@@ -52,7 +59,8 @@ class Form extends Component
 
     public function render()
     {
-        return view('livewire.admin.faqs.form')
-            ->layout('layouts.admin', ['heading' => $this->faq?->exists ? 'Edit FAQ' : 'New FAQ']);
+        return view('livewire.admin.faqs.form', [
+            'topics' => Faq::TOPICS,
+        ])->layout('layouts.admin', ['heading' => $this->faq?->exists ? 'Edit FAQ' : 'New FAQ']);
     }
 }

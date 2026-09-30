@@ -244,10 +244,15 @@
                 <div class="mobile-drawer__section">
                     <p class="mobile-drawer__eyebrow">Popular</p>
                     <a href="{{ route('journeys.finder') }}" class="mobile-drawer__text-link" @click="closeMobile()">Journey Finder</a>
+                    <a href="{{ route('how-it-works') }}" class="mobile-drawer__text-link" @click="closeMobile()">How it works</a>
+                    <a href="{{ route('specialist.index') }}" class="mobile-drawer__text-link" @click="closeMobile()">Specialist journeys</a>
                     <a href="{{ route('true-pulse') }}" class="mobile-drawer__text-link" @click="closeMobile()">True Pulse</a>
                     <a href="{{ route('insiders.index') }}" class="mobile-drawer__text-link" @click="closeMobile()">Insiders</a>
-                    <a href="{{ route('stays.index') }}" class="mobile-drawer__text-link" @click="closeMobile()">Selected stays</a>
-                    <a href="{{ route('reviews.index') }}" class="mobile-drawer__text-link" @click="closeMobile()">Guest reviews</a>
+                    <a href="{{ route('faqs.index') }}" class="mobile-drawer__text-link" @click="closeMobile()">FAQs</a>
+                    <a href="{{ route('stays.index') }}" class="mobile-drawer__text-link" @click="closeMobile()">Preferred lodges</a>
+                    <a href="{{ route('reviews.index') }}" class="mobile-drawer__text-link" @click="closeMobile()">Guest stories</a>
+                    <a href="{{ route('contact') }}" class="mobile-drawer__text-link" @click="closeMobile()">Speak to a specialist</a>
+                    <a href="{{ route('legal', 'privacy') }}" class="mobile-drawer__text-link" @click="closeMobile()">Privacy &amp; terms</a>
                     <a href="{{ route('plan') }}" class="mobile-drawer__text-link" @click="closeMobile()">Plan your journey</a>
                 </div>
 
@@ -468,13 +473,18 @@
                                 <a href="{{ route('journeys.index') }}" class="block hover:text-white transition">Journeys</a>
                                 <a href="{{ route('destinations.index') }}" class="block hover:text-white transition">Destinations</a>
                                 <a href="{{ route('experiences.index') }}" class="block hover:text-white transition">Experiences</a>
-                                <a href="{{ route('stays.index') }}" class="block hover:text-white transition">Selected stays</a>
+                                <a href="{{ route('how-it-works') }}" class="block hover:text-white transition">How it works</a>
+                                <a href="{{ route('stays.index') }}" class="block hover:text-white transition">Preferred lodges</a>
+                                <a href="{{ route('faqs.index') }}" class="block hover:text-white transition">FAQs</a>
+                                <a href="{{ route('reviews.index') }}" class="block hover:text-white transition">Guest stories</a>
                                 <a href="{{ route('about') }}" class="block hover:text-white transition">About</a>
                                 <a href="{{ route('our-people') }}" class="block hover:text-white transition">Our people</a>
+                                <a href="{{ route('contact') }}" class="block hover:text-white transition">Contact</a>
                             </div>
                         </div>
                         <div>
                             <p class="text-[13px] tracking-[0.2em] uppercase text-white/60 mb-4">Contact</p>
+                            <p class="mb-3 text-sm"><a class="text-white/90 hover:text-white transition" href="{{ route('contact') }}">Speak to a specialist</a></p>
                             @if($siteContact['address'] ?? null)
                                 <p class="text-sm text-white/90 whitespace-pre-line">{{ $siteContact['address'] }}</p>
                             @endif
@@ -521,8 +531,13 @@
                                 <a href="{{ route('journeys.index') }}" class="block hover:text-white">Journeys</a>
                                 <a href="{{ route('destinations.index') }}" class="block hover:text-white">Destinations</a>
                                 <a href="{{ route('experiences.index') }}" class="block hover:text-white">Experiences</a>
-                                <a href="{{ route('stays.index') }}" class="block hover:text-white">Selected stays</a>
+                                <a href="{{ route('how-it-works') }}" class="block hover:text-white">How it works</a>
+                                <a href="{{ route('stays.index') }}" class="block hover:text-white">Preferred lodges</a>
+                                <a href="{{ route('faqs.index') }}" class="block hover:text-white">FAQs</a>
+                                <a href="{{ route('reviews.index') }}" class="block hover:text-white">Guest stories</a>
                                 <a href="{{ route('about') }}" class="block hover:text-white">About</a>
+                                <a href="{{ route('our-people') }}" class="block hover:text-white">Our people</a>
+                                <a href="{{ route('contact') }}" class="block hover:text-white">Contact</a>
                             </div>
                         </div>
                         <div>
@@ -531,6 +546,7 @@
                                 <span x-text="footerOpen === 'contact' ? '−' : '+'"></span>
                             </button>
                             <div x-show="footerOpen === 'contact'" x-cloak class="pb-4 space-y-2 text-sm text-white/90">
+                                <a href="{{ route('contact') }}" class="block hover:text-white">Speak to a specialist</a>
                                 @if($siteContact['phone'] ?? null)
                                     <a class="block hover:text-white" href="tel:{{ preg_replace('/\s+/', '', $siteContact['phone']) }}">{{ $siteContact['phone'] }}</a>
                                 @endif
@@ -553,6 +569,7 @@
                                 @endif
                                 <a href="{{ route('legal', 'privacy') }}" class="block hover:text-white">Privacy</a>
                                 <a href="{{ route('legal', 'terms') }}" class="block hover:text-white">Terms</a>
+                                <a href="{{ route('legal', 'cancellation') }}" class="block hover:text-white">Cancellation</a>
                                 <a href="{{ route('legal', 'cookies') }}" class="block hover:text-white">Cookies</a>
                             </div>
                         </div>

@@ -14,11 +14,13 @@ use Illuminate\Support\Facades\Cache;
 
 class PublicNav
 {
-    public const CACHE_KEY = 'public_nav_shell_v7';
+    public const CACHE_KEY = 'public_nav_shell_v9';
 
     public static function forget(): void
     {
         Cache::forget(self::CACHE_KEY);
+        Cache::forget('public_nav_shell_v8');
+        Cache::forget('public_nav_shell_v7');
         Cache::forget('public_nav_shell_v6');
         Cache::forget('public_nav_shell_v5');
         Cache::forget('public_nav_shell_v4');
@@ -129,8 +131,22 @@ class PublicNav
                     [
                         'label' => 'Selected stays',
                         'href' => route('stays.index'),
-                        'teaser' => 'Lodges we choose. We do not own them.',
+                        'teaser' => 'Preferred lodges and camps. We do not own them.',
                         'image' => $stay?->coverThumbUrl() ?: ($stay?->coverUrl() ?: $heroImage),
+                        'muted' => true,
+                    ],
+                    [
+                        'label' => 'How it works',
+                        'href' => route('how-it-works'),
+                        'teaser' => 'Five clear steps from first note to the forest floor.',
+                        'image' => $heroImage,
+                        'muted' => true,
+                    ],
+                    [
+                        'label' => 'Guest stories',
+                        'href' => route('reviews.index'),
+                        'teaser' => 'Quotes and photographs from travellers we have hosted.',
+                        'image' => $pulse?->coverThumbUrl() ?: ($pulse?->coverUrl() ?: $heroImage),
                         'muted' => true,
                     ],
                     [
@@ -145,6 +161,13 @@ class PublicNav
                         'href' => route('insiders.index'),
                         'teaser' => 'Guides from the ground — permits, seasons, packing.',
                         'image' => $article?->coverThumbUrl() ?: ($article?->coverUrl() ?: $heroImage),
+                        'muted' => true,
+                    ],
+                    [
+                        'label' => 'Privacy & terms',
+                        'href' => route('legal', 'privacy'),
+                        'teaser' => 'Privacy, terms, cancellation, and cookie policies.',
+                        'image' => $heroImage,
                         'muted' => true,
                     ],
                 ],

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Journey;
 use App\Models\Specialist;
 use Illuminate\View\View;
 
@@ -20,6 +21,13 @@ class SpecialistController extends Controller
 
         return view('public.specialists.show', [
             'specialist' => $specialist,
+            'relatedJourneys' => Journey::query()
+                ->published()
+                ->with('countries')
+                ->orderByDesc('is_featured')
+                ->orderBy('sort_order')
+                ->take(3)
+                ->get(),
             'others' => Specialist::query()
                 ->published()
                 ->where('id', '!=', $specialist->id)

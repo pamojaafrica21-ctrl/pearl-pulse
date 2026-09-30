@@ -50,6 +50,7 @@ class SettingService
             'email' => $this->get('contact_email', ''),
             'admin_email' => $this->get('admin_email', config('mail.from.address')),
             'whatsapp' => $this->get('contact_whatsapp', ''),
+            'map_embed' => $this->get('contact_map_embed', ''),
         ];
     }
 

@@ -34,9 +34,19 @@ class PageController extends Controller
         return view('public.about-people', compact('team'));
     }
 
-    public function reason(): View
+    public function reason(SettingService $settings): View
     {
-        return view('public.about-reason');
+        return view('public.about-reason', [
+            'eyebrow' => $settings->get('reason_eyebrow', 'Travel with a reason'),
+            'title' => $settings->get('reason_title', 'Conservation, community, local people'),
+            'lead' => $settings->get('reason_lead', ''),
+            'intro' => $settings->get('reason_intro', ''),
+            'pillars' => $settings->listItems('reason_pillars', 4),
+            'partners' => $settings->listItems('reason_partners', 4),
+            'ctaHeading' => $settings->get('reason_cta_heading', ''),
+            'ctaText' => $settings->get('reason_cta_text', ''),
+            'heroImage' => $settings->heroImageUrl(),
+        ]);
     }
 
     public function plan(SettingService $settings): View
@@ -44,6 +54,20 @@ class PageController extends Controller
         return view('public.plan', [
             'whatsappUrl' => $settings->whatsappUrl('Hello Pearl Pulse — I would like to plan a journey.'),
         ]);
+    }
+
+    public function contact(SettingService $settings): View
+    {
+        return view('public.contact', [
+            'contact' => $settings->contact(),
+            'whatsappUrl' => $settings->whatsappUrl('Hello Pearl Pulse — I would like to speak with a specialist.'),
+            'mapEmbed' => $settings->get('contact_map_embed', ''),
+        ]);
+    }
+
+    public function howItWorks(): View
+    {
+        return view('public.how-it-works');
     }
 
     public function legal(string $page): View

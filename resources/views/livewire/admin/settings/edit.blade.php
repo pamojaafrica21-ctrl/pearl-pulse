@@ -273,6 +273,48 @@
         </section>
 
         <section class="space-y-5">
+            <h2 class="font-display text-2xl text-forest">Travel with a reason</h2>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Eyebrow</label>
+                <input type="text" wire:model="reason_eyebrow" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Title</label>
+                <input type="text" wire:model="reason_title" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Lead</label>
+                <textarea rows="2" wire:model="reason_lead" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Intro</label>
+                <textarea rows="5" wire:model="reason_intro" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+            <p class="text-sm text-muted pt-2">Conservation pillars</p>
+            @foreach($reason_pillars as $index => $pillar)
+                <div class="space-y-3 border-t border-sand-deep/30 pt-4" wire:key="reason-pillar-{{ $index }}">
+                    <input type="text" wire:model="reason_pillars.{{ $index }}.title" placeholder="Pillar {{ $index + 1 }} title" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                    <textarea rows="2" wire:model="reason_pillars.{{ $index }}.text" placeholder="Pillar {{ $index + 1 }} text" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+                </div>
+            @endforeach
+            <p class="text-sm text-muted pt-2">Partners & projects</p>
+            @foreach($reason_partners as $index => $partner)
+                <div class="space-y-3 border-t border-sand-deep/30 pt-4" wire:key="reason-partner-{{ $index }}">
+                    <input type="text" wire:model="reason_partners.{{ $index }}.title" placeholder="Partner {{ $index + 1 }} title" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                    <textarea rows="2" wire:model="reason_partners.{{ $index }}.text" placeholder="Partner {{ $index + 1 }} text" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+                </div>
+            @endforeach
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">CTA heading</label>
+                <input type="text" wire:model="reason_cta_heading" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">CTA text</label>
+                <textarea rows="2" wire:model="reason_cta_text" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+        </section>
+
+        <section class="space-y-5">
             <h2 class="font-display text-2xl text-forest">Footer</h2>
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Blurb</label>
@@ -299,6 +341,11 @@
                     <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Public email</label>
                     <input type="email" wire:model="contact_email" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
                 </div>
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Map embed URL</label>
+                <input type="url" wire:model="contact_map_embed" placeholder="https://www.google.com/maps/embed?…" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                <p class="mt-1 text-xs text-muted">Paste a Google Maps embed URL (the src of the iframe). Shown on the Contact page.</p>
             </div>
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Admin email (enquiry notifications)</label>

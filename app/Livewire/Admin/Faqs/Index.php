@@ -29,6 +29,7 @@ class Index extends Component
             'columns' => [
                 ['key' => 'question', 'label' => 'Question', 'type' => 'primary'],
                 ['key' => 'group', 'label' => 'Group'],
+                ['key' => 'topic', 'label' => 'Topic'],
                 ['key' => 'status', 'label' => 'Status', 'type' => 'status'],
                 ['key' => 'updated_at', 'label' => 'Updated', 'type' => 'date'],
             ],

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    @foreach(['/', '/journeys', '/journeys/finder', '/destinations', '/experiences', '/specialist', '/reviews', '/faqs', '/true-pulse', '/insiders', '/plan-your-journey', '/about', '/about/our-people', '/about/travel-with-a-reason', '/stays'] as $path)
+    @foreach(['/', '/journeys', '/journeys/finder', '/destinations', '/experiences', '/specialist', '/reviews', '/faqs', '/how-it-works', '/true-pulse', '/insiders', '/plan-your-journey', '/contact', '/about', '/about/our-people', '/about/travel-with-a-reason', '/stays'] as $path)
     <url>
         <loc>{{ url($path) }}</loc>
         <changefreq>weekly</changefreq>

@@ -73,7 +73,8 @@ Route::middleware('site.public')->group(function () {
     Route::get('/insiders/{article:slug}', [InsiderController::class, 'show'])->name('insiders.show');
 
     Route::get('/plan-your-journey', [PageController::class, 'plan'])->name('plan');
-    Route::redirect('/contact', '/plan-your-journey');
+    Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+    Route::get('/how-it-works', [PageController::class, 'howItWorks'])->name('how-it-works');
 
     Route::get('/about', [PageController::class, 'about'])->name('about');
     Route::get('/about/our-people', [PageController::class, 'people'])->name('our-people');

@@ -9,6 +9,13 @@
                 <option value="{{ $journey->id }}">{{ $journey->name }}</option>
             @endforeach
         </select>
+        <div>
+            <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Guest photo (optional)</label>
+            @if($review?->coverUrl())
+                <img src="{{ $review->coverThumbUrl() ?: $review->coverUrl() }}" alt="" class="mb-3 h-24 w-24 object-cover">
+            @endif
+            <input type="file" wire:model="cover" accept="image/*">
+        </div>
         <select wire:model="status" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
             <option value="draft">Pending / hidden</option>
             <option value="published">Published on website</option>

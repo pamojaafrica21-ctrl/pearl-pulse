@@ -10,10 +10,20 @@ class Faq extends Model
 {
     use Publishable;
 
+    public const TOPICS = [
+        'permits' => 'Permits',
+        'best_time' => 'Best time to travel',
+        'inclusions' => 'Inclusions',
+        'families' => 'Families',
+        'payment_cancellation' => 'Payment & cancellation',
+        'health_visas' => 'Health & visas',
+    ];
+
     protected $fillable = [
         'question',
         'answer',
         'group',
+        'topic',
         'faqable_type',
         'faqable_id',
         'status',
@@ -23,5 +33,10 @@ class Faq extends Model
     public function faqable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function topicLabel(): string
+    {
+        return self::TOPICS[$this->topic] ?? 'General';
     }
 }

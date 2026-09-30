@@ -1,3 +1,54 @@
+@if($variant === 'contact')
+    <div class="enquiry-flow enquiry-flow--contact h-full">
+        @if($submitted)
+            <div class="surface surface--white border border-charcoal/8 px-6 py-8 sm:px-10 h-full">
+                <p class="section-eyebrow">Message received</p>
+                <h2 class="font-display text-3xl text-charcoal mt-2">Thank you</h2>
+                <p class="mt-4 text-muted leading-relaxed">A specialist will reply within a few hours from Uganda. Prefer WhatsApp in the meantime? Use the link on this page.</p>
+            </div>
+        @else
+            <div class="surface surface--white border border-charcoal/8 px-5 py-8 sm:px-10 sm:py-10 h-full flex flex-col">
+                <p class="section-eyebrow">Enquiry</p>
+                <h2 class="font-display text-3xl text-charcoal mt-2">Write to a specialist</h2>
+                <p class="mt-2 text-muted text-sm">Share a little about your dates, travellers, and what you hope the journey will feel like.</p>
+
+                <form wire:submit="submit" class="mt-8 space-y-5 flex-1 flex flex-col">
+                    <div>
+                        <label for="contact-enquiry-name" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">Name</label>
+                        <input id="contact-enquiry-name" type="text" wire:model="name" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                        @error('name') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <div>
+                            <label for="contact-enquiry-email" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">Email</label>
+                            <input id="contact-enquiry-email" type="email" wire:model="email" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                            @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <label for="contact-enquiry-phone" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">Phone</label>
+                            <input id="contact-enquiry-phone" type="text" wire:model="phone" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="contact-enquiry-whatsapp" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">WhatsApp</label>
+                        <input id="contact-enquiry-whatsapp" type="text" wire:model="whatsapp" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                    </div>
+                    <div class="flex-1 flex flex-col min-h-[10rem]">
+                        <label for="contact-enquiry-message" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">How can we help?</label>
+                        <textarea id="contact-enquiry-message" rows="6" wire:model="message" class="w-full flex-1 min-h-[10rem] border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest" placeholder="Dates, travellers, destinations, or anything else on your mind…"></textarea>
+                        @error('message') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="pt-2 mt-auto">
+                        <button type="submit" class="btn-primary" wire:loading.attr="disabled">
+                            <span wire:loading.remove wire:target="submit">Send message</span>
+                            <span wire:loading wire:target="submit">Sending…</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        @endif
+    </div>
+@else
 <div
     class="enquiry-flow"
     x-data="{
@@ -315,3 +366,4 @@
     document.addEventListener('livewire:navigating', destroyEditors);
 </script>
 @endscript
+@endif

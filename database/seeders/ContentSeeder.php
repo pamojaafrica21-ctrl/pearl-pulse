@@ -424,9 +424,10 @@ class ContentSeeder extends Seeder
     protected function team(): void
     {
         $people = [
-            ['Amina N.', 'Lead Uganda guide', 'Born in Kampala, Amina has spent a decade in Bwindi and Queen Elizabeth. She designs days around light, not a checklist.'],
-            ['Joseph K.', 'Safari director', 'Joseph matches travellers to the right parks and the right pace — private vehicles, fewer transfers, deeper stays.'],
-            ['Grace M.', 'Rwanda specialist', 'Grace knows the volcanoes and the quiet logistics that make a gorilla morning feel seamless.'],
+            ['Amina N.', 'Lead Uganda guide', 'Born in Kampala, Amina has spent a decade in Bwindi and Queen Elizabeth. She designs days around light and wildlife behaviour — not a checklist — and briefs guests so the forest feels approachable, never rushed.'],
+            ['Joseph K.', 'Safari director', 'Joseph matches travellers to the right parks and the right pace: private vehicles, fewer transfers, deeper stays. He is the quiet centre of logistics — permits, lodge holds, and the honest “no” when a route will not work.'],
+            ['Grace M.', 'Rwanda specialist', 'Grace knows the volcanoes and the quiet logistics that make a gorilla morning feel seamless. She favours highland nights, clear briefings, and camps that leave room to breathe after the trek.'],
+            ['Daniel O.', 'Kenya & Tanzania planner', 'Daniel stitches Mara, Serengeti, and coast chapters with an eye on migration intelligence and light for photographers. He prefers conservancy camps when guests want fewer vehicles and longer evenings.'],
         ];
 
         foreach ($people as $i => [$name, $role, $bio]) {
@@ -447,17 +448,21 @@ class ContentSeeder extends Seeder
     protected function reviews(array $journeys): void
     {
         $items = [
-            ['Elena Rossi', 'Italy', 'They knew the forest, and they knew when to be quiet. It never felt like a package.', '5-day-uganda-gorilla-wildlife'],
-            ['James Whitaker', 'United Kingdom', 'Private vehicles, exceptional guides, and a journey that felt designed for us — not sold to us.', 'kenya-mara-migration'],
-            ['Sofia Mensah', 'Ghana', 'Local, warm, and precise. We left feeling we had been looked after by people who belong here.', 'uganda-rwanda-gorilla-crossing'],
+            ['Elena Rossi', 'Italy', 'They knew the forest, and they knew when to be quiet. It never felt like a package.', '5-day-uganda-gorilla-wildlife', 'elena'],
+            ['James Whitaker', 'United Kingdom', 'Private vehicles, exceptional guides, and a journey that felt designed for us — not sold to us.', 'kenya-mara-migration', 'james'],
+            ['Sofia Mensah', 'Ghana', 'Local, warm, and precise. We left feeling we had been looked after by people who belong here.', 'uganda-rwanda-gorilla-crossing', 'sofia'],
+            ['Tom & Aya Nakamura', 'Japan', 'Photography light protected, transfers calm, and evenings that never felt rushed. We will return.', 'kenya-mara-migration', 'tom-aya'],
+            ['Claire Dubois', 'France', 'Our children still talk about the boat at Kazinga. Pearl Pulse paced every day so nobody was left behind.', '5-day-uganda-gorilla-wildlife', 'claire'],
+            ['Marcus Okonkwo', 'Nigeria', 'Honest counsel when we asked for too much in too few days — then a proposal that actually fitted.', 'uganda-rwanda-gorilla-crossing', 'marcus'],
         ];
 
-        foreach ($items as $i => [$name, $country, $quote, $journey]) {
+        foreach ($items as $i => [$name, $country, $quote, $journey, $slug]) {
             Review::query()->updateOrCreate(
                 ['guest_name' => $name],
                 [
                     'guest_country' => $country,
                     'quote' => $quote,
+                    'cover_path' => SeedImage::photo('review-'.$slug, 'seed/review-'.$slug.'.jpg', 1200, 900),
                     'journey_id' => $journeys[$journey]->id ?? null,
                     'status' => 'published',
                     'sort_order' => $i + 1,
@@ -532,18 +537,37 @@ class ContentSeeder extends Seeder
         $uganda = Country::query()->where('slug', 'uganda')->first();
 
         $site = [
-            ['When is the best time to visit East Africa?', 'It depends on what you want to see. Dry seasons (roughly June–September and December–February) are most reliable for wildlife and trekking. We still travel in the green seasons when it suits your pace and interests.'],
-            ['Can you arrange gorilla permits?', 'Yes. Permits are limited and often sell out months ahead in peak season. We recommend starting the conversation early so we can secure the right dates and parks.'],
-            ['What is typically included in a private journey?', 'Private guiding and vehicles, lodge nights as confirmed, park fees, and the logistics that stitch each day together. Flights, visas, and personal expenses are usually separate — we spell this out clearly in your proposal.'],
-            ['Is Pearl Pulse suitable for families?', 'Yes. We design family journeys with age-appropriate pacing, quieter camps where possible, and activities that work for mixed ages — from gentle game drives to cultural visits.'],
-            ['How does payment work?', 'We outline a clear deposit and balance schedule in your proposal, tied to lodge and permit deadlines. International bank transfer is most common; we confirm details once the itinerary is agreed.'],
-            ['Do you own lodges?', 'No. We select stays for location, character, and how they complement your journey.'],
+            ['permits', 'Can you arrange gorilla permits?', 'Yes. Permits are limited and often sell out months ahead in peak season. We recommend starting the conversation early so we can secure the right dates and parks — Uganda, Rwanda, or both.'],
+            ['permits', 'How far ahead should we book permits?', 'For June–September and Christmas peak windows, six to twelve months is wise. Shoulder months can be shorter, but popular lodges still fill. We will tell you honestly what is still available.'],
+            ['permits', 'Are chimpanzee permits easier than gorilla permits?', 'Usually yes — but busy weeks still book out. We confirm current allocation when we propose your dates.'],
+            ['best_time', 'When is the best time to visit East Africa?', 'It depends on what you want to see. Dry seasons (roughly June–September and December–February) are most reliable for wildlife and trekking. We still travel in the green seasons when it suits your pace and interests — fewer vehicles, softer light, and often better rates.'],
+            ['best_time', 'Is the rainy season a bad idea?', 'Not necessarily. Short rains can mean greener landscapes and quieter parks. Long rains can slow roads and close some treks briefly. We match season to your priorities, not a calendar myth.'],
+            ['best_time', 'When is the Great Migration best?', 'Herds move with rain and grass — timing shifts year to year. We plan Mara–Serengeti chapters around the latest intelligence, not a fixed brochure month.'],
+            ['inclusions', 'What is typically included in a private journey?', 'Private guiding and vehicles, lodge nights as confirmed, park fees and permits as agreed, and the logistics that stitch each day together. International flights, visas, travel insurance, and personal expenses are usually separate — we spell this out clearly in your proposal.'],
+            ['inclusions', 'Do you own the lodges?', 'No. We select stays for location, character, and how they complement your journey. We do not own camps — we curate preferred partners.'],
+            ['inclusions', 'Are meals and park fees included?', 'Meals follow each lodge’s plan (often full board on safari). Park fees and permits are confirmed line by line in your proposal so there are no surprises.'],
+            ['families', 'Is Pearl Pulse suitable for families?', 'Yes. We design family journeys with age-appropriate pacing, quieter camps where possible, and activities that work for mixed ages — from gentle game drives to cultural visits and swimming holes.'],
+            ['families', 'How old must children be for gorilla trekking?', 'Parks set minimum ages (commonly 15 for mountain gorillas). We plan chimpanzee forest, savannah, and boat days for younger travellers, and keep gorilla days for those who qualify.'],
+            ['families', 'Can grandparents and toddlers travel together?', 'Often yes — with private vehicles, flexible daily rhythm, and lodges that welcome mixed ages. Tell us the ages and energy levels; we design around them.'],
+            ['payment_cancellation', 'How does payment work?', 'We outline a clear deposit and balance schedule in your proposal, tied to lodge and permit deadlines. International bank transfer is most common; we confirm details once the itinerary is agreed.'],
+            ['payment_cancellation', 'What is your cancellation policy?', 'Terms depend on permits, stays, and season. Non-refundable permits and lodge deposits are common close to travel. We set everything out in writing before you pay a deposit — see also our Cancellation Policy page.'],
+            ['payment_cancellation', 'Can we change dates after booking?', 'Sometimes — subject to permit availability and lodge rules. Early notice helps. We renegotiate on your behalf and confirm any cost difference before you decide.'],
+            ['health_visas', 'Do I need a yellow fever vaccination?', 'Many travellers to Uganda and the region need proof of yellow fever vaccination for entry. Rules change — check official sources and your doctor; we share current guidance when you enquire.'],
+            ['health_visas', 'What about malaria and travel insurance?', 'East Africa is a malaria region for many itineraries. Discuss prophylaxis with a travel clinic. Comprehensive travel insurance (including evacuation) is essential; we can outline what cover to look for.'],
+            ['health_visas', 'Do you help with visas?', 'We advise on typical requirements and visa-on-arrival or e-visa processes, but you remain responsible for valid documents. We include a practical briefing in your pre-departure notes.'],
         ];
 
-        foreach ($site as $i => [$q, $a]) {
+        foreach ($site as $i => [$topic, $q, $a]) {
             Faq::query()->updateOrCreate(
                 ['question' => $q, 'group' => 'site'],
-                ['answer' => $a, 'status' => 'published', 'sort_order' => $i + 1, 'faqable_type' => null, 'faqable_id' => null]
+                [
+                    'answer' => $a,
+                    'topic' => $topic,
+                    'status' => 'published',
+                    'sort_order' => $i + 1,
+                    'faqable_type' => null,
+                    'faqable_id' => null,
+                ]
             );
         }
 
@@ -618,10 +642,62 @@ class ContentSeeder extends Seeder
     protected function pages(): void
     {
         $pages = [
-            ['privacy', 'Privacy Policy', '<p>We collect only what we need to plan your journey and reply to you. We do not sell personal information.</p>'],
-            ['terms', 'Terms & Conditions', '<p>Journeys are privately arranged. A detailed confirmation will outline what is included before you travel.</p>'],
-            ['cancellation', 'Cancellation Policy', '<p>Cancellation terms depend on permits, stays, and season. We will set these out clearly in your proposal.</p>'],
-            ['cookies', 'Cookie Policy', '<p>We use essential cookies to run the site and understand which pages are useful. You can control cookies in your browser.</p>'],
+            [
+                'privacy',
+                'Privacy Policy',
+                '<p>Pearl Pulse Safaris (“we”, “us”) respects your privacy. This policy explains what information we collect when you use pearlpulse.com or enquire with us, how we use it, and your choices.</p>'.
+                '<h2>Information we collect</h2>'.
+                '<p>We may collect your name, email address, phone or WhatsApp number, travel preferences, and message content when you submit an enquiry, create an account, or otherwise contact us. We also collect technical data such as IP address, browser type, and pages visited (including via cookies — see our Cookie Policy).</p>'.
+                '<h2>How we use information</h2>'.
+                '<p>We use your information to respond to enquiries, design and administer your journey, send booking-related communications, improve our website, and meet legal obligations. We do not sell personal information.</p>'.
+                '<h2>Sharing</h2>'.
+                '<p>We may share necessary details with lodges, parks, transport partners, and payment processors solely to deliver your journey. Service providers who host our site or email may process data on our instructions.</p>'.
+                '<h2>Retention & security</h2>'.
+                '<p>We keep enquiry and booking records for as long as needed for the journey and legitimate business or legal purposes. We apply reasonable technical and organisational measures to protect personal data.</p>'.
+                '<h2>Your rights & contact</h2>'.
+                '<p>Depending on where you live, you may have rights to access, correct, or delete personal data. Contact us at the email address on our Contact page. We may update this policy; the “last updated” date on the page reflects the latest revision.</p>',
+            ],
+            [
+                'terms',
+                'Terms & Conditions',
+                '<p>By using this website or requesting a proposal from Pearl Pulse Safaris, you agree to these terms. Journeys are privately arranged; a written confirmation and proposal will set out inclusions, exclusions, prices, and payment schedules for your specific trip.</p>'.
+                '<h2>Website use</h2>'.
+                '<p>Content on this site is for general information. Sample itineraries are starting points, not fixed products. Images and descriptions of lodges are illustrative; availability and standards may change.</p>'.
+                '<h2>Bookings</h2>'.
+                '<p>A booking is formed when we confirm your itinerary in writing and receive the required deposit. You are responsible for accurate traveller details, valid travel documents, visas, vaccinations, and suitable travel insurance.</p>'.
+                '<h2>Prices & changes</h2>'.
+                '<p>Prices may change until confirmed. Park fees, permits, fuel, and taxes can adjust with little notice; we will communicate material changes and options before you are committed further.</p>'.
+                '<h2>Liability</h2>'.
+                '<p>Safari travel involves inherent risks. We plan carefully and work with trusted partners, but we are not liable for events outside our reasonable control (including weather, wildlife behaviour, political disruption, or third-party failures). Nothing in these terms excludes liability that cannot be excluded by law.</p>'.
+                '<h2>Governing law</h2>'.
+                '<p>These terms are governed by the laws of Uganda unless your confirmation states otherwise. Contact us via the Contact page for questions about these terms.</p>',
+            ],
+            [
+                'cancellation',
+                'Cancellation Policy',
+                '<p>Cancellation terms depend on permits, lodge contracts, and season. The schedule in your written proposal prevails for your booking. The outline below is typical guidance only.</p>'.
+                '<h2>Deposits</h2>'.
+                '<p>Deposits secure limited permits and lodge inventory. Gorilla and chimpanzee permits are often non-refundable once issued. Lodge deposits may become non-refundable closer to arrival according to each property’s rules.</p>'.
+                '<h2>Guest cancellations</h2>'.
+                '<p>If you cancel, we will recover what we can from suppliers and refund any unused portion after deductions for non-recoverable costs and our reasonable administration. Early notice improves outcomes.</p>'.
+                '<h2>Our cancellations</h2>'.
+                '<p>If we must cancel for reasons within our control, we will offer a suitable alternative or a refund of amounts paid for undelivered services. Force majeure events may limit refunds where suppliers retain funds.</p>'.
+                '<h2>Travel insurance</h2>'.
+                '<p>We strongly recommend comprehensive travel insurance that covers cancellation, curtailment, medical treatment, and evacuation. Ask us what cover to look for before you pay a deposit.</p>',
+            ],
+            [
+                'cookies',
+                'Cookie Policy',
+                '<p>This Cookie Policy explains how Pearl Pulse Safaris uses cookies and similar technologies on our website.</p>'.
+                '<h2>What are cookies?</h2>'.
+                '<p>Cookies are small text files stored on your device. They help the site function, remember preferences, and understand which pages are useful.</p>'.
+                '<h2>Cookies we use</h2>'.
+                '<ul><li><strong>Essential</strong> — required for security, session, and core features (for example login and form submission).</li><li><strong>Analytics</strong> — help us see aggregated traffic patterns so we can improve content and performance. Where used, we prefer privacy-conscious settings.</li></ul>'.
+                '<h2>Your choices</h2>'.
+                '<p>You can control cookies through your browser settings, including blocking or deleting them. Blocking essential cookies may affect site functionality. For personal data processed via cookies, see our Privacy Policy.</p>'.
+                '<h2>Updates</h2>'.
+                '<p>We may update this policy when our tools or practices change. The date on this page shows the latest revision.</p>',
+            ],
         ];
 
         foreach ($pages as $i => [$slug, $title, $content]) {
@@ -631,6 +707,7 @@ class ContentSeeder extends Seeder
                     'title' => $title,
                     'content' => $content,
                     'meta_title' => $title.' | Pearl Pulse Safaris',
+                    'meta_description' => 'Pearl Pulse Safaris '.$title.'.',
                     'status' => 'published',
                     'sort_order' => $i + 1,
                 ]

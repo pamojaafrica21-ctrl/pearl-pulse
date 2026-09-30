@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasCover;
 use App\Models\Concerns\Publishable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Review extends Model
 {
-    use Publishable;
+    use HasCover, Publishable;
 
     protected $fillable = [
         'guest_name',
         'guest_country',
         'quote',
+        'cover_path',
         'journey_id',
         'status',
         'sort_order',

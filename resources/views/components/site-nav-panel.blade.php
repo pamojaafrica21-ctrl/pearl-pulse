@@ -47,11 +47,15 @@
             <div class="site-nav-panel__aside-links">
                 <p class="site-nav-panel__eyebrow">Popular</p>
                 <a href="{{ route('journeys.finder') }}" class="site-nav-panel__aside-link">Journey Finder</a>
+                <a href="{{ route('how-it-works') }}" class="site-nav-panel__aside-link">How it works</a>
                 <a href="{{ route('specialist.index') }}" class="site-nav-panel__aside-link">Specialist journeys</a>
                 <a href="{{ route('true-pulse') }}" class="site-nav-panel__aside-link">True Pulse</a>
                 <a href="{{ route('insiders.index') }}" class="site-nav-panel__aside-link">Insiders</a>
                 <a href="{{ route('faqs.index') }}" class="site-nav-panel__aside-link">FAQs</a>
-                <a href="{{ route('stays.index') }}" class="site-nav-panel__aside-link">Selected stays</a>
+                <a href="{{ route('reviews.index') }}" class="site-nav-panel__aside-link">Guest stories</a>
+                <a href="{{ route('stays.index') }}" class="site-nav-panel__aside-link">Preferred lodges</a>
+                <a href="{{ route('contact') }}" class="site-nav-panel__aside-link">Speak to a specialist</a>
+                <a href="{{ route('legal', 'privacy') }}" class="site-nav-panel__aside-link">Privacy &amp; terms</a>
                 <a href="{{ route('plan') }}" class="site-nav-panel__aside-link site-nav-panel__aside-link--accent">Plan your journey</a>
             </div>
         </div>

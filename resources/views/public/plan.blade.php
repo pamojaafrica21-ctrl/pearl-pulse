@@ -9,12 +9,14 @@
         <p class="section-eyebrow">Plan your journey</p>
         <h1 class="font-display text-5xl md:text-6xl text-charcoal leading-tight">Tell us what you are dreaming about</h1>
         <p class="mt-5 text-muted leading-relaxed text-lg">Start with destinations and timing. We will design a private proposal around you.</p>
-        @if(!empty($whatsappUrl ?? null))
-            <p class="mt-4 text-sm text-muted">
-                Prefer WhatsApp?
-                <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener" class="text-forest hover:opacity-70 transition">Message us from Uganda</a>
-            </p>
-        @endif
+        <p class="mt-4 text-sm text-muted">
+            Prefer a shorter note?
+            <a href="{{ route('contact') }}" class="text-forest hover:opacity-70 transition">Speak to a specialist</a>
+            @if(!empty($whatsappUrl ?? null))
+                ·
+                <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener" class="text-forest hover:opacity-70 transition">WhatsApp</a>
+            @endif
+        </p>
     </div>
 </section>
 
