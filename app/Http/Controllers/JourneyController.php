@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Country;
 use App\Models\Journey;
+use App\Models\Stay;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -57,6 +58,15 @@ class JourneyController extends Controller
 
         $journey->load(['countries', 'destinations.country', 'experiences', 'stays', 'reviews' => fn ($q) => $q->published(), 'images']);
 
+        $itineraryStayIds = $journey->itineraryStayIds();
+        $itineraryStays = $itineraryStayIds === []
+            ? collect()
+            : Stay::query()
+                ->published()
+                ->whereIn('id', $itineraryStayIds)
+                ->get()
+                ->keyBy('id');
+
         $related = Journey::query()
             ->published()
             ->whereKeyNot($journey->id)
@@ -68,6 +78,7 @@ class JourneyController extends Controller
         return view('public.journeys.show', [
             'journey' => $journey,
             'related' => $related,
+            'itineraryStays' => $itineraryStays,
         ]);
     }
 }

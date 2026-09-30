@@ -14,6 +14,10 @@
                 <input type="number" wire:model="days" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
             </div>
             <div class="md:col-span-2">
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Subtitle</label>
+                <input type="text" wire:model="subtitle" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div class="md:col-span-2">
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Teaser</label>
                 <textarea rows="2" wire:model="teaser" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
             </div>
@@ -32,6 +36,18 @@
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">From price</label>
                 <input type="text" wire:model="price_from" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Best time</label>
+                <input type="text" wire:model="best_time" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Practical (HTML ok)</label>
+                <textarea rows="4" wire:model="practical" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Map embed URL</label>
+                <input type="url" wire:model="map_embed_url" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
             </div>
             <div class="md:col-span-2">
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Included (one per line)</label>
@@ -53,9 +69,83 @@
                 <input type="file" wire:model="cover" accept="image/*">
             </div>
         </div>
+
         <div>
             @include('livewire.admin.partials.video-field', ['record' => $journey ?? null, 'uploader' => $videoUploader])
         </div>
+
+        <section class="space-y-4 border-t border-sand-deep/30 pt-8">
+            <div class="flex flex-wrap items-end justify-between gap-3">
+                <div>
+                    <h2 class="font-display text-2xl text-forest">Day by day</h2>
+                    <p class="mt-1 text-sm text-muted">Title, description, lodging, meals, and an optional day image.</p>
+                </div>
+                <button type="button" wire:click="addDay" class="text-sm text-forest hover:underline">Add day</button>
+            </div>
+
+            @foreach($itineraryDays as $index => $day)
+                <div class="space-y-3 border border-sand-deep/30 p-4" wire:key="itinerary-day-{{ $index }}">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <p class="text-xs tracking-[0.14em] uppercase text-muted">Day {{ $day['day'] ?? $index + 1 }}</p>
+                        <div class="flex flex-wrap gap-3 text-sm">
+                            <button type="button" wire:click="moveDayUp({{ $index }})" class="text-muted hover:text-charcoal" @disabled($index === 0)>Up</button>
+                            <button type="button" wire:click="moveDayDown({{ $index }})" class="text-muted hover:text-charcoal" @disabled($index === count($itineraryDays) - 1)>Down</button>
+                            <button type="button" wire:click="removeDay({{ $index }})" class="text-red-700 hover:underline">Remove</button>
+                        </div>
+                    </div>
+
+                    <input type="text" wire:model="itineraryDays.{{ $index }}.title" placeholder="Day title" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                    <textarea rows="3" wire:model="itineraryDays.{{ $index }}.description" placeholder="What happens this day" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest"></textarea>
+
+                    <div class="grid gap-3 md:grid-cols-2">
+                        <div>
+                            <label class="block text-xs tracking-[0.12em] uppercase text-muted mb-2">Lodging (linked stay)</label>
+                            <select wire:model="itineraryDays.{{ $index }}.stay_id" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                                <option value="">None / use label below</option>
+                                @foreach($stays as $stay)
+                                    <option value="{{ $stay->id }}">{{ $stay->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs tracking-[0.12em] uppercase text-muted mb-2">Lodging label (fallback)</label>
+                            <input type="text" wire:model="itineraryDays.{{ $index }}.stay_name" placeholder="e.g. Entebbe hotel" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-xs tracking-[0.12em] uppercase text-muted mb-2">Meals</p>
+                        <div class="flex flex-wrap gap-4 text-sm">
+                            <label class="inline-flex items-center gap-2">
+                                <input type="checkbox" value="B" wire:model="itineraryDays.{{ $index }}.meals" class="rounded text-forest"> Breakfast
+                            </label>
+                            <label class="inline-flex items-center gap-2">
+                                <input type="checkbox" value="L" wire:model="itineraryDays.{{ $index }}.meals" class="rounded text-forest"> Lunch
+                            </label>
+                            <label class="inline-flex items-center gap-2">
+                                <input type="checkbox" value="D" wire:model="itineraryDays.{{ $index }}.meals" class="rounded text-forest"> Dinner
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs tracking-[0.12em] uppercase text-muted mb-2">Day image (optional)</label>
+                        @if(!empty($day['image_path']) && empty($removeDayImages[$index]))
+                            <div class="mb-2 flex flex-wrap items-center gap-3">
+                                <img src="{{ $uploader->url($day['image_path']) }}" alt="" class="h-20 w-28 object-cover">
+                                <button type="button" wire:click="clearDayImage({{ $index }})" class="text-sm text-red-700 hover:underline">Remove image</button>
+                            </div>
+                        @elseif(!empty($removeDayImages[$index]))
+                            <p class="mb-2 text-xs text-amber-800">Image will be removed when you save.</p>
+                        @endif
+                        <input type="file" wire:model="dayImages.{{ $index }}" accept="image/*" class="text-sm w-full">
+                        <div wire:loading wire:target="dayImages.{{ $index }}" class="text-xs text-muted mt-1">Uploading…</div>
+                        @error('dayImages.'.$index) <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+            @endforeach
+        </section>
+
         <div class="grid gap-6 md:grid-cols-2">
             <div>
                 <p class="text-xs tracking-[0.14em] uppercase text-muted mb-2">Countries</p>

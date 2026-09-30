@@ -188,11 +188,11 @@ class ContentSeeder extends Seeder
                 'experiences' => ['gorilla-trekking', 'big-five-safari', 'boat-water-experiences'],
                 'stays' => ['buhoma-forest-lodge', 'ishasha-wilderness-camp'],
                 'itinerary' => [
-                    ['day' => 1, 'title' => 'Arrive Uganda', 'description' => 'Meet in Entebbe. After a briefing we travel toward the southwest at an unhurried pace, with a proper lunch stop — not a race to make the forest by dark.'],
-                    ['day' => 2, 'title' => 'Bwindi at rest', 'description' => 'Settle above the canopy. A short forest-edge walk if you want one, and a detailed briefing for tomorrow’s trek. Sleep early; the walk can be long.'],
-                    ['day' => 3, 'title' => 'Gorilla trek', 'description' => 'Permit briefing, walk with trackers, and a regulated hour with a habituated family. Afternoon to recover at the lodge — not another transfer.'],
-                    ['day' => 4, 'title' => 'Queen Elizabeth and the channel', 'description' => 'Change of landscape: savannah and a boat on the Kazinga Channel. Hippo, elephant, and birds from the water. Evening in a selected stay chosen for access.'],
-                    ['day' => 5, 'title' => 'Depart', 'description' => 'A final morning and the road or hop back toward Entebbe — or onward if we have already planned the next country.'],
+                    ['day' => 1, 'title' => 'Arrive Uganda', 'description' => 'Meet in Entebbe. After a briefing we travel toward the southwest at an unhurried pace, with a proper lunch stop — not a race to make the forest by dark.', 'stay_slug' => 'buhoma-forest-lodge', 'meals' => ['L', 'D']],
+                    ['day' => 2, 'title' => 'Bwindi at rest', 'description' => 'Settle above the canopy. A short forest-edge walk if you want one, and a detailed briefing for tomorrow’s trek. Sleep early; the walk can be long.', 'stay_slug' => 'buhoma-forest-lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 3, 'title' => 'Gorilla trek', 'description' => 'Permit briefing, walk with trackers, and a regulated hour with a habituated family. Afternoon to recover at the lodge — not another transfer.', 'stay_slug' => 'buhoma-forest-lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 4, 'title' => 'Queen Elizabeth and the channel', 'description' => 'Change of landscape: savannah and a boat on the Kazinga Channel. Hippo, elephant, and birds from the water. Evening in a selected stay chosen for access.', 'stay_slug' => 'ishasha-wilderness-camp', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 5, 'title' => 'Depart', 'description' => 'A final morning and the road or hop back toward Entebbe — or onward if we have already planned the next country.', 'stay_name' => 'Departure day', 'meals' => ['B']],
                 ],
             ],
             [
@@ -209,14 +209,14 @@ class ContentSeeder extends Seeder
                 'experiences' => ['gorilla-trekking', 'chimpanzee-tracking', 'boat-water-experiences'],
                 'stays' => ['buhoma-forest-lodge'],
                 'itinerary' => [
-                    ['day' => 1, 'title' => 'Entebbe to the southwest', 'description' => 'Arrive Uganda. After a briefing we travel toward Bwindi at an unhurried pace, with a proper lunch stop — not a race to make the forest by dark.'],
-                    ['day' => 2, 'title' => 'Bwindi at rest', 'description' => 'A forest-edge day: short walk, community visit if you want one, and a detailed briefing for tomorrow’s trek. Sleep early.'],
-                    ['day' => 3, 'title' => 'Gorilla trek', 'description' => 'Permit briefing, walk with trackers, and a regulated hour with a habituated family. Afternoon to recover at the lodge.'],
-                    ['day' => 4, 'title' => 'Toward Kibale', 'description' => 'Leave the high forest for chimpanzee country. The drive is part of seeing Uganda change under the wheels.'],
-                    ['day' => 5, 'title' => 'Chimpanzee tracking', 'description' => 'A vocal morning in Kibale with a habituated community. Optional wetland or crater time if legs allow.'],
-                    ['day' => 6, 'title' => 'North to the Nile', 'description' => 'Travel toward Murchison. We break the journey so you arrive able to look at the river, not only the pillow.'],
-                    ['day' => 7, 'title' => 'Falls and game', 'description' => 'Boat toward the base of the falls, a walk to the top if you wish, and a game drive on the north bank.'],
-                    ['day' => 8, 'title' => 'Depart', 'description' => 'A last morning and the road or flight back to Entebbe — or onward if we have already planned the next country.'],
+                    ['day' => 1, 'title' => 'Entebbe to the southwest', 'description' => 'Arrive Uganda. After a briefing we travel toward Bwindi at an unhurried pace, with a proper lunch stop — not a race to make the forest by dark.', 'stay_slug' => 'buhoma-forest-lodge', 'meals' => ['L', 'D']],
+                    ['day' => 2, 'title' => 'Bwindi at rest', 'description' => 'A forest-edge day: short walk, community visit if you want one, and a detailed briefing for tomorrow’s trek. Sleep early.', 'stay_slug' => 'buhoma-forest-lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 3, 'title' => 'Gorilla trek', 'description' => 'Permit briefing, walk with trackers, and a regulated hour with a habituated family. Afternoon to recover at the lodge.', 'stay_slug' => 'buhoma-forest-lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 4, 'title' => 'Toward Kibale', 'description' => 'Leave the high forest for chimpanzee country. The drive is part of seeing Uganda change under the wheels.', 'stay_name' => 'Kibale forest lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 5, 'title' => 'Chimpanzee tracking', 'description' => 'A vocal morning in Kibale with a habituated community. Optional wetland or crater time if legs allow.', 'stay_name' => 'Kibale forest lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 6, 'title' => 'North to the Nile', 'description' => 'Travel toward Murchison. We break the journey so you arrive able to look at the river, not only the pillow.', 'stay_name' => 'Murchison riverside stay', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 7, 'title' => 'Falls and game', 'description' => 'Boat toward the base of the falls, a walk to the top if you wish, and a game drive on the north bank.', 'stay_name' => 'Murchison riverside stay', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 8, 'title' => 'Depart', 'description' => 'A last morning and the road or flight back to Entebbe — or onward if we have already planned the next country.', 'stay_name' => 'Departure day', 'meals' => ['B']],
                 ],
             ],
             [
@@ -233,10 +233,10 @@ class ContentSeeder extends Seeder
                 'experiences' => ['gorilla-trekking'],
                 'stays' => ['volcanoes-view-lodge'],
                 'itinerary' => [
-                    ['day' => 1, 'title' => 'Kigali to the volcanoes', 'description' => 'Arrive Kigali and travel into the highlands. Time to settle, breathe the cooler air, and walk the lodge grounds.'],
-                    ['day' => 2, 'title' => 'Gorilla trek', 'description' => 'Briefing at the park, walk with trackers, and an hour with a habituated family. The afternoon is for rest, not another activity.'],
-                    ['day' => 3, 'title' => 'A second forest day', 'description' => 'Golden monkeys, the Dian Fossey hike, or simply a quiet highland morning — we choose with you, not from a default add-on.'],
-                    ['day' => 4, 'title' => 'Return to Kigali', 'description' => 'A last view of the peaks if the cloud lifts, then the city and your flight. Easy to extend into Akagera or Uganda.'],
+                    ['day' => 1, 'title' => 'Kigali to the volcanoes', 'description' => 'Arrive Kigali and travel into the highlands. Time to settle, breathe the cooler air, and walk the lodge grounds.', 'stay_slug' => 'volcanoes-view-lodge', 'meals' => ['D']],
+                    ['day' => 2, 'title' => 'Gorilla trek', 'description' => 'Briefing at the park, walk with trackers, and an hour with a habituated family. The afternoon is for rest, not another activity.', 'stay_slug' => 'volcanoes-view-lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 3, 'title' => 'A second forest day', 'description' => 'Golden monkeys, the Dian Fossey hike, or simply a quiet highland morning — we choose with you, not from a default add-on.', 'stay_slug' => 'volcanoes-view-lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 4, 'title' => 'Return to Kigali', 'description' => 'A last view of the peaks if the cloud lifts, then the city and your flight. Easy to extend into Akagera or Uganda.', 'stay_name' => 'Departure day', 'meals' => ['B']],
                 ],
             ],
             [
@@ -253,12 +253,12 @@ class ContentSeeder extends Seeder
                 'experiences' => ['big-five-safari', 'wildlife-photography'],
                 'stays' => ['mara-plains-camp'],
                 'itinerary' => [
-                    ['day' => 1, 'title' => 'Nairobi to the Mara', 'description' => 'A scheduled or private hop to the conservancy. Afternoon drive to understand the light and where the cats have been.'],
-                    ['day' => 2, 'title' => 'Full safari day', 'description' => 'Dawn departure, a proper rest, last light. Private vehicle — we stay with a sighting instead of collecting a list.'],
-                    ['day' => 3, 'title' => 'River or plains', 'description' => 'In season we give time to the Mara River. Out of season we work the conservancy and the reserve edge for cats and elephant.'],
-                    ['day' => 4, 'title' => 'A slower morning', 'description' => 'Optional balloon, or a later start if yesterday was long. Afternoon drive shaped around photography if that is your pace.'],
-                    ['day' => 5, 'title' => 'Last full day', 'description' => 'We return to areas that were quiet or promising. Guiding, not a new loop for the sake of it.'],
-                    ['day' => 6, 'title' => 'Fly to Nairobi', 'description' => 'A final short drive and the hop back. International connections are planned so you are not running through the terminal.'],
+                    ['day' => 1, 'title' => 'Nairobi to the Mara', 'description' => 'A scheduled or private hop to the conservancy. Afternoon drive to understand the light and where the cats have been.', 'stay_slug' => 'mara-plains-camp', 'meals' => ['L', 'D']],
+                    ['day' => 2, 'title' => 'Full safari day', 'description' => 'Dawn departure, a proper rest, last light. Private vehicle — we stay with a sighting instead of collecting a list.', 'stay_slug' => 'mara-plains-camp', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 3, 'title' => 'River or plains', 'description' => 'In season we give time to the Mara River. Out of season we work the conservancy and the reserve edge for cats and elephant.', 'stay_slug' => 'mara-plains-camp', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 4, 'title' => 'A slower morning', 'description' => 'Optional balloon, or a later start if yesterday was long. Afternoon drive shaped around photography if that is your pace.', 'stay_slug' => 'mara-plains-camp', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 5, 'title' => 'Last full day', 'description' => 'We return to areas that were quiet or promising. Guiding, not a new loop for the sake of it.', 'stay_slug' => 'mara-plains-camp', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 6, 'title' => 'Fly to Nairobi', 'description' => 'A final short drive and the hop back. International connections are planned so you are not running through the terminal.', 'stay_name' => 'Departure day', 'meals' => ['B']],
                 ],
             ],
             [
@@ -275,14 +275,14 @@ class ContentSeeder extends Seeder
                 'experiences' => ['big-five-safari', 'wildlife-photography'],
                 'stays' => ['serengeti-safari-camp'],
                 'itinerary' => [
-                    ['day' => 1, 'title' => 'Arusha to Tarangire', 'description' => 'Meet in Arusha and enter baobab country. Afternoon among elephant if the river is drawing herds.'],
-                    ['day' => 2, 'title' => 'Tarangire at length', 'description' => 'A full day in the park — river, baobabs, and time to photograph rather than transit.'],
-                    ['day' => 3, 'title' => 'Toward Ngorongoro', 'description' => 'Travel to the crater rim. Evening briefing so tomorrow’s descent is unhurried.'],
-                    ['day' => 4, 'title' => 'The crater floor', 'description' => 'Descend after breakfast, spend the useful hours on the floor, picnic, and climb out before the light goes.'],
-                    ['day' => 5, 'title' => 'Into the Serengeti', 'description' => 'Enter the plains. Camp is placed for the month you travel, not a single famous kopje.'],
-                    ['day' => 6, 'title' => 'Serengeti', 'description' => 'Game drives shaped around the herds or the resident cats — we decide with the guide each evening.'],
-                    ['day' => 7, 'title' => 'Serengeti, again', 'description' => 'A second full day so the first was not your only chance. Balloon optional.'],
-                    ['day' => 8, 'title' => 'Depart', 'description' => 'Light aircraft or road back toward Arusha. Zanzibar can begin the same afternoon if we have already built it in.'],
+                    ['day' => 1, 'title' => 'Arusha to Tarangire', 'description' => 'Meet in Arusha and enter baobab country. Afternoon among elephant if the river is drawing herds.', 'stay_name' => 'Tarangire lodge', 'meals' => ['L', 'D']],
+                    ['day' => 2, 'title' => 'Tarangire at length', 'description' => 'A full day in the park — river, baobabs, and time to photograph rather than transit.', 'stay_name' => 'Tarangire lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 3, 'title' => 'Toward Ngorongoro', 'description' => 'Travel to the crater rim. Evening briefing so tomorrow’s descent is unhurried.', 'stay_name' => 'Ngorongoro rim lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 4, 'title' => 'The crater floor', 'description' => 'Descend after breakfast, spend the useful hours on the floor, picnic, and climb out before the light goes.', 'stay_name' => 'Ngorongoro rim lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 5, 'title' => 'Into the Serengeti', 'description' => 'Enter the plains. Camp is placed for the month you travel, not a single famous kopje.', 'stay_slug' => 'serengeti-safari-camp', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 6, 'title' => 'Serengeti', 'description' => 'Game drives shaped around the herds or the resident cats — we decide with the guide each evening.', 'stay_slug' => 'serengeti-safari-camp', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 7, 'title' => 'Serengeti, again', 'description' => 'A second full day so the first was not your only chance. Balloon optional.', 'stay_slug' => 'serengeti-safari-camp', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 8, 'title' => 'Depart', 'description' => 'Light aircraft or road back toward Arusha. Zanzibar can begin the same afternoon if we have already built it in.', 'stay_name' => 'Departure day', 'meals' => ['B']],
                 ],
             ],
             [
@@ -299,13 +299,13 @@ class ContentSeeder extends Seeder
                 'experiences' => ['gorilla-trekking'],
                 'stays' => ['buhoma-forest-lodge', 'volcanoes-view-lodge'],
                 'itinerary' => [
-                    ['day' => 1, 'title' => 'Arrive Uganda', 'description' => 'Entebbe briefing and the road toward Bwindi. We do not try to trek on arrival day.'],
-                    ['day' => 2, 'title' => 'Bwindi forest', 'description' => 'Settle, walk, and prepare. The trek is tomorrow; tonight is for altitude and rest.'],
-                    ['day' => 3, 'title' => 'Uganda gorilla trek', 'description' => 'A Bwindi family in the sector we booked for your fitness. Afternoon to recover.'],
-                    ['day' => 4, 'title' => 'Cross to Rwanda', 'description' => 'A private transfer through the southwest and into the highlands. Immigration is planned, not improvised.'],
-                    ['day' => 5, 'title' => 'Volcanoes rest', 'description' => 'A highland day before the second permit — golden monkeys or simply the view.'],
-                    ['day' => 6, 'title' => 'Rwanda gorilla trek', 'description' => 'A second forest, a second hour. The comparison is the point for travellers who asked for both.'],
-                    ['day' => 7, 'title' => 'Kigali and depart', 'description' => 'Return to the city. We can reverse the crossing if your flights prefer Kigali first.'],
+                    ['day' => 1, 'title' => 'Arrive Uganda', 'description' => 'Entebbe briefing and the road toward Bwindi. We do not try to trek on arrival day.', 'stay_slug' => 'buhoma-forest-lodge', 'meals' => ['L', 'D']],
+                    ['day' => 2, 'title' => 'Bwindi forest', 'description' => 'Settle, walk, and prepare. The trek is tomorrow; tonight is for altitude and rest.', 'stay_slug' => 'buhoma-forest-lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 3, 'title' => 'Uganda gorilla trek', 'description' => 'A Bwindi family in the sector we booked for your fitness. Afternoon to recover.', 'stay_slug' => 'buhoma-forest-lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 4, 'title' => 'Cross to Rwanda', 'description' => 'A private transfer through the southwest and into the highlands. Immigration is planned, not improvised.', 'stay_slug' => 'volcanoes-view-lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 5, 'title' => 'Volcanoes rest', 'description' => 'A highland day before the second permit — golden monkeys or simply the view.', 'stay_slug' => 'volcanoes-view-lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 6, 'title' => 'Rwanda gorilla trek', 'description' => 'A second forest, a second hour. The comparison is the point for travellers who asked for both.', 'stay_slug' => 'volcanoes-view-lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 7, 'title' => 'Kigali and depart', 'description' => 'Return to the city. We can reverse the crossing if your flights prefer Kigali first.', 'stay_name' => 'Departure day', 'meals' => ['B']],
                 ],
             ],
             [
@@ -321,16 +321,16 @@ class ContentSeeder extends Seeder
                 'experiences' => ['gorilla-trekking', 'chimpanzee-tracking', 'big-five-safari'],
                 'stays' => ['buhoma-forest-lodge', 'mara-plains-camp'],
                 'itinerary' => [
-                    ['day' => 1, 'title' => 'Arrive Entebbe', 'description' => 'Rest after the long flight. We do not put you on the southwest road until you can enjoy it.'],
-                    ['day' => 2, 'title' => 'Toward Bwindi', 'description' => 'Travel into gorilla country with a proper pause. Lodge by last light.'],
-                    ['day' => 3, 'title' => 'Gorilla trek', 'description' => 'Bwindi briefing, walk, and a regulated hour. Evening above the canopy.'],
-                    ['day' => 4, 'title' => 'Kibale', 'description' => 'Leave the high forest for chimpanzee country.'],
-                    ['day' => 5, 'title' => 'Chimpanzees', 'description' => 'A vocal morning with a habituated community. Afternoon at an easier pace.'],
-                    ['day' => 6, 'title' => 'Entebbe and Nairobi', 'description' => 'Return to Entebbe and the hop to Kenya. We protect the connection so this is not a stressful day.'],
-                    ['day' => 7, 'title' => 'The Mara', 'description' => 'Conservancy arrival and a first drive — open country after days of forest.'],
-                    ['day' => 8, 'title' => 'Plains', 'description' => 'A full safari day. Private vehicle, cats and light.'],
-                    ['day' => 9, 'title' => 'Plains, again', 'description' => 'Second full day so the change of landscape has time to settle.'],
-                    ['day' => 10, 'title' => 'Nairobi and depart', 'description' => 'Fly to Nairobi. International departures are timed with a buffer, not a prayer.'],
+                    ['day' => 1, 'title' => 'Arrive Entebbe', 'description' => 'Rest after the long flight. We do not put you on the southwest road until you can enjoy it.', 'stay_name' => 'Entebbe lakeshore hotel', 'meals' => ['D']],
+                    ['day' => 2, 'title' => 'Toward Bwindi', 'description' => 'Travel into gorilla country with a proper pause. Lodge by last light.', 'stay_slug' => 'buhoma-forest-lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 3, 'title' => 'Gorilla trek', 'description' => 'Bwindi briefing, walk, and a regulated hour. Evening above the canopy.', 'stay_slug' => 'buhoma-forest-lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 4, 'title' => 'Kibale', 'description' => 'Leave the high forest for chimpanzee country.', 'stay_name' => 'Kibale forest lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 5, 'title' => 'Chimpanzees', 'description' => 'A vocal morning with a habituated community. Afternoon at an easier pace.', 'stay_name' => 'Kibale forest lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 6, 'title' => 'Entebbe and Nairobi', 'description' => 'Return to Entebbe and the hop to Kenya. We protect the connection so this is not a stressful day.', 'stay_name' => 'Nairobi overnight', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 7, 'title' => 'The Mara', 'description' => 'Conservancy arrival and a first drive — open country after days of forest.', 'stay_slug' => 'mara-plains-camp', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 8, 'title' => 'Plains', 'description' => 'A full safari day. Private vehicle, cats and light.', 'stay_slug' => 'mara-plains-camp', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 9, 'title' => 'Plains, again', 'description' => 'Second full day so the change of landscape has time to settle.', 'stay_slug' => 'mara-plains-camp', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 10, 'title' => 'Nairobi and depart', 'description' => 'Fly to Nairobi. International departures are timed with a buffer, not a prayer.', 'stay_name' => 'Departure day', 'meals' => ['B']],
                 ],
             ],
             [
@@ -347,15 +347,15 @@ class ContentSeeder extends Seeder
                 'experiences' => ['pure-pulse-wellness', 'boat-water-experiences'],
                 'stays' => [],
                 'itinerary' => [
-                    ['day' => 1, 'title' => 'Arrive Uganda, slowly', 'description' => 'Entebbe or a lakeshore night. No long transfer on day one.'],
-                    ['day' => 2, 'title' => 'Lake Mburo', 'description' => 'Walking safari, boat, and a pace that does not steal tomorrow.'],
-                    ['day' => 3, 'title' => 'Water and rest', 'description' => 'A second Mburo day or a private lakeshore — we choose with you.'],
-                    ['day' => 4, 'title' => 'A gentle wildlife day', 'description' => 'Optional Queen Elizabeth boat if you want more wildlife without a full circuit.'],
-                    ['day' => 5, 'title' => 'Travel day, protected', 'description' => 'We move toward the coast connection without treating the airport as the destination.'],
-                    ['day' => 6, 'title' => 'Zanzibar arrives', 'description' => 'Stone Town or the beach — we do not try to do both before you have slept.'],
-                    ['day' => 7, 'title' => 'The ocean', 'description' => 'Swim, walk, or do nothing. This is the point of Pure Pulse.'],
-                    ['day' => 8, 'title' => 'Spice or reef', 'description' => 'A single outing if you want one. We will not stack a town tour and a snorkel on the same tired morning.'],
-                    ['day' => 9, 'title' => 'Depart', 'description' => 'A last swim if flights allow. We write the proposal around your actual departure, not a brochure checkout.'],
+                    ['day' => 1, 'title' => 'Arrive Uganda, slowly', 'description' => 'Entebbe or a lakeshore night. No long transfer on day one.', 'stay_name' => 'Lakeshore rest', 'meals' => ['D']],
+                    ['day' => 2, 'title' => 'Lake Mburo', 'description' => 'Walking safari, boat, and a pace that does not steal tomorrow.', 'stay_name' => 'Lake Mburo lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 3, 'title' => 'Water and rest', 'description' => 'A second Mburo day or a private lakeshore — we choose with you.', 'stay_name' => 'Lake Mburo lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 4, 'title' => 'A gentle wildlife day', 'description' => 'Optional Queen Elizabeth boat if you want more wildlife without a full circuit.', 'stay_name' => 'Lake Mburo lodge', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 5, 'title' => 'Travel day, protected', 'description' => 'We move toward the coast connection without treating the airport as the destination.', 'stay_name' => 'Travel day', 'meals' => ['B', 'L']],
+                    ['day' => 6, 'title' => 'Zanzibar arrives', 'description' => 'Stone Town or the beach — we do not try to do both before you have slept.', 'stay_name' => 'Zanzibar beach house', 'meals' => ['D']],
+                    ['day' => 7, 'title' => 'The ocean', 'description' => 'Swim, walk, or do nothing. This is the point of Pure Pulse.', 'stay_name' => 'Zanzibar beach house', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 8, 'title' => 'Spice or reef', 'description' => 'A single outing if you want one. We will not stack a town tour and a snorkel on the same tired morning.', 'stay_name' => 'Zanzibar beach house', 'meals' => ['B', 'L', 'D']],
+                    ['day' => 9, 'title' => 'Depart', 'description' => 'A last swim if flights allow. We write the proposal around your actual departure, not a brochure checkout.', 'stay_name' => 'Departure day', 'meals' => ['B']],
                 ],
             ],
         ];
@@ -371,10 +371,10 @@ class ContentSeeder extends Seeder
                     'overview' => SeedCopy::journey($item['slug']),
                     'days' => $item['days'],
                     'duration_label' => $item['days'].' days',
-                    'itinerary' => $item['itinerary'] ?? [
-                        ['day' => 1, 'title' => 'Arrive', 'description' => 'A gentle arrival and first briefing. We do not trek or game-drive on a long-haul day unless you ask.'],
-                        ['day' => 2, 'title' => 'Into the journey', 'description' => 'Travel privately toward your first wilderness, with a proper pause — not a transfer that steals the light.'],
-                    ],
+                    'itinerary' => $this->resolveItineraryDays($item['itinerary'] ?? [
+                        ['day' => 1, 'title' => 'Arrive', 'description' => 'A gentle arrival and first briefing. We do not trek or game-drive on a long-haul day unless you ask.', 'meals' => ['D']],
+                        ['day' => 2, 'title' => 'Into the journey', 'description' => 'Travel privately toward your first wilderness, with a proper pause — not a transfer that steals the light.', 'meals' => ['B', 'L', 'D']],
+                    ], $stays),
                     'highlights' => [
                         ['label' => 'Pace', 'value' => 'Private, tailor-made'],
                         ['label' => 'Guiding', 'value' => 'Exceptional local guides'],
@@ -419,6 +419,50 @@ class ContentSeeder extends Seeder
         }
 
         return $models;
+    }
+
+    /**
+     * @param  list<array<string, mixed>>  $days
+     * @param  array<string, Stay>  $stays
+     * @return list<array<string, mixed>>
+     */
+    protected function resolveItineraryDays(array $days, array $stays): array
+    {
+        $resolved = [];
+
+        foreach (array_values($days) as $i => $day) {
+            $row = [
+                'day' => (int) ($day['day'] ?? $i + 1),
+                'title' => (string) ($day['title'] ?? ''),
+                'description' => (string) ($day['description'] ?? ''),
+            ];
+
+            $staySlug = $day['stay_slug'] ?? null;
+            if ($staySlug && isset($stays[$staySlug])) {
+                $row['stay_id'] = $stays[$staySlug]->id;
+            }
+
+            if (! empty($day['stay_name'])) {
+                $row['stay_name'] = (string) $day['stay_name'];
+            }
+
+            $meals = $day['meals'] ?? [];
+            if (is_string($meals)) {
+                $meals = array_map('trim', explode(',', $meals));
+            }
+            $meals = array_values(array_intersect(['B', 'L', 'D'], $meals));
+            if ($meals !== []) {
+                $row['meals'] = $meals;
+            }
+
+            if (! empty($day['image_path'])) {
+                $row['image_path'] = (string) $day['image_path'];
+            }
+
+            $resolved[] = $row;
+        }
+
+        return $resolved;
     }
 
     protected function team(): void

@@ -7,6 +7,7 @@ use App\Models\Concerns\HasGallery;
 use App\Models\Concerns\HasSeo;
 use App\Models\Concerns\HasVideo;
 use App\Models\Concerns\Publishable;
+use App\Services\ImageUploader;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -111,5 +112,89 @@ class Journey extends Model
             'proposal' => 'Request a private proposal',
             default => $this->price_from ?: 'From — on request',
         };
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    public function itineraryDays(): array
+    {
+        return array_values($this->itinerary ?? []);
+    }
+
+    /**
+     * Stay IDs referenced inside the day-by-day itinerary.
+     *
+     * @return list<int>
+     */
+    public function itineraryStayIds(): array
+    {
+        return collect($this->itineraryDays())
+            ->pluck('stay_id')
+            ->filter()
+            ->map(fn ($id) => (int) $id)
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    public function dayImageUrl(?string $path): ?string
+    {
+        if (! $path) {
+            return null;
+        }
+
+        return app(ImageUploader::class)->url($path);
+    }
+
+    public function dayImageThumbUrl(?string $path): ?string
+    {
+        if (! $path) {
+            return null;
+        }
+
+        return app(ImageUploader::class)->thumbUrl($path) ?: $this->dayImageUrl($path);
+    }
+
+    /**
+     * @param  array<string, mixed>  $day
+     */
+    public function dayStayLabel(array $day, ?Stay $stay = null): ?string
+    {
+        if ($stay) {
+            return $stay->name;
+        }
+
+        $name = trim((string) ($day['stay_name'] ?? ''));
+
+        return $name !== '' ? $name : null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $day
+     * @return list<string>
+     */
+    public function dayMeals(array $day): array
+    {
+        $meals = $day['meals'] ?? [];
+
+        if (is_string($meals)) {
+            $meals = array_map('trim', explode(',', $meals));
+        }
+
+        return array_values(array_intersect(['B', 'L', 'D'], $meals));
+    }
+
+    /**
+     * @param  list<string>  $codes
+     */
+    public function mealsLabel(array $codes): string
+    {
+        $map = ['B' => 'Breakfast', 'L' => 'Lunch', 'D' => 'Dinner'];
+
+        return collect($codes)
+            ->map(fn ($code) => $map[$code] ?? $code)
+            ->filter()
+            ->implode(' · ');
     }
 }

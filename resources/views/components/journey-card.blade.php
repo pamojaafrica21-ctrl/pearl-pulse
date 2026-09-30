@@ -31,30 +31,34 @@
             @if($journey->teaser)
                 <p class="journey-card__teaser">{{ $journey->teaser }}</p>
             @endif
-            <span class="journey-card__cta">Explore now</span>
+            <span class="journey-card__cta">Explore journey</span>
         </div>
     </a>
 @else
-    <a href="{{ route('journeys.show', $journey) }}" {{ $attributes->class(['destination-card destination-card--overlay group']) }}>
-        <div class="overflow-hidden bg-forest/10">
+    <a href="{{ route('journeys.show', $journey) }}" {{ $attributes->class(['journey-card journey-card--listing group']) }}>
+        <div class="journey-card__media">
             @if($cover)
                 <img src="{{ $cover }}" alt="{{ $journey->name }}" loading="lazy" decoding="async">
             @else
-                <div class="aspect-[4/5] bg-gradient-to-br from-forest to-forest-light"></div>
+                <div class="journey-card__fallback" aria-hidden="true"></div>
             @endif
+            <div class="journey-card__shade" aria-hidden="true"></div>
         </div>
-        <div class="destination-card-meta">
-            <p class="text-[13px] tracking-[0.18em] uppercase text-white/70">
+        <div class="journey-card__body">
+            <p class="journey-card__meta">
                 {{ $countries ?: 'East Africa' }}
-                @if($journey->duration_label) · {{ $journey->duration_label }}@endif
+                @if($journey->duration_label)
+                    <span aria-hidden="true"> · </span>{{ $journey->duration_label }}
+                @endif
             </p>
-            <h3 class="font-display text-2xl md:text-3xl text-white mt-1">
-                {{ $journey->name }}
-            </h3>
+            <h3 class="journey-card__title">{{ $journey->name }}</h3>
             @if($journey->teaser)
-                <p class="mt-2 text-sm text-white/80 leading-relaxed line-clamp-3">{{ $journey->teaser }}</p>
+                <p class="journey-card__teaser">{{ $journey->teaser }}</p>
             @endif
-            <p class="mt-3 text-[13px] tracking-[0.14em] uppercase text-white/65">{{ $journey->priceLabel() }}</p>
+            <div class="journey-card__footer">
+                <span class="journey-card__price">{{ $journey->priceLabel() }}</span>
+                <span class="journey-card__cta">Explore journey</span>
+            </div>
         </div>
     </a>
 @endif
