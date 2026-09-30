@@ -134,12 +134,6 @@
                 @endif
             </div>
             <div class="flex shrink-0 items-center gap-x-3 sm:gap-x-5">
-                @if(!empty($reviewLinks['google'] ?? null))
-                    <a class="utility-link site-utility__review" href="{{ $reviewLinks['google'] }}" target="_blank" rel="noopener">Google reviews</a>
-                @endif
-                @if(!empty($reviewLinks['tripadvisor'] ?? null))
-                    <a class="utility-link site-utility__review" href="{{ $reviewLinks['tripadvisor'] }}" target="_blank" rel="noopener">Tripadvisor</a>
-                @endif
                 @auth
                     @if(auth()->user()->isAdmin())
                         <a class="utility-link" href="{{ route('admin.dashboard') }}">Admin</a>

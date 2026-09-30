@@ -29,6 +29,9 @@ class SeedImage
         $plainsElephant = $p('667205');
         $highlands = $p('1183099');
         $guide = $p('1670732');
+        $lions = $u('photo-1546182990-dffeafbe841d');
+        $elephantsWalk = $u('photo-1557050543-4d5f4e07ef46');
+        $cheetahClose = $u('photo-1551969014-7d2c4cddf0b6');
 
         return [
             'hero' => $jeep,
@@ -78,10 +81,11 @@ class SeedImage
             'pulse-morning-in-bwindi' => $forest,
             'pulse-kazinga-at-dusk' => $waterhole,
             'pulse-mara-crossing' => $jeep,
-            'specialist-family' => $calf,
-            'specialist-honeymoon' => $reef,
-            'specialist-photography' => $cheetah,
-            'specialist-wellness' => $reef,
+            'specialist-family' => $elephantsWalk,
+            'specialist-honeymoon' => $lions,
+            'specialist-photography' => $cheetahClose,
+            'specialist-wellness' => $giraffe,
+            'specialist-section-bg' => $elephantsDusk,
             'article' => $jeep,
             'elephant-forest' => $elephantForest,
             'elephant-calf' => $calf,

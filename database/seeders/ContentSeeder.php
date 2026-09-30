@@ -602,7 +602,7 @@ class ContentSeeder extends Seeder
                     'subtitle' => $item['subtitle'],
                     'teaser' => $item['teaser'],
                     'description' => $item['description'],
-                    'cover_path' => SeedImage::photo('specialist-'.$item['slug'], 'seed/specialist-'.$item['slug'].'.jpg', 1800, 1200),
+                    'cover_path' => SeedImage::photo('specialist-'.$item['slug'], 'seed/specialist-'.$item['slug'].'.jpg', 1800, 1200, true),
                     'meta_title' => $item['name'].' | Pearl Pulse Safaris',
                     'meta_description' => $item['teaser'],
                     'status' => 'published',
@@ -610,6 +610,9 @@ class ContentSeeder extends Seeder
                 ]
             );
         }
+
+        // Full-bleed animal backdrop for the homepage Specialist Journeys section.
+        SeedImage::photo('specialist-section-bg', 'seed/specialist-section-bg.jpg', 2200, 1400, true);
     }
 
     protected function pages(): void

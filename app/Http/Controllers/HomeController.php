@@ -114,9 +114,6 @@ class HomeController extends Controller
                 ?: $countries->first()?->coverUrl();
         }
 
-        $introImage = $orderedCountries->first()?->coverThumbUrl()
-            ?: $orderedCountries->first()?->coverUrl();
-
         $trustItems = $settings->listItems('home_trust_items', 6);
         if ($trustItems === []) {
             $trustItems = [
@@ -133,7 +130,6 @@ class HomeController extends Controller
             'homeIntroEyebrow' => $settings->get('home_intro_eyebrow', 'Africa, deeply personal'),
             'homeIntroHeading' => $settings->get('home_intro_heading', 'Local African specialists who design private journeys'),
             'homeIntroBody' => $settings->get('home_intro_body', "Pearl Pulse is a Uganda-based safari company. We design private journeys across Uganda, Rwanda, Kenya, and Tanzania — shaped around how you want to experience Africa, not a fixed catalogue."),
-            'introImage' => $introImage,
             'homePillars' => $settings->listItems('home_pillars', 6),
             'destinationsEyebrow' => $settings->get('home_destinations_eyebrow', 'Destinations'),
             'destinationsHeading' => $settings->get('home_destinations_heading', 'Where do you want to go?'),
@@ -155,6 +151,7 @@ class HomeController extends Controller
             'journeys' => $journeys,
             'experiences' => Experience::query()->published()->orderBy('sort_order')->get(),
             'specialists' => Specialist::query()->published()->orderBy('sort_order')->get(),
+            'specialistsBg' => asset('storage/seed/specialist-section-bg.jpg'),
             'team' => TeamMember::query()->published()->orderBy('sort_order')->take(4)->get(),
             'pulseItems' => PulseItem::query()->visible()->orderBy('sort_order')->take(4)->get(),
             'stays' => Stay::query()->published()->orderBy('sort_order')->take(3)->get(),

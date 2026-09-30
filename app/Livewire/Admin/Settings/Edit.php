@@ -320,8 +320,8 @@ class Edit extends Component
             'social_instagram' => ['nullable', 'url', 'max:500'],
             'social_facebook' => ['nullable', 'url', 'max:500'],
             'social_twitter' => ['nullable', 'url', 'max:500'],
-            'review_google_url' => ['nullable', 'url', 'max:500'],
-            'review_tripadvisor_url' => ['nullable', 'url', 'max:500'],
+            'review_google_url' => ['nullable', 'url', 'max:2000'],
+            'review_tripadvisor_url' => ['nullable', 'url', 'max:2000'],
             'hero_image' => ['nullable', 'image', 'max:8192'],
         ];
     }

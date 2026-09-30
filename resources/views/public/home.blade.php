@@ -16,13 +16,12 @@
             ['title' => 'Uganda-based'],
         ];
     }
-    $mobileTrust = array_slice($trustItems, 0, 3);
     $defaultPillars = [
-        ['title' => 'Private by design', 'text' => 'Your vehicle, your pace, your group — never shared seat sales.'],
-        ['title' => 'Local knowledge', 'text' => 'Uganda-based specialists with deep East Africa relationships.'],
-        ['title' => 'Seamless logistics', 'text' => 'Permits, lodges, transfers, and timing handled end to end.'],
-        ['title' => 'Conservation-minded', 'text' => 'Travel that supports communities and wild places.'],
-        ['title' => 'Honest counsel', 'text' => 'We say no when a trip does not fit — and reshape when it can.'],
+        ['title' => 'Private by design', 'text' => 'Your vehicle, your pace, your group — never a shared seat sale. Days unfold around how you want to travel, not a fixed departure list.'],
+        ['title' => 'Local knowledge', 'text' => 'Uganda-based specialists with deep East Africa relationships — parks, camps, and guides we trust to read the land and look after you.'],
+        ['title' => 'Seamless logistics', 'text' => 'Gorilla permits, lodge holds, transfers, and timing handled end to end, so you arrive ready to look up — not down at a checklist.'],
+        ['title' => 'Conservation-minded', 'text' => 'Travel that supports communities and wild places: permits that fund protection, local employment, and routes that keep impact light.'],
+        ['title' => 'Honest counsel', 'text' => 'We say no when a trip does not fit, and reshape when it can — clear advice on seasons, pace, and what is worth the journey.'],
     ];
     $pillars = ($homePillars ?? []) !== [] ? $homePillars : $defaultPillars;
 @endphp
@@ -116,16 +115,16 @@
         </div>
     @endforeach
 
-    <div class="relative z-10 flex min-h-[inherit] flex-1 flex-col justify-end">
-        <div class="home-hero__content relative mx-auto w-full max-w-7xl px-5 lg:px-8">
+    <div class="relative z-10 flex min-h-full flex-1 flex-col justify-end">
+        <div class="home-hero__content relative mt-auto w-full">
             @foreach($heroSlides as $i => $slide)
                 <div x-show="index === {{ $i }}" @if($i !== 0) x-cloak @endif>
-                    <p class="text-[0.8rem] tracking-[0.22em] uppercase text-white/75 fade-up">{{ $slide['label'] ?: 'Pearl Pulse Safaris' }}</p>
-                    <h1 class="home-hero__title font-display text-white leading-[0.95] max-w-4xl fade-up mt-3 sm:mt-4" style="animation-delay: 0.08s">
+                    <p class="home-hero__label fade-up">{{ $slide['label'] ?: 'Pearl Pulse Safaris' }}</p>
+                    <h1 class="home-hero__title font-display text-white leading-[1.02] max-w-3xl fade-up mt-2 sm:mt-3" style="animation-delay: 0.08s">
                         {{ $slide['headline'] ?: "Private journeys into Africa's wild heart" }}
                     </h1>
                     @if($slide['tagline'] || $i === 0)
-                        <p class="home-hero__tagline mt-4 sm:mt-6 max-w-xl text-white/85 font-light leading-relaxed fade-up" style="animation-delay: 0.18s">
+                        <p class="home-hero__tagline max-w-lg text-white/85 font-light leading-relaxed fade-up" style="animation-delay: 0.18s">
                             {{ $slide['tagline'] ?: 'Uganda-based specialists. East Africa, designed around you.' }}
                         </p>
                     @endif
@@ -160,13 +159,10 @@
         </div>
 
         {{-- 2. Trust bar --}}
-        <div class="home-hero__trust home-hero__trust--forest relative z-10 mt-auto">
-            <div class="home-hero__trust-row mx-auto max-w-7xl">
-                @foreach($mobileTrust as $item)
-                    <span class="md:hidden">{{ $item['title'] }}</span>
-                @endforeach
+        <div class="home-hero__trust relative z-10">
+            <div class="home-hero__trust-row">
                 @foreach($trustItems as $item)
-                    <span class="hidden md:inline{{ strlen($item['title']) > 22 ? ' home-hero__trust-item--wide' : '' }}">{{ $item['title'] }}</span>
+                    <span>{{ $item['title'] }}</span>
                 @endforeach
             </div>
         </div>
@@ -176,28 +172,19 @@
 {{-- 3. Short intro --}}
 @if($homeIntroHeading || $homeIntroBody)
 <section class="surface surface--white py-14 lg:py-20">
-    <div class="mx-auto grid max-w-7xl items-center gap-10 px-5 lg:grid-cols-12 lg:gap-14 lg:px-8">
-        <div class="reveal lg:col-span-7 @if(!($introImage ?? null)) lg:col-span-12 lg:mx-auto lg:max-w-3xl lg:text-center @endif">
-            @if($homeIntroEyebrow)
-                <p class="section-eyebrow">{{ $homeIntroEyebrow }}</p>
-            @endif
-            @if($homeIntroHeading)
-                <h2 class="home-section-title">{{ $homeIntroHeading }}</h2>
-            @endif
-            @if($homeIntroBody)
-                <p class="home-section-lead whitespace-pre-line">{{ $homeIntroBody }}</p>
-            @endif
-            <div class="mt-8">
-                <a href="{{ route('about') }}" class="btn-outline-dark">Discover Pearl Pulse</a>
-            </div>
-        </div>
-        @if(!empty($introImage))
-            <div class="reveal hidden overflow-hidden lg:col-span-5 lg:block" style="transition-delay:120ms">
-                <div class="aspect-[4/5] overflow-hidden bg-sand">
-                    <img src="{{ $introImage }}" alt="" class="h-full w-full object-cover transition duration-[1.4s] ease-out hover:scale-[1.04]" loading="lazy" decoding="async">
-                </div>
-            </div>
+    <div class="mx-auto max-w-3xl px-5 lg:px-8 text-center reveal">
+        @if($homeIntroEyebrow)
+            <p class="section-eyebrow">{{ $homeIntroEyebrow }}</p>
         @endif
+        @if($homeIntroHeading)
+            <h2 class="home-section-title">{{ $homeIntroHeading }}</h2>
+        @endif
+        @if($homeIntroBody)
+            <p class="home-section-lead whitespace-pre-line">{{ $homeIntroBody }}</p>
+        @endif
+        <div class="mt-8">
+            <a href="{{ route('about') }}" class="btn-outline-dark">Discover Pearl Pulse</a>
+        </div>
     </div>
 </section>
 @endif
@@ -433,7 +420,7 @@
     </div>
 </section>
 
-{{-- 5. Experiences — vertical portrait strip (former destinations card strip) --}}
+{{-- 5. Experiences — vertical portrait strip with auto-scroll --}}
 <section class="surface surface--white relative py-16 lg:py-24 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="reveal mx-auto max-w-3xl text-center mb-12">
@@ -443,37 +430,76 @@
                 <p class="home-section-lead mx-auto max-w-2xl">{{ $experiencesIntro }}</p>
             @endif
         </div>
-
-        @if($experiences->isNotEmpty())
-            <div class="destination-country-grid destination-country-grid--scroll reveal-stagger" aria-label="Experiences">
-                @foreach($experiences as $experience)
-                    <a href="{{ route('experiences.show', $experience) }}" class="destination-country-card group">
-                        <div class="destination-country-card__media">
-                            @if($experience->coverUrl())
-                                <img src="{{ $experience->coverThumbUrl() ?: $experience->coverUrl() }}" alt="{{ $experience->name }}" loading="lazy" decoding="async">
-                            @endif
-                        </div>
-                        <div class="destination-country-card__copy">
-                            <h3 class="font-display text-white">{{ $experience->name }}</h3>
-                            @if($experience->teaser)
-                                <p class="mt-2 line-clamp-2 text-white/80">{{ $experience->teaser }}</p>
-                            @endif
-                            <span class="destination-country-card__cta">Explore</span>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-            <div class="mt-10 text-center reveal">
-                <a href="{{ route('experiences.index') }}" class="btn-outline-dark">All experiences</a>
-            </div>
-        @endif
     </div>
+
+    @if($experiences->isNotEmpty())
+        <div class="experience-scroller-wrap mt-2" data-card-scroller-wrap>
+            <div
+                class="experience-scroller"
+                data-card-scroller
+                data-pause="2000"
+                aria-label="Experiences"
+            >
+                <div class="experience-scroller__track" data-card-scroller-track>
+                    @foreach($experiences as $experience)
+                        <a
+                            href="{{ route('experiences.show', $experience) }}"
+                            class="destination-country-card experience-scroller__card group"
+                            data-card-scroller-item
+                        >
+                            <div class="destination-country-card__media">
+                                @if($experience->coverUrl())
+                                    <img src="{{ $experience->coverThumbUrl() ?: $experience->coverUrl() }}" alt="{{ $experience->name }}" loading="lazy" decoding="async">
+                                @endif
+                            </div>
+                            <div class="destination-country-card__copy">
+                                <h3 class="font-display text-white">{{ $experience->name }}</h3>
+                                @if($experience->teaser)
+                                    <p class="mt-2 line-clamp-2 text-white/80">{{ $experience->teaser }}</p>
+                                @endif
+                                <span class="destination-country-card__cta">Explore</span>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="experience-scroller__controls">
+                <button
+                    type="button"
+                    class="experience-scroller__btn"
+                    data-card-scroller-prev
+                    aria-label="Previous experiences"
+                >
+                    <svg class="experience-scroller__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button
+                    type="button"
+                    class="experience-scroller__btn"
+                    data-card-scroller-next
+                    aria-label="Next experiences"
+                >
+                    <svg class="experience-scroller__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="mx-auto max-w-7xl px-5 lg:px-8 mt-10 text-center reveal">
+            <a href="{{ route('experiences.index') }}" class="btn-outline-dark">All experiences</a>
+        </div>
+    @endif
 </section>
 
 {{-- 6. Specialist Journeys --}}
 @if($specialists->isNotEmpty())
-<section class="surface surface--green text-sand relative py-16 lg:py-24 overflow-hidden">
-    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+<section class="specialist-stage relative isolate overflow-hidden py-16 text-sand lg:py-24">
+    @if(!empty($specialistsBg))
+        <div class="specialist-stage__media" aria-hidden="true">
+            <img src="{{ $specialistsBg }}" alt="" loading="lazy" decoding="async">
+        </div>
+    @endif
+    <div class="specialist-stage__veil" aria-hidden="true"></div>
+    <div class="relative z-10 mx-auto max-w-7xl px-5 lg:px-8">
         <div class="reveal max-w-3xl mb-12">
             <p class="section-eyebrow text-sand/75">{{ $specialistsEyebrow }}</p>
             <h2 class="home-section-title text-white">{{ $specialistsHeading }}</h2>
@@ -485,20 +511,22 @@
         <div class="specialist-mosaic reveal-stagger">
             @foreach($specialists as $specialist)
                 <a href="{{ route('specialist.show', $specialist) }}" class="specialist-panel group specialist-panel--{{ $loop->iteration }}">
-                    <div class="specialist-panel__media">
-                        @if($specialist->coverUrl())
-                            <img src="{{ $specialist->coverThumbUrl() ?: $specialist->coverUrl() }}" alt="{{ $specialist->name }}" loading="lazy" decoding="async">
-                        @endif
-                    </div>
-                    <div class="specialist-panel__copy">
-                        @if($specialist->subtitle)
-                            <p class="text-[0.75rem] tracking-[0.2em] uppercase text-sand/85">{{ $specialist->subtitle }}</p>
-                        @endif
-                        <h3 class="font-display text-white mt-2">{{ $specialist->name }}</h3>
-                        @if($specialist->teaser)
-                            <p class="mt-3 max-w-md text-white/85 leading-relaxed">{{ $specialist->teaser }}</p>
-                        @endif
-                        <span class="specialist-panel__cta">Explore this journey</span>
+                    <div class="specialist-panel__frame">
+                        <div class="specialist-panel__media">
+                            @if($specialist->coverUrl())
+                                <img src="{{ $specialist->coverThumbUrl() ?: $specialist->coverUrl() }}" alt="{{ $specialist->name }}" loading="lazy" decoding="async">
+                            @endif
+                        </div>
+                        <div class="specialist-panel__copy">
+                            @if($specialist->subtitle)
+                                <p class="text-[0.75rem] tracking-[0.2em] uppercase text-sand/85">{{ $specialist->subtitle }}</p>
+                            @endif
+                            <h3 class="font-display text-white mt-2">{{ $specialist->name }}</h3>
+                            @if($specialist->teaser)
+                                <p class="mt-3 max-w-md text-white/85 leading-relaxed">{{ $specialist->teaser }}</p>
+                            @endif
+                            <span class="specialist-panel__cta">Explore this journey</span>
+                        </div>
                     </div>
                 </a>
             @endforeach
@@ -554,7 +582,8 @@
             <div
                 class="signature-rail__scroller"
                 data-card-scroller
-                data-manual
+                data-pause="2000"
+                aria-label="Signature journeys"
             >
                 <div class="signature-rail__track" data-card-scroller-track>
                     @foreach($journeys as $journey)
@@ -576,6 +605,7 @@
         <div class="reveal mx-auto max-w-3xl text-center mb-12">
             <p class="section-eyebrow">Why Pearl Pulse</p>
             <h2 class="home-section-title">What sets a private journey apart</h2>
+            <p class="home-section-lead mx-auto max-w-2xl">Five promises we keep on every itinerary — so the wild feels close, and the planning never gets in the way.</p>
         </div>
         <div class="feature-strip reveal-stagger">
             @foreach($pillars as $index => $pillar)
@@ -593,9 +623,9 @@
 
 {{-- 9. Our People --}}
 @if($team->isNotEmpty())
-<section class="surface surface--beige relative py-20 lg:py-28 overflow-hidden">
-    <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <div class="reveal text-center mb-14">
+<section class="surface surface--beige relative py-12 lg:py-16 overflow-hidden">
+    <div class="mx-auto max-w-5xl px-5 lg:px-8">
+        <div class="reveal text-center mb-8">
             <p class="section-eyebrow">Our people</p>
             <h2 class="home-section-title">Meet the people who will look after you</h2>
         </div>
@@ -607,14 +637,14 @@
                             <img src="{{ $member->coverThumbUrl() ?: $member->coverUrl() }}" alt="{{ $member->name }}" loading="lazy" decoding="async">
                         @endif
                     </div>
-                    <p class="mt-4 font-display text-charcoal">{{ $member->name }}</p>
+                    <p class="mt-3 font-display text-charcoal">{{ $member->name }}</p>
                     @if($member->role)
-                        <p class="mt-1 text-[0.75rem] tracking-[0.16em] uppercase text-muted">{{ $member->role }}</p>
+                        <p class="mt-0.5 text-[0.7rem] tracking-[0.14em] uppercase text-muted">{{ $member->role }}</p>
                     @endif
                 </div>
             @endforeach
         </div>
-        <div class="mt-14 text-center reveal">
+        <div class="mt-8 text-center reveal">
             <a href="{{ route('our-people') }}" class="btn-outline-dark">Meet our team</a>
         </div>
     </div>
@@ -714,6 +744,8 @@
                 </blockquote>
             @endforeach
         </div>
+
+        <x-review-platform-links :links="$reviewLinks ?? []" class="mt-10" />
     </div>
 </section>
 @endif

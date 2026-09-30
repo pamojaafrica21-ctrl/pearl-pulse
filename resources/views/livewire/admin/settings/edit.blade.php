@@ -324,7 +324,7 @@
 
         <section class="space-y-5">
             <h2 class="font-display text-2xl text-forest">Review links</h2>
-            <p class="text-sm text-muted">Shown in the site header utility bar and homepage trust section.</p>
+            <p class="text-sm text-muted">Paste your Google Business and Tripadvisor profile URLs. They appear on Guest voices and the reviews page so travellers can read and leave reviews.</p>
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Google reviews URL</label>
                 <input type="url" wire:model="review_google_url" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">

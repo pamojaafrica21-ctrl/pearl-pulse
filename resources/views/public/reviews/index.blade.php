@@ -9,14 +9,11 @@
         <div class="reveal mx-auto max-w-3xl text-center mb-12">
             <p class="section-eyebrow">Guest voices</p>
             <h1 class="font-display text-4xl md:text-5xl text-charcoal">The journeys our guests remember</h1>
-            <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm">
-                @if(!empty($reviewLinks['google']))
-                    <a href="{{ $reviewLinks['google'] }}" class="tracking-[0.12em] uppercase text-forest hover:opacity-70 transition" target="_blank" rel="noopener">Google reviews</a>
-                @endif
-                @if(!empty($reviewLinks['tripadvisor']))
-                    <a href="{{ $reviewLinks['tripadvisor'] }}" class="tracking-[0.12em] uppercase text-forest hover:opacity-70 transition" target="_blank" rel="noopener">Tripadvisor</a>
-                @endif
-            </div>
+            <x-review-platform-links
+                :links="$reviewLinks ?? []"
+                :show-lead="false"
+                class="mt-8"
+            />
         </div>
 
         <div class="guest-voices">
