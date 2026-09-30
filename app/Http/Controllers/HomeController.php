@@ -21,6 +21,7 @@ class HomeController extends Controller
     {
         $countries = Country::query()
             ->published()
+            ->with(['destinations' => fn ($q) => $q->published()->orderByDesc('is_featured')->orderBy('sort_order')->orderBy('name')])
             ->orderBy('sort_order')
             ->get();
 
@@ -31,18 +32,72 @@ class HomeController extends Controller
             ->concat($countries->reject(fn (Country $country) => in_array($country->slug, $countryOrder, true)))
             ->values();
 
-        $hasMulti = Journey::query()->published()->where('is_multi_country', true)->exists();
+        $destinationPanels = $orderedCountries
+            ->map(function (Country $country) {
+                $items = $country->destinations->take(3)->map(fn ($destination) => [
+                    'href' => route('destinations.show', [$country, $destination]),
+                    'image' => $destination->coverUrl() ?: $country->coverUrl(),
+                    'thumb' => $destination->coverThumbUrl()
+                        ?: $country->coverThumbUrl()
+                        ?: $destination->coverUrl()
+                        ?: $country->coverUrl(),
+                    'kicker' => $country->name,
+                    'title' => $destination->name,
+                    'meta' => $destination->region ?: $destination->duration,
+                    'teaser' => $destination->teaser,
+                ])->values();
+
+                if ($items->isEmpty()) {
+                    return null;
+                }
+
+                return [
+                    'key' => $country->slug,
+                    'label' => $country->name,
+                    'href' => route('destinations.country', $country),
+                    'explore' => 'Explore '.$country->name,
+                    'items' => $items,
+                ];
+            })
+            ->filter()
+            ->values();
+
+        $multiJourneys = Journey::query()
+            ->published()
+            ->where('is_multi_country', true)
+            ->with('countries')
+            ->orderBy('sort_order')
+            ->take(3)
+            ->get();
+
+        if ($multiJourneys->isNotEmpty()) {
+            $destinationPanels->push([
+                'key' => 'multi',
+                'label' => 'Around East Africa',
+                'href' => route('journeys.index', ['type' => 'multi']),
+                'explore' => 'Explore multi-country',
+                'items' => $multiJourneys->map(fn (Journey $journey) => [
+                    'href' => route('journeys.show', $journey),
+                    'image' => $journey->coverUrl(),
+                    'thumb' => $journey->coverThumbUrl() ?: $journey->coverUrl(),
+                    'kicker' => $journey->countries->pluck('name')->filter()->join(' · ') ?: 'Multi-country',
+                    'title' => $journey->name,
+                    'meta' => $journey->duration_label,
+                    'teaser' => $journey->teaser,
+                ])->values(),
+            ]);
+        }
 
         $journeys = Journey::query()
             ->published()
             ->signature()
             ->with('countries')
             ->orderBy('sort_order')
-            ->take(4)
+            ->take(6)
             ->get();
 
         if ($journeys->isEmpty()) {
-            $journeys = Journey::query()->published()->with('countries')->orderBy('sort_order')->take(4)->get();
+            $journeys = Journey::query()->published()->with('countries')->orderBy('sort_order')->take(6)->get();
         }
 
         $reasonImage = $settings->get('home_reason_image')
@@ -89,14 +144,14 @@ class HomeController extends Controller
             'specialistsEyebrow' => $settings->get('home_specialists_eyebrow', 'Specialist journeys'),
             'specialistsHeading' => $settings->get('home_specialists_heading', 'Travel shaped around how you want to feel'),
             'specialistsIntro' => $settings->get('home_specialists_intro', 'Family, honeymoon, photography, and wellness — private chapters designed with intent.'),
-            'featuredEyebrow' => $settings->get('featured_eyebrow', 'Signature journeys'),
-            'featuredHeading' => $settings->get('featured_heading', 'Sample itineraries to begin from'),
-            'featuredIntro' => $settings->get('featured_intro', 'Three or four starting points. Open a journey for the full day-by-day — or ask us to rewrite it around you.'),
+            'featuredEyebrow' => $settings->get('featured_eyebrow', 'Journeys worth taking'),
+            'featuredHeading' => $settings->get('featured_heading', 'Signature journeys'),
+            'featuredIntro' => $settings->get('featured_intro', 'Three starting points. Open a journey for the full day-by-day — or tell us how you want it rewritten.'),
             'homeCtaHeading' => $settings->get('home_cta_heading', 'Not sure where to begin?'),
             'homeCtaText' => $settings->get('home_cta_text', 'Use the Journey Finder, write to us, or message on WhatsApp — we will meet you where you are.'),
             'homeCtaButton' => $settings->get('home_cta_button', 'Plan your journey'),
             'countries' => $orderedCountries,
-            'hasMultiCountry' => $hasMulti,
+            'destinationPanels' => $destinationPanels,
             'journeys' => $journeys,
             'experiences' => Experience::query()->published()->orderBy('sort_order')->get(),
             'specialists' => Specialist::query()->published()->orderBy('sort_order')->get(),

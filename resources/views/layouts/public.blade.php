@@ -185,7 +185,7 @@
                     <svg class="h-5 w-5 lg:h-4 lg:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.3-4.3M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/>
                     </svg>
-                    <span class="hidden sm:inline text-[13px] tracking-[0.16em] uppercase">Find your journey</span>
+                    <span class="hidden sm:inline text-[0.85rem] tracking-[0.16em] uppercase">Find your journey</span>
                 </button>
             </div>
 
@@ -194,7 +194,7 @@
             </a>
 
             <div class="flex items-center justify-end gap-4 justify-self-end">
-                <a href="{{ route('plan') }}" class="btn-primary !px-3.5 !py-2 text-[12px] sm:!px-5 sm:!py-2.5 sm:text-[13px] lg:!px-6 lg:!py-3 whitespace-nowrap" @click="closeNav(); closeMobile()">
+                <a href="{{ route('plan') }}" class="btn-primary !px-4 !py-2.5 text-[0.8rem] sm:!px-6 sm:!py-3 sm:text-[0.9rem] lg:!px-7 lg:!py-3.5 lg:text-[1rem] whitespace-nowrap" @click="closeNav(); closeMobile()">
                     <span class="sm:hidden">Plan</span>
                     <span class="hidden sm:inline">Plan your journey</span>
                 </a>
