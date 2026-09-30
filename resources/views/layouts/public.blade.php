@@ -172,14 +172,14 @@
                 </button>
                 <button
                     type="button"
-                    class="nav-link inline-flex items-center gap-2"
+                    class="nav-link inline-flex items-center gap-2 shrink-0"
                     @click="closeNav(); closeMobile(); $dispatch('open-journey-search')"
                     aria-label="Find your journey"
                 >
                     <svg class="h-5 w-5 lg:h-4 lg:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.3-4.3M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/>
                     </svg>
-                    <span class="hidden sm:inline text-[0.85rem] tracking-[0.16em] uppercase">Find your journey</span>
+                    <span class="site-header-search-label hidden lg:inline text-[0.85rem] tracking-[0.16em] uppercase">Find your journey</span>
                 </button>
             </div>
 
@@ -247,8 +247,20 @@
                     <a href="{{ route('true-pulse') }}" class="mobile-drawer__text-link" @click="closeMobile()">True Pulse</a>
                     <a href="{{ route('insiders.index') }}" class="mobile-drawer__text-link" @click="closeMobile()">Insiders</a>
                     <a href="{{ route('stays.index') }}" class="mobile-drawer__text-link" @click="closeMobile()">Selected stays</a>
+                    <a href="{{ route('reviews.index') }}" class="mobile-drawer__text-link" @click="closeMobile()">Guest reviews</a>
                     <a href="{{ route('plan') }}" class="mobile-drawer__text-link" @click="closeMobile()">Plan your journey</a>
                 </div>
+
+                @if(!empty($reviewLinks['google'] ?? null) || !empty($reviewLinks['tripadvisor'] ?? null))
+                    <div class="mobile-drawer__section">
+                        <p class="mobile-drawer__eyebrow">Leave a review</p>
+                        <x-review-platform-links
+                            :links="$reviewLinks ?? []"
+                            :show-lead="false"
+                            class="mobile-drawer__reviews"
+                        />
+                    </div>
+                @endif
 
                 <div class="mobile-drawer__section">
                     <button type="button" class="mobile-drawer__row" @click="openMobilePanel('about')">
