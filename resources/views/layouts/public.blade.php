@@ -122,9 +122,9 @@
     @keydown.escape.window="closeNav(); closeMobile()"
 >
     <div class="sticky top-0 z-50" data-site-chrome x-init="$nextTick(() => { const set = () => document.documentElement.style.setProperty('--site-chrome-height', $el.offsetHeight + 'px'); set(); new ResizeObserver(set).observe($el); })">
-    {{-- Utility bar (AST trust cues) --}}
-    <div class="site-utility bg-forest text-white">
-        <div class="site-utility__inner mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-1.5 sm:gap-4 sm:px-5 sm:py-2 lg:px-8">
+    {{-- Utility bar — quieter, collapses on scroll --}}
+    <div class="site-utility bg-forest text-white" data-site-utility>
+        <div class="site-utility__inner mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-5 lg:px-8">
             <div class="flex min-w-0 items-center gap-x-3 sm:gap-x-5">
                 @if($siteContact['phone'] ?? null)
                     <a class="utility-link shrink-0" href="tel:{{ preg_replace('/\s+/', '', $siteContact['phone']) }}">{{ $siteContact['phone'] }}</a>
@@ -158,7 +158,7 @@
         class="border-b border-charcoal/8 bg-white/95 backdrop-blur"
         data-site-header
     >
-        <div class="site-header-grid mx-auto max-w-7xl px-5 py-2.5 sm:py-3 lg:px-8 lg:py-3.5 xl:py-4">
+        <div class="site-header-grid mx-auto max-w-7xl px-5 py-2 sm:py-2.5 lg:px-8 lg:py-3 xl:py-3.5">
             <div class="flex items-center gap-3 sm:gap-4 justify-self-start">
                 <button
                     type="button"
@@ -188,7 +188,7 @@
             </a>
 
             <div class="flex items-center justify-end gap-4 justify-self-end">
-                <a href="{{ route('plan') }}" class="btn-primary !px-4 !py-2.5 text-[0.8rem] sm:!px-6 sm:!py-3 sm:text-[0.9rem] lg:!px-7 lg:!py-3.5 lg:text-[1rem] whitespace-nowrap" @click="closeNav(); closeMobile()">
+                <a href="{{ route('plan') }}" class="btn-primary site-header__plan whitespace-nowrap" @click="closeNav(); closeMobile()">
                     <span class="sm:hidden">Plan</span>
                     <span class="hidden sm:inline">Plan your journey</span>
                 </a>

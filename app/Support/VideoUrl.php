@@ -74,6 +74,7 @@ class VideoUrl
             'disablekb' => 1,
             'fs' => 0,
             'enablejsapi' => 1,
+            'cc_load_policy' => 0,
         ];
 
         $origin = '';

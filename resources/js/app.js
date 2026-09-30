@@ -260,10 +260,14 @@ function initCardScrollers() {
 
 function initHeaderShrink() {
     const header = document.querySelector('[data-site-header]');
-    if (!header) return;
+    const utility = document.querySelector('[data-site-utility]');
+    if (!header && !utility) return;
 
     const onScroll = () => {
-        header.classList.toggle('is-scrolled', window.scrollY > 24);
+        const scrolled = window.scrollY > 20;
+        document.documentElement.classList.toggle('is-scrolled', scrolled);
+        header?.classList.toggle('is-scrolled', scrolled);
+        utility?.classList.toggle('is-hidden', scrolled);
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });

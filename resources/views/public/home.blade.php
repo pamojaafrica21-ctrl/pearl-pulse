@@ -34,6 +34,7 @@
         count: {{ $slideCount }},
         timer: null,
         duration: {{ $heroDuration }},
+        labels: {{ Js::from(collect($heroSlides)->map(fn ($s) => $s['label'] ?: ($s['headline'] ?: 'Pearl Pulse'))->values()->all()) }},
         next() { this.index = (this.index + 1) % this.count; this.restart() },
         prev() { this.index = (this.index - 1 + this.count) % this.count; this.restart() },
         go(i) { this.index = i; this.restart() },
@@ -88,11 +89,15 @@
                     muted
                     loop
                     playsinline
+                    autoplay
                     preload="{{ $i === 0 ? 'metadata' : 'none' }}"
                     poster="{{ $slide['image_url'] }}"
                     data-parallax="0.08"
                     x-bind:autoplay="index === {{ $i }}"
-                    @if($i === 0) autoplay @endif
+                    x-init="$watch('index', (value) => {
+                        if (value === {{ $i }}) { $el.play?.().catch(() => {}); }
+                        else { $el.pause?.(); }
+                    })"
                 >
                     <source
                         x-bind:src="index === {{ $i }} ? @js($slide['video_url']) : ''"
@@ -111,42 +116,35 @@
             @else
                 <div class="absolute inset-0 bg-gradient-to-br from-forest via-forest-light to-[#3d4f35]"></div>
             @endif
-            <div class="hero-slide__shade absolute inset-0 bg-gradient-to-t from-charcoal/55 via-charcoal/25 to-black/15"></div>
+            <div class="hero-slide__shade absolute inset-0 bg-gradient-to-t from-charcoal/55 via-charcoal/20 to-transparent"></div>
         </div>
     @endforeach
 
     <div class="relative z-10 flex min-h-full flex-1 flex-col justify-end">
         <div class="home-hero__content relative mt-auto w-full">
             @foreach($heroSlides as $i => $slide)
-                <div x-show="index === {{ $i }}" @if($i !== 0) x-cloak @endif>
-                    <p class="home-hero__label fade-up">{{ $slide['label'] ?: 'Pearl Pulse Safaris' }}</p>
-                    <h1 class="home-hero__title font-display text-white leading-[1.02] max-w-3xl fade-up mt-2 sm:mt-3" style="animation-delay: 0.08s">
+                <div class="home-hero__copy" x-show="index === {{ $i }}" @if($i !== 0) x-cloak @endif>
+                    <h1 class="home-hero__title font-display text-white leading-[1.05] max-w-3xl fade-up">
                         {{ $slide['headline'] ?: "Private journeys into Africa's wild heart" }}
                     </h1>
                     @if($slide['tagline'] || $i === 0)
-                        <p class="home-hero__tagline max-w-lg text-white/85 font-light leading-relaxed fade-up" style="animation-delay: 0.18s">
+                        <p class="home-hero__tagline max-w-lg text-white/85 font-light leading-relaxed fade-up" style="animation-delay: 0.1s">
                             {{ $slide['tagline'] ?: 'Uganda-based specialists. East Africa, designed around you.' }}
                         </p>
                     @endif
                 </div>
             @endforeach
 
-            <div class="home-hero__actions fade-up" style="animation-delay: 0.28s">
-                <a href="{{ route('plan') }}" class="btn-outline home-hero__btn">Plan Your Journey</a>
-                <a href="{{ route('journeys.finder') }}" class="btn-outline home-hero__btn home-hero__btn--ghost">Find Your Journey</a>
+            <div class="home-hero__actions fade-up" style="animation-delay: 0.18s">
+                <a href="{{ route('plan') }}" class="btn-outline home-hero__btn">Plan your journey</a>
+                <a href="{{ route('journeys.finder') }}" class="btn-outline home-hero__btn home-hero__btn--ghost">Find your journey</a>
             </div>
 
             @if($slideCount > 1)
-                @php
-                    $nextLabels = collect($heroSlides)->map(fn ($s) => $s['label'] ?: $s['headline'])->values()->all();
-                @endphp
-                <div class="home-hero__meta fade-up" style="animation-delay: 0.4s">
-                    <div class="home-hero__next">
-                        <p class="text-[0.75rem] tracking-[0.2em] uppercase text-white/55 mb-2">Next up</p>
-                        <p class="text-base text-white/90 font-light truncate">
-                            <span x-text="{{ Js::from($nextLabels) }}[(index + 1) % count]"></span>
-                        </p>
-                        <div class="hero-progress mt-3" style="--hero-duration: {{ $heroDuration }}ms">
+                <div class="home-hero__meta fade-up" style="animation-delay: 0.28s">
+                    <div class="home-hero__now">
+                        <p class="home-hero__now-label" x-text="labels[index]"></p>
+                        <div class="hero-progress mt-2.5" style="--hero-duration: {{ $heroDuration }}ms">
                             <span :key="index"></span>
                         </div>
                     </div>
@@ -155,13 +153,19 @@
                         <button type="button" @click="next()" class="home-hero__nav-btn" aria-label="Next slide">›</button>
                     </div>
                 </div>
+            @elseif($slideCount === 1)
+                <div class="home-hero__meta fade-up" style="animation-delay: 0.28s">
+                    <div class="home-hero__now">
+                        <p class="home-hero__now-label">{{ $heroSlides[0]['label'] ?: 'Pearl Pulse Safaris' }}</p>
+                    </div>
+                </div>
             @endif
         </div>
 
-        {{-- 2. Trust bar --}}
+        {{-- 2. Trust bar — three keywords in one row --}}
         <div class="home-hero__trust relative z-10">
             <div class="home-hero__trust-row">
-                @foreach($trustItems as $item)
+                @foreach(array_slice($trustItems, 0, 3) as $item)
                     <span>{{ $item['title'] }}</span>
                 @endforeach
             </div>
@@ -171,19 +175,19 @@
 
 {{-- 3. Short intro --}}
 @if($homeIntroHeading || $homeIntroBody)
-<section class="surface surface--white py-14 lg:py-20">
+<section class="surface surface--white py-12 lg:py-20">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 text-center reveal">
         @if($homeIntroEyebrow)
             <p class="section-eyebrow">{{ $homeIntroEyebrow }}</p>
         @endif
         @if($homeIntroHeading)
-            <h2 class="home-section-title">{{ $homeIntroHeading }}</h2>
+            <h2 class="home-section-title home-intro__title">{{ $homeIntroHeading }}</h2>
         @endif
         @if($homeIntroBody)
             <p class="home-section-lead whitespace-pre-line">{{ $homeIntroBody }}</p>
         @endif
-        <div class="mt-8">
-            <a href="{{ route('about') }}" class="btn-outline-dark">Discover Pearl Pulse</a>
+        <div class="mt-6 sm:mt-8">
+            <a href="{{ route('about') }}" class="btn-outline-dark home-intro__cta">Discover Pearl Pulse</a>
         </div>
     </div>
 </section>
