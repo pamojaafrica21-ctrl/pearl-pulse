@@ -404,6 +404,31 @@
         </section>
 
         <section class="space-y-5">
+            <h2 class="font-display text-2xl text-forest">True Pulse — Instagram API</h2>
+            <p class="text-sm text-muted">Connect an Instagram professional account via Meta Graph API. The homepage and True Pulse page show live posts and reels (likes + comments). Visitors leave comments on Instagram.</p>
+            <p class="text-xs text-muted leading-relaxed">Required permissions: media read (<code class="text-charcoal">instagram_basic</code> / <code class="text-charcoal">instagram_business_basic</code>) and comments read (<code class="text-charcoal">instagram_manage_comments</code> / <code class="text-charcoal">instagram_business_manage_comments</code>), plus Page dependencies if using Facebook Login.</p>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Instagram user ID</label>
+                <input type="text" wire:model="instagram_user_id" autocomplete="off" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest" placeholder="IG professional account ID">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Access token</label>
+                <input type="password" wire:model="instagram_access_token" autocomplete="off" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest" placeholder="Long-lived access token">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Hashtag label</label>
+                <input type="text" wire:model="instagram_hashtag" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest" placeholder="#PearlPulseSafaris">
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+                <button type="button" wire:click="syncInstagram" class="btn-outline-dark text-xs" wire:loading.attr="disabled" wire:target="syncInstagram">
+                    <span wire:loading.remove wire:target="syncInstagram">Sync now</span>
+                    <span wire:loading wire:target="syncInstagram">Syncing…</span>
+                </button>
+                <p class="text-xs text-muted">Feed also syncs hourly when the scheduler is running.</p>
+            </div>
+        </section>
+
+        <section class="space-y-5">
             <h2 class="font-display text-2xl text-forest">Reviews — Google &amp; Tripadvisor</h2>
             <p class="text-sm text-muted">Paste your Google Business and Tripadvisor profile URLs. They appear on Guest voices and the reviews page so travellers can read and leave reviews.</p>
             <div>

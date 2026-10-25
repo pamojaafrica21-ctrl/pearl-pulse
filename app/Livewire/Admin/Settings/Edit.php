@@ -3,9 +3,11 @@
 namespace App\Livewire\Admin\Settings;
 
 use App\Services\ImageUploader;
+use App\Services\InstagramGraphService;
 use App\Services\SettingService;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Throwable;
 
 class Edit extends Component
 {
@@ -110,6 +112,12 @@ class Edit extends Component
     public string $admin_email = '';
 
     public string $social_instagram = '';
+
+    public string $instagram_user_id = '';
+
+    public string $instagram_access_token = '';
+
+    public string $instagram_hashtag = '';
 
     public string $social_facebook = '';
 
@@ -230,6 +238,9 @@ class Edit extends Component
         $this->contact_map_embed = (string) $settings->get('contact_map_embed', '');
         $this->admin_email = (string) $settings->get('admin_email', '');
         $this->social_instagram = (string) $settings->get('social_instagram', '');
+        $this->instagram_user_id = (string) $settings->get('instagram_user_id', '');
+        $this->instagram_access_token = (string) $settings->get('instagram_access_token', '');
+        $this->instagram_hashtag = (string) $settings->get('instagram_hashtag', '#PearlPulseSafaris');
         $this->social_facebook = (string) $settings->get('social_facebook', '');
         $this->social_youtube = (string) $settings->get('social_youtube', '');
         $this->social_tiktok = (string) $settings->get('social_tiktok', '');
@@ -390,6 +401,9 @@ class Edit extends Component
             'contact_map_embed' => ['nullable', 'url', 'max:2000'],
             'admin_email' => ['nullable', 'email', 'max:255'],
             'social_instagram' => ['nullable', 'url', 'max:500'],
+            'instagram_user_id' => ['nullable', 'string', 'max:64'],
+            'instagram_access_token' => ['nullable', 'string', 'max:2000'],
+            'instagram_hashtag' => ['nullable', 'string', 'max:80'],
             'social_facebook' => ['nullable', 'url', 'max:500'],
             'social_youtube' => ['nullable', 'url', 'max:500'],
             'social_tiktok' => ['nullable', 'url', 'max:500'],
@@ -459,7 +473,8 @@ class Edit extends Component
             'reason_cta_heading', 'reason_cta_text',
             'footer_blurb',
             'contact_address', 'contact_phone', 'contact_whatsapp', 'contact_email', 'contact_map_embed', 'admin_email',
-            'social_instagram', 'social_facebook', 'social_youtube', 'social_tiktok',
+            'social_instagram', 'instagram_user_id', 'instagram_access_token', 'instagram_hashtag',
+            'social_facebook', 'social_youtube', 'social_tiktok',
             'social_linkedin', 'social_twitter', 'social_pinterest', 'social_rednote',
             'review_google_url', 'review_tripadvisor_url',
             'review_google_place_id', 'review_google_api_key',
@@ -510,6 +525,27 @@ class Edit extends Component
         $settings->set('hero_slides', json_encode(array_values($slides)));
 
         session()->flash('status', 'Settings saved.');
+    }
+
+    public function syncInstagram(SettingService $settings, InstagramGraphService $instagram): void
+    {
+        $settings->set('instagram_user_id', $this->instagram_user_id);
+        $settings->set('instagram_access_token', $this->instagram_access_token);
+        $settings->set('instagram_hashtag', $this->instagram_hashtag !== '' ? $this->instagram_hashtag : '#PearlPulseSafaris');
+
+        try {
+            $result = $instagram->sync(25);
+        } catch (Throwable $e) {
+            session()->flash('status', $e->getMessage());
+
+            return;
+        }
+
+        session()->flash('status', sprintf(
+            'Instagram synced: %d posts, %d comments.',
+            $result['synced'],
+            $result['comments']
+        ));
     }
 
     public function removeHero(SettingService $settings, ImageUploader $uploader): void

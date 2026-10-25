@@ -6,7 +6,6 @@ use App\Models\Country;
 use App\Models\Experience;
 use App\Models\Faq;
 use App\Models\Journey;
-use App\Models\PulseItem;
 use App\Models\Review;
 use App\Models\Specialist;
 use App\Models\Stay;
@@ -178,7 +177,6 @@ class HomeController extends Controller
             'specialists' => Specialist::query()->published()->orderBy('sort_order')->get(),
             'specialistsBg' => asset('storage/seed/specialist-section-bg.jpg'),
             'team' => TeamMember::query()->published()->orderBy('sort_order')->take(3)->get(),
-            'pulseItems' => PulseItem::query()->visible()->orderBy('sort_order')->take(4)->get(),
             'stays' => Stay::query()->published()->with('destination.country')->orderBy('sort_order')->get(),
             'stayCountries' => Stay::query()
                 ->published()

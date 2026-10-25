@@ -1676,16 +1676,32 @@
 
     .home-section-title {
         font-family: 'Cormorant Garamond', ui-serif, Georgia, serif;
-        font-size: clamp(2.35rem, 1.6rem + 2.4vw, 3.65rem);
+        font-size: clamp(2.15rem, 1.35rem + 2.2vw, 3.65rem);
         line-height: 1.08;
-        letter-spacing: -0.01em;
+        letter-spacing: -0.015em;
         color: var(--color-charcoal);
+        white-space: nowrap;
+        max-width: 100%;
+    }
+
+    /* Scale titles to the viewport so lines like “Where do you want to go?” stay single-line */
+    @media (max-width: 1023px) {
+        .home-section-title {
+            font-size: clamp(0.82rem, calc((100vw - 2.5rem) / 24), 2.35rem);
+            letter-spacing: -0.02em;
+        }
     }
 
     .home-experiences__title {
         max-width: none;
-        white-space: nowrap;
-        font-size: clamp(1.15rem, 0.55rem + 2.8vw, 3.35rem);
+        font-weight: 700;
+    }
+
+    @media (max-width: 1023px) {
+        /* Bold + longer copy needs a slightly tighter fit on mobile/tablet */
+        .home-experiences__title {
+            font-size: clamp(0.8rem, calc((100vw - 2.5rem) / 28), 2.35rem);
+        }
     }
 
     .home-section-title.text-white,
@@ -3462,9 +3478,10 @@
 
     .home-intro__title {
         margin-top: 0.35rem;
-        font-size: clamp(2rem, 1.45rem + 1.8vw, 3.15rem) !important;
+        font-size: clamp(1.55rem, 0.85rem + 2.8vw, 3.15rem) !important;
         line-height: 1.08;
         text-wrap: balance;
+        white-space: normal;
     }
 
     .home-intro__lead {
@@ -4583,6 +4600,305 @@ body:has(.journey-sticky-bar) {
     .pulse-mosaic > :nth-child(1) figcaption {
         padding: 4.5rem 1.75rem 1.75rem;
     }
+}
+
+/* True Pulse — Instagram feed */
+.true-pulse-feed__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.true-pulse-feed__title {
+    font-family: var(--font-display, "Cormorant Garamond", Georgia, serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    color: var(--color-charcoal, #2c241c);
+}
+
+.true-pulse-feed__ig-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    color: var(--color-charcoal, #2c241c);
+    transition: opacity 0.2s ease;
+}
+
+.true-pulse-feed__ig-link:hover {
+    opacity: 0.7;
+}
+
+.true-pulse-feed__ig-icon {
+    display: inline-flex;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.true-pulse-feed__ig-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.true-pulse-feed__strip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .true-pulse-feed__strip {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .true-pulse-feed__strip {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 1rem;
+    }
+}
+
+.true-pulse-feed__card {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: #1f3a2e;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    text-align: left;
+}
+
+.true-pulse-feed__img,
+.true-pulse-feed__placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.45s ease;
+}
+
+.true-pulse-feed__placeholder {
+    background: linear-gradient(145deg, #1f3a2e, #3d5a45);
+}
+
+.true-pulse-feed__card:hover .true-pulse-feed__img,
+.true-pulse-feed__card:focus-visible .true-pulse-feed__img {
+    transform: scale(1.04);
+}
+
+.true-pulse-feed__card:focus-visible {
+    outline: 2px solid var(--color-forest, #1f3a2e);
+    outline-offset: 3px;
+}
+
+.true-pulse-feed__play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.true-pulse-feed__play svg {
+    width: 2.75rem;
+    height: 2.75rem;
+    color: #fff;
+    filter: drop-shadow(0 2px 8px rgb(0 0 0 / 0.35));
+    opacity: 0.92;
+}
+
+.true-pulse-feed__meta {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem 0.85rem;
+    padding: 2.25rem 0.75rem 0.7rem;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.28) 55%, transparent 100%);
+    color: #fff;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+}
+
+.true-pulse-feed__stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28rem;
+}
+
+.true-pulse-feed__stat svg {
+    width: 0.85rem;
+    height: 0.85rem;
+}
+
+.true-pulse-feed__time {
+    margin-left: auto;
+    opacity: 0.85;
+}
+
+.true-pulse-feed__empty {
+    min-height: 8rem;
+}
+
+.true-pulse-viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgb(0 0 0 / 0.72);
+}
+
+.true-pulse-viewer__panel {
+    position: relative;
+    display: grid;
+    width: min(960px, 100%);
+    max-height: min(90vh, 820px);
+    background: #f7f3ec;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .true-pulse-viewer__panel {
+        grid-template-columns: 1.15fr 0.85fr;
+    }
+}
+
+.true-pulse-viewer__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.65rem;
+    z-index: 2;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    background: rgb(0 0 0 / 0.45);
+    color: #fff;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.true-pulse-viewer__media {
+    background: #111;
+    min-height: 16rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.true-pulse-viewer__image,
+.true-pulse-viewer__video {
+    width: 100%;
+    height: 100%;
+    max-height: min(90vh, 820px);
+    object-fit: contain;
+    background: #111;
+}
+
+.true-pulse-viewer__side {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem 1.25rem 1.5rem;
+    overflow: auto;
+    max-height: min(90vh, 820px);
+}
+
+.true-pulse-viewer__counts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: var(--color-charcoal, #2c241c);
+}
+
+.true-pulse-viewer__counts span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.true-pulse-viewer__counts svg {
+    width: 0.95rem;
+    height: 0.95rem;
+}
+
+.true-pulse-viewer__caption {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--color-charcoal, #2c241c);
+    white-space: pre-wrap;
+}
+
+.true-pulse-viewer__comments-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-muted, #7a7168);
+    margin-bottom: 0.65rem;
+}
+
+.true-pulse-viewer__comment {
+    padding: 0.55rem 0;
+    border-top: 1px solid rgb(44 36 28 / 0.08);
+}
+
+.true-pulse-viewer__comment-user {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-forest, #1f3a2e);
+}
+
+.true-pulse-viewer__comment-text {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: var(--color-charcoal, #2c241c);
+    margin-top: 0.15rem;
+}
+
+.true-pulse-viewer__comment-empty {
+    font-size: 0.85rem;
+    color: var(--color-muted, #7a7168);
+}
+
+.true-pulse-viewer__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+    margin-top: auto;
+    padding-top: 0.75rem;
+}
+
+.true-pulse-viewer__share {
+    border: 0;
+    background: transparent;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted, #7a7168);
+    cursor: pointer;
+    padding: 0.5rem 0.25rem;
+}
+
+.true-pulse-viewer__share:hover {
+    color: var(--color-forest, #1f3a2e);
 }
 
 .people-grid {

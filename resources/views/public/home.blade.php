@@ -688,51 +688,20 @@
     </div>
 </section>
 
-{{-- 11. True Pulse --}}
-@if($pulseItems->isNotEmpty())
+{{-- 11. True Pulse — live Instagram --}}
 <section class="surface surface--beige relative py-20 lg:py-28">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
-        <div class="reveal flex flex-wrap items-end justify-between gap-6 mb-10">
-            <div class="max-w-2xl">
-                <p class="section-eyebrow">True Pulse</p>
-                <h2 class="home-section-title">Africa through the eyes of our travellers</h2>
-            </div>
-            <div class="max-w-sm">
-                <p class="text-muted leading-relaxed">Guest photographs, reels, and field notes — shared with permission, never staged for the brochure.</p>
-                <a href="{{ route('true-pulse') }}" class="home-text-link mt-4">Explore True Pulse →</a>
-            </div>
+        <div class="reveal mb-2">
+            <p class="section-eyebrow">True Pulse</p>
         </div>
-        <div class="pulse-mosaic reveal-stagger">
-            @foreach($pulseItems as $item)
-                <a href="{{ route('true-pulse') }}" class="pulse-mosaic__link" aria-label="{{ $item->title ?: 'Explore True Pulse' }}">
-                    <figure>
-                        @if($item->coverUrl())
-                            <img src="{{ $item->coverThumbUrl() ?: $item->coverUrl() }}" alt="{{ $item->title }}" loading="lazy" decoding="async">
-                        @endif
-                        @if($item->type === 'reel' || $item->videoPlaybackUrl())
-                            <span class="pulse-mosaic__play" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                            </span>
-                        @endif
-                        <span class="pulse-mosaic__arrow" aria-hidden="true">↗</span>
-                        <figcaption>
-                            <span class="pulse-mosaic__meta">
-                                Guest {{ $item->type ?: 'photo' }}@if($item->guest_name) · {{ $item->guest_name }}@endif
-                            </span>
-                            @if($item->title)
-                                <span class="pulse-mosaic__title">{{ $item->title }}</span>
-                            @endif
-                            @if($item->caption)
-                                <span class="pulse-mosaic__text">{{ $item->caption }}</span>
-                            @endif
-                        </figcaption>
-                    </figure>
-                </a>
-            @endforeach
+        <div class="reveal">
+            <livewire:true-pulse-viewer :limit="5" :compact="true" />
+        </div>
+        <div class="reveal mt-8">
+            <a href="{{ route('true-pulse') }}" class="home-text-link">Explore True Pulse →</a>
         </div>
     </div>
 </section>
-@endif
 
 {{-- 12. Selected stays — by country --}}
 @if($stayCountries->isNotEmpty())
