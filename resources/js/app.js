@@ -261,17 +261,55 @@ function initCardScrollers() {
 function initHeaderShrink() {
     const header = document.querySelector('[data-site-header]');
     const utility = document.querySelector('[data-site-utility]');
+    const chrome = document.querySelector('[data-site-chrome]');
     if (!header && !utility) return;
 
-    const onScroll = () => {
-        const scrolled = window.scrollY > 20;
+    // Hysteresis: hide only after scrolling further down, show only near the top
+    // so collapsing chrome cannot thrash around a single threshold.
+    const HIDE_AT = 56;
+    const SHOW_AT = 12;
+    let scrolled = document.documentElement.classList.contains('is-scrolled');
+    let ticking = false;
+
+    const syncChromeHeight = () => {
+        if (!chrome) return;
+        document.documentElement.style.setProperty(
+            '--site-chrome-height',
+            `${chrome.offsetHeight}px`
+        );
+    };
+
+    const apply = (next) => {
+        if (next === scrolled) return;
+        scrolled = next;
         document.documentElement.classList.toggle('is-scrolled', scrolled);
         header?.classList.toggle('is-scrolled', scrolled);
         utility?.classList.toggle('is-hidden', scrolled);
     };
 
+    const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+            const y = window.scrollY || window.pageYOffset || 0;
+            if (!scrolled && y >= HIDE_AT) {
+                apply(true);
+            } else if (scrolled && y <= SHOW_AT) {
+                apply(false);
+            }
+            ticking = false;
+        });
+    };
+
+    utility?.addEventListener('transitionend', (event) => {
+        if (event.target !== utility) return;
+        if (event.propertyName !== 'max-height' && event.propertyName !== 'opacity') return;
+        syncChromeHeight();
+    });
+
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+    syncChromeHeight();
 }
 
 function initYouTubeHeroes() {

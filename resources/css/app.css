@@ -109,10 +109,11 @@
         overflow: hidden;
         max-height: 2.25rem;
         transition:
-            max-height 0.35s ease,
-            opacity 0.28s ease,
-            border-color 0.28s ease;
+            max-height 0.22s ease,
+            opacity 0.18s ease,
+            border-color 0.18s ease;
         opacity: 1;
+        will-change: max-height, opacity;
     }
 
     .site-utility.is-hidden {
@@ -1684,11 +1685,11 @@
         max-width: 100%;
     }
 
-    /* Scale titles to the viewport so lines like “Where do you want to go?” stay single-line */
+    /* Keep section titles on one line on tablet/mobile, with a readable floor */
     @media (max-width: 1023px) {
         .home-section-title {
-            font-size: clamp(0.82rem, calc((100vw - 2.5rem) / 24), 2.35rem);
-            letter-spacing: -0.02em;
+            font-size: clamp(1.28rem, calc((100vw - 2.5rem) / 15.5), 2.55rem);
+            letter-spacing: -0.03em;
         }
     }
 
@@ -1698,9 +1699,20 @@
     }
 
     @media (max-width: 1023px) {
-        /* Bold + longer copy needs a slightly tighter fit on mobile/tablet */
+        /* Longer bold titles: still one line, but not tiny */
         .home-experiences__title {
-            font-size: clamp(0.8rem, calc((100vw - 2.5rem) / 28), 2.35rem);
+            font-size: clamp(1.2rem, calc((100vw - 2.5rem) / 17.5), 2.55rem);
+            letter-spacing: -0.035em;
+        }
+    }
+
+    @media (max-width: 389px) {
+        .home-section-title {
+            font-size: clamp(1.18rem, calc((100vw - 2rem) / 14.5), 1.55rem);
+        }
+
+        .home-experiences__title {
+            font-size: clamp(1.12rem, calc((100vw - 2rem) / 16), 1.45rem);
         }
     }
 
@@ -3143,11 +3155,11 @@
     }
 
     [data-site-header] {
-        transition: box-shadow 0.35s ease, background-color 0.35s ease, padding 0.35s ease;
+        transition: box-shadow 0.25s ease;
     }
 
     [data-site-header].is-scrolled {
-        box-shadow: 0 10px 30px -18px rgb(28 27 31 / 0.18);
+        box-shadow: 0 8px 22px -16px rgb(28 27 31 / 0.14);
     }
 
     .site-logo {

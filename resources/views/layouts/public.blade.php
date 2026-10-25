@@ -121,7 +121,25 @@
     }"
     @keydown.escape.window="closeNav(); closeMobile()"
 >
-    <div class="sticky top-0 z-50" data-site-chrome x-init="$nextTick(() => { const set = () => document.documentElement.style.setProperty('--site-chrome-height', $el.offsetHeight + 'px'); set(); new ResizeObserver(set).observe($el); })">
+    <div
+        class="sticky top-0 z-50"
+        data-site-chrome
+        x-init="$nextTick(() => {
+            let frame = null;
+            let last = 0;
+            const set = () => {
+                cancelAnimationFrame(frame);
+                frame = requestAnimationFrame(() => {
+                    const height = Math.round($el.offsetHeight);
+                    if (height === last) return;
+                    last = height;
+                    document.documentElement.style.setProperty('--site-chrome-height', height + 'px');
+                });
+            };
+            set();
+            new ResizeObserver(set).observe($el);
+        })"
+    >
     {{-- Utility bar — quieter, collapses on scroll --}}
     <div class="site-utility bg-forest text-white" data-site-utility>
         <div class="site-utility__inner mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-5 lg:px-8">
