@@ -10,7 +10,7 @@
         : collect();
 @endphp
 
-<section class="journeys-index-hero surface surface--white pt-16 pb-10 lg:pt-24 lg:pb-14">
+<section class="journeys-index-hero surface surface--beige pt-16 pb-10 lg:pt-24 lg:pb-14">
     <div class="mx-auto max-w-7xl px-5 lg:px-8 reveal">
         <p class="section-eyebrow">Journeys</p>
         <h1 class="font-display text-5xl md:text-6xl lg:text-7xl text-charcoal leading-[0.95]">{{ $heading }}</h1>
@@ -57,7 +57,7 @@
 </section>
 @endif
 
-<section class="journeys-index-grid surface surface--{{ $signatureJourneys->isNotEmpty() ? 'white' : 'beige' }} pb-24 pt-12 lg:pt-16">
+<section class="journeys-index-grid surface surface--beige pb-24 pt-12 lg:pt-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         @if($signatureJourneys->isNotEmpty())
             <div class="reveal mb-8 flex flex-wrap items-end justify-between gap-4">

@@ -4,7 +4,7 @@
 @section('meta_description', $lead ?: 'Learn about Pearl Pulse Safaris and our approach to East African travel.')
 
 @section('content')
-<div class="pt-16 pb-16 bg-white">
+<div class="pt-16 pb-16 bg-beige">
     <div class="mx-auto max-w-3xl px-5 lg:px-8">
         @if($eyebrow)
             <p class="text-xs tracking-[0.22em] uppercase text-muted mb-3">{{ $eyebrow }}</p>
@@ -20,7 +20,7 @@
 </div>
 
 @if(count($values))
-<section class="bg-cream py-16 lg:py-20">
+<section class="bg-beige py-16 lg:py-20">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="grid gap-10 md:grid-cols-3">
             @foreach($values as $value)
@@ -37,7 +37,7 @@
 @endif
 
 @if($approachHeading || $approachBody)
-<section class="bg-white py-16 lg:py-24">
+<section class="bg-beige py-16 lg:py-24">
     <div class="mx-auto max-w-3xl px-5 lg:px-8">
         @if($approachHeading)
             <h2 class="font-display text-3xl md:text-4xl text-charcoal">{{ $approachHeading }}</h2>
@@ -50,7 +50,7 @@
 @endif
 
 @if(($team ?? collect())->isNotEmpty())
-<section class="bg-white py-16">
+<section class="bg-beige py-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <h2 class="font-display text-4xl text-charcoal mb-8">Our people</h2>
         <div class="grid gap-8 sm:grid-cols-3">

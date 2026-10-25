@@ -58,7 +58,7 @@ new class extends Component
                     id="password"
                     name="password"
                     type="password"
-                    class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest"
+                    class="w-full border-charcoal/15 bg-cream text-charcoal focus:border-forest focus:ring-forest"
                     placeholder="Your password"
                 >
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />

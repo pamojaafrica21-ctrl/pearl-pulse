@@ -12,7 +12,7 @@
         'cookies' => 'Cookie Policy',
     ];
 @endphp
-<section class="surface surface--white pt-16 pb-20 lg:pt-20">
+<section class="surface surface--beige pt-16 pb-20 lg:pt-20">
     <div class="mx-auto max-w-3xl px-5 lg:px-8">
         <div class="reveal">
             <p class="section-eyebrow">Legal</p>

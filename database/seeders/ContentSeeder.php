@@ -471,22 +471,28 @@ class ContentSeeder extends Seeder
             ['Amina N.', 'Lead Uganda guide', 'Born in Kampala, Amina has spent a decade in Bwindi and Queen Elizabeth. She designs days around light and wildlife behaviour — not a checklist — and briefs guests so the forest feels approachable, never rushed.'],
             ['Joseph K.', 'Safari director', 'Joseph matches travellers to the right parks and the right pace: private vehicles, fewer transfers, deeper stays. He is the quiet centre of logistics — permits, lodge holds, and the honest “no” when a route will not work.'],
             ['Grace M.', 'Rwanda specialist', 'Grace knows the volcanoes and the quiet logistics that make a gorilla morning feel seamless. She favours highland nights, clear briefings, and camps that leave room to breathe after the trek.'],
-            ['Daniel O.', 'Kenya & Tanzania planner', 'Daniel stitches Mara, Serengeti, and coast chapters with an eye on migration intelligence and light for photographers. He prefers conservancy camps when guests want fewer vehicles and longer evenings.'],
         ];
 
+        $keep = [];
+
         foreach ($people as $i => [$name, $role, $bio]) {
+            $slug = Str::slug($name);
+            $keep[] = $slug;
+
             TeamMember::query()->updateOrCreate(
-                ['slug' => Str::slug($name)],
+                ['slug' => $slug],
                 [
                     'name' => $name,
                     'role' => $role,
                     'bio' => $bio,
-                    'cover_path' => SeedImage::photo('team-'.Str::slug($name), 'seed/team-'.Str::slug($name).'.jpg', 900, 1100),
+                    'cover_path' => SeedImage::photo('team-'.$slug, 'seed/team-'.$slug.'.jpg', 900, 1100),
                     'status' => 'published',
                     'sort_order' => $i + 1,
                 ]
             );
         }
+
+        TeamMember::query()->whereNotIn('slug', $keep)->update(['status' => 'draft']);
     }
 
     protected function reviews(array $journeys): void

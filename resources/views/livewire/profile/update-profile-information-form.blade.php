@@ -66,13 +66,13 @@ new class extends Component
     <form wire:submit="updateProfileInformation" class="mt-8 space-y-5">
         <div>
             <label for="name" class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Name</label>
-            <input wire:model="name" id="name" name="name" type="text" required autofocus autocomplete="name" class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest">
+            <input wire:model="name" id="name" name="name" type="text" required autofocus autocomplete="name" class="w-full border-charcoal/15 bg-cream text-charcoal focus:border-forest focus:ring-forest">
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
         <div>
             <label for="email" class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Email</label>
-            <input wire:model="email" id="email" name="email" type="email" required autocomplete="username" class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest">
+            <input wire:model="email" id="email" name="email" type="email" required autocomplete="username" class="w-full border-charcoal/15 bg-cream text-charcoal focus:border-forest focus:ring-forest">
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())

@@ -49,7 +49,7 @@ new #[Layout('layouts.guest')] class extends Component
                 name="email"
                 required
                 autofocus
-                class="w-full border-sand-deep/50 bg-white text-charcoal focus:border-forest focus:ring-forest"
+                class="w-full border-sand-deep/50 bg-cream text-charcoal focus:border-forest focus:ring-forest"
             >
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>

@@ -36,7 +36,7 @@
     </div>
 </section>
 
-<section class="surface surface--white py-14 lg:py-16">
+<section class="surface surface--beige py-14 lg:py-16">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 text-center reveal">
         <p class="text-muted leading-relaxed">Not sure which specialist path fits? Write to us — we will listen first.</p>
         <div class="mt-6 flex flex-wrap items-center justify-center gap-4">

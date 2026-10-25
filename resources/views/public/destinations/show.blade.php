@@ -10,7 +10,7 @@
 @endphp
 <section class="relative min-h-[70svh] flex items-end overflow-hidden bg-forest">
     <x-hero-media :video="$video" :image="$cover" :alt="$destination->name" />
-    <div class="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/30 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
     <div class="relative z-10 mx-auto w-full max-w-7xl px-5 pb-16 pt-12 lg:px-8">
         <x-breadcrumbs :items="[
             ['label' => 'Destinations', 'href' => route('destinations.index')],
@@ -27,7 +27,7 @@
     </div>
 </section>
 
-<section class="bg-white py-16 lg:py-24">
+<section class="bg-beige py-16 lg:py-24">
     <div class="mx-auto max-w-7xl px-5 lg:px-8 grid gap-14 lg:grid-cols-12">
         <div class="lg:col-span-7">
             @if($destination->teaser)
@@ -64,7 +64,7 @@
 </section>
 
 @if($destination->experiences->isNotEmpty())
-<section class="bg-white pb-16">
+<section class="bg-beige pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <h2 class="font-display text-4xl text-charcoal mb-8">Experiences</h2>
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -77,7 +77,7 @@
 @endif
 
 @if($destination->journeys->isNotEmpty())
-<section class="bg-white pb-16">
+<section class="bg-beige pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <h2 class="font-display text-4xl text-charcoal mb-8">Journeys here</h2>
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -93,7 +93,7 @@
     $stays = $destination->stays->merge($destination->primaryStays)->unique('id');
 @endphp
 @if($stays->isNotEmpty())
-<section class="bg-white pb-16">
+<section class="bg-beige pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <h2 class="font-display text-4xl text-charcoal mb-3">Selected stays</h2>
         <p class="text-muted mb-8">We do not own these properties.</p>
@@ -107,7 +107,7 @@
 @endif
 
 @if($destination->practical)
-<section class="bg-white pb-16">
+<section class="bg-beige pb-16">
     <div class="mx-auto max-w-3xl px-5 lg:px-8">
         <h2 class="font-display text-3xl text-charcoal mb-4">Practical information</h2>
         <div class="prose-safari">{!! $destination->practical !!}</div>
@@ -116,7 +116,7 @@
 @endif
 
 @if($destination->images->isNotEmpty())
-<section class="bg-white pb-16" x-data="{ active: 0 }">
+<section class="bg-beige pb-16" x-data="{ active: 0 }">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <h2 class="font-display text-4xl text-charcoal mb-8">Gallery</h2>
         <div class="relative overflow-hidden bg-forest/5 aspect-[16/10]">

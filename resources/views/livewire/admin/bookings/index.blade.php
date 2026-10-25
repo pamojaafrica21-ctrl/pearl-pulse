@@ -48,7 +48,7 @@
                 wire:key="bk-{{ $booking->id }}"
                 href="{{ route('admin.bookings.edit', $booking) }}"
                 wire:navigate
-                class="group flex flex-col sm:flex-row sm:items-center gap-4 bg-white border border-sand-deep/30 px-5 py-4 transition hover:border-forest/40"
+                class="group flex flex-col sm:flex-row sm:items-center gap-4 bg-cream border border-sand-deep/30 px-5 py-4 transition hover:border-forest/40"
             >
                 <div class="min-w-0 flex-1">
                     <p class="text-[11px] tracking-[0.14em] uppercase text-muted">
@@ -86,7 +86,7 @@
                 </div>
             </a>
         @empty
-            <div class="bg-white border border-sand-deep/30 px-6 py-12 max-w-xl">
+            <div class="bg-cream border border-sand-deep/30 px-6 py-12 max-w-xl">
                 <p class="text-[11px] tracking-[0.18em] uppercase text-muted">Empty desk</p>
                 <p class="font-display text-3xl text-forest mt-2">No bookings here</p>
                 <p class="mt-3 text-sm text-muted leading-relaxed">

@@ -48,7 +48,7 @@ new #[Layout('layouts.guest')] class extends Component
                 required
                 autofocus
                 autocomplete="username"
-                class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest"
+                class="w-full border-charcoal/15 bg-cream text-charcoal focus:border-forest focus:ring-forest"
             >
             <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
         </div>
@@ -62,7 +62,7 @@ new #[Layout('layouts.guest')] class extends Component
                 name="password"
                 required
                 autocomplete="current-password"
-                class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest"
+                class="w-full border-charcoal/15 bg-cream text-charcoal focus:border-forest focus:ring-forest"
             >
             <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
         </div>

@@ -17,7 +17,7 @@
 
 <section class="relative min-h-[78svh] flex items-end overflow-hidden bg-forest">
     <x-hero-media :video="$video" :image="$cover" :alt="$journey->name" />
-    <div class="absolute inset-0 bg-gradient-to-t from-forest/92 via-forest/40 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent"></div>
     <div class="relative z-10 mx-auto w-full max-w-7xl px-5 pb-16 pt-12 lg:px-8">
         <x-breadcrumbs :items="[
             ['label' => 'Journeys', 'href' => route('journeys.index')],
@@ -176,7 +176,7 @@
     </div>
 </nav>
 
-<section id="overview" class="surface surface--white py-16 lg:py-24 scroll-mt-28">
+<section id="overview" class="surface surface--beige py-16 lg:py-24 scroll-mt-28">
     <div class="mx-auto max-w-7xl px-5 lg:px-8 grid gap-14 lg:grid-cols-12">
         <div class="lg:col-span-7 reveal">
             <p class="text-sm tracking-[0.04em] text-muted leading-relaxed max-w-xl">
@@ -201,7 +201,7 @@
             <div class="prose-safari mt-10">{!! $journey->overview !!}</div>
         </div>
         <aside class="lg:col-span-5 lg:pl-4">
-            <div class="journey-glance surface surface--beige p-7 lg:p-8">
+            <div class="journey-glance surface surface--white p-7 lg:p-8">
                 <div class="flex items-center justify-between gap-4 mb-6">
                     <h2 class="text-[13px] tracking-[0.2em] uppercase text-muted">At a glance</h2>
                     <livewire:favorite-button :journey="$journey" />
@@ -339,7 +339,7 @@
 @endif
 
 @if($hasDestinations)
-<section class="surface surface--white py-16 lg:py-20 overflow-hidden">
+<section class="surface surface--beige py-16 lg:py-20 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <h2 class="font-display text-4xl text-charcoal mb-8 reveal">Destinations</h2>
         <div class="editorial-rail reveal-stagger">
@@ -368,7 +368,7 @@
 @endif
 
 @if($journey->experiences->isNotEmpty())
-<section class="surface surface--white py-16 lg:py-20 overflow-hidden">
+<section class="surface surface--beige py-16 lg:py-20 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <h2 class="font-display text-4xl text-charcoal mb-8 reveal">Experiences</h2>
         <div class="filmstrip reveal-stagger">
@@ -381,7 +381,7 @@
 @endif
 
 @if($hasMap)
-<section id="map" class="surface surface--white pb-4 scroll-mt-28">
+<section id="map" class="surface surface--beige pb-4 scroll-mt-28">
     <div class="mx-auto max-w-7xl px-5 lg:px-8 mb-6">
         <h2 class="font-display text-4xl text-charcoal reveal">Map</h2>
     </div>
@@ -413,7 +413,7 @@
 </section>
 
 @if($journey->practical)
-<section class="surface surface--white py-16">
+<section class="surface surface--beige py-16">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 reveal">
         <h2 class="font-display text-3xl text-charcoal mb-4">Practical information</h2>
         <div class="prose-safari">{!! $journey->practical !!}</div>
@@ -422,7 +422,7 @@
 @endif
 
 @if($journey->images->isNotEmpty())
-<section class="surface surface--white py-16 lg:py-20">
+<section class="surface surface--beige py-16 lg:py-20">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <h2 class="font-display text-4xl text-charcoal mb-8 reveal">Gallery</h2>
         <div class="gallery-mosaic reveal-stagger">
@@ -434,7 +434,7 @@
 </section>
 @endif
 
-<section class="surface surface--brown py-16 lg:py-24">
+<section class="surface surface--beige py-16 lg:py-24">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <h2 class="font-display text-4xl text-charcoal mb-8 reveal">Guest reviews</h2>
 
@@ -460,7 +460,7 @@
 </section>
 
 @if($related->isNotEmpty())
-<section class="surface surface--white py-16 lg:py-20 overflow-hidden">
+<section class="surface surface--beige py-16 lg:py-20 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <h2 class="font-display text-4xl text-charcoal mb-8 reveal">Related journeys</h2>
         <div class="filmstrip reveal-stagger">

@@ -4,7 +4,7 @@
 @section('meta_description', 'A clear five-step process: tell us what you want, we design a proposal, refine together, secure with a deposit, and we handle everything.')
 
 @section('content')
-<section class="surface surface--white pt-16 pb-12 lg:pt-20 lg:pb-16">
+<section class="surface surface--beige pt-16 pb-12 lg:pt-20 lg:pb-16">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 reveal text-center">
         <p class="section-eyebrow">How it works</p>
         <h1 class="font-display text-5xl md:text-6xl text-charcoal leading-tight">From first note to the forest floor</h1>
@@ -58,7 +58,7 @@
     </div>
 </section>
 
-<section class="surface surface--white py-16 lg:py-20">
+<section class="surface surface--beige py-16 lg:py-20">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 reveal text-center">
         <p class="section-eyebrow">Ready when you are</p>
         <h2 class="font-display text-3xl md:text-4xl text-charcoal">Start with a conversation</h2>

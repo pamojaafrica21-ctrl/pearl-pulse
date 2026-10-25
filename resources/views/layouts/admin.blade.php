@@ -34,6 +34,7 @@
                 <a href="{{ route('admin.faqs.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.faqs.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">FAQs</a>
                 <a href="{{ route('admin.pages.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.pages.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Pages</a>
                 <a href="{{ route('admin.enquiries.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.enquiries.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Enquiries</a>
+                <a href="{{ route('admin.newsletter.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.newsletter.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Newsletter</a>
                 <a href="{{ route('admin.bookings.index') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.bookings.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Bookings</a>
                 <a href="{{ route('admin.settings.edit') }}" wire:navigate class="block px-3 py-2 rounded-sm {{ request()->routeIs('admin.settings.*') ? 'bg-sand/10 text-sand' : 'text-sand/70 hover:text-sand' }}">Settings</a>
                 <a href="{{ route('home') }}" class="block px-3 py-2 rounded-sm text-sand/50 hover:text-sand mt-6" target="_blank">View site →</a>
@@ -47,7 +48,7 @@
         </aside>
 
         <div class="flex-1 min-w-0">
-            <header class="border-b border-sand-deep/30 bg-white/60 backdrop-blur px-6 py-4 flex items-center justify-between">
+            <header class="border-b border-sand-deep/30 bg-cream/60 backdrop-blur px-6 py-4 flex items-center justify-between">
                 <h1 class="font-display text-2xl text-forest">{{ $heading ?? 'Admin' }}</h1>
                 <span class="text-sm text-muted">{{ auth()->user()?->name }}</span>
             </header>

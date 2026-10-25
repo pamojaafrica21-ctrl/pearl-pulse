@@ -57,6 +57,7 @@ class DestinationController extends Controller
 
         $stays = Stay::query()
             ->published()
+            ->with('destination.country')
             ->where(function ($q) use ($destinationIds) {
                 $q->whereIn('destination_id', $destinationIds)
                     ->orWhereHas('destinations', fn ($d) => $d->whereIn('destinations.id', $destinationIds));

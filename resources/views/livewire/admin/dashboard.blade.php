@@ -1,6 +1,6 @@
 <div wire:poll.5s>
     {{-- Site visibility --}}
-    <div class="mb-10 bg-white border border-sand-deep/30 p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+    <div class="mb-10 bg-cream border border-sand-deep/30 p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div>
             <p class="text-xs tracking-[0.15em] uppercase text-muted">Public site</p>
             <p class="font-display text-2xl text-forest mt-1">
@@ -24,7 +24,7 @@
     </div>
 
     @if(! $sitePublic)
-        <div class="mb-10 bg-white border border-sand-deep/30 p-6">
+        <div class="mb-10 bg-cream border border-sand-deep/30 p-6">
             <p class="text-xs tracking-[0.15em] uppercase text-muted mb-2">Maintenance message</p>
             <form wire:submit="saveMaintenanceMessage" class="flex flex-col sm:flex-row gap-3">
                 <input
@@ -40,21 +40,21 @@
 
     {{-- Stats --}}
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
-        <div class="bg-white border border-sand-deep/30 p-5">
+        <div class="bg-cream border border-sand-deep/30 p-5">
             <p class="text-xs tracking-[0.15em] uppercase text-muted">Total page views</p>
             <p class="font-display text-4xl text-forest mt-2">{{ number_format($visitStats['total_views']) }}</p>
         </div>
-        <div class="bg-white border border-sand-deep/30 p-5">
+        <div class="bg-cream border border-sand-deep/30 p-5">
             <p class="text-xs tracking-[0.15em] uppercase text-muted">Today</p>
             <p class="font-display text-4xl text-forest mt-2">{{ number_format($visitStats['today_views']) }}</p>
             <p class="text-sm text-muted mt-1">{{ number_format($visitStats['today_unique']) }} unique visitors</p>
         </div>
-        <div class="bg-white border border-sand-deep/30 p-5">
+        <div class="bg-cream border border-sand-deep/30 p-5">
             <p class="text-xs tracking-[0.15em] uppercase text-muted">Last 7 days</p>
             <p class="font-display text-4xl text-forest mt-2">{{ number_format($visitStats['week_views']) }}</p>
             <p class="text-sm text-muted mt-1">{{ number_format($visitStats['week_unique']) }} unique visitors</p>
         </div>
-        <div class="bg-white border border-sand-deep/30 p-5">
+        <div class="bg-cream border border-sand-deep/30 p-5">
             <p class="text-xs tracking-[0.15em] uppercase text-muted">Last 30 days</p>
             <p class="font-display text-4xl text-forest mt-2">{{ number_format($visitStats['month_views']) }}</p>
             <p class="text-sm text-muted mt-1">{{ number_format($visitStats['month_unique']) }} unique visitors</p>
@@ -62,23 +62,23 @@
     </div>
 
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
-        <div class="bg-white border border-sand-deep/30 p-5">
+        <div class="bg-cream border border-sand-deep/30 p-5">
             <p class="text-xs tracking-[0.15em] uppercase text-muted">Destinations</p>
             <p class="font-display text-4xl text-forest mt-2">{{ $destinationCount }}</p>
             <p class="text-sm text-muted mt-1">{{ $publishedCount }} published</p>
         </div>
-        <div class="bg-white border border-sand-deep/30 p-5">
+        <div class="bg-cream border border-sand-deep/30 p-5">
             <p class="text-xs tracking-[0.15em] uppercase text-muted">Open enquiries</p>
             <p class="font-display text-4xl text-forest mt-2">{{ $openEnquiries }}</p>
             <p class="text-sm text-muted mt-1">{{ $newEnquiries }} new</p>
             <a href="{{ route('admin.enquiries.index') }}" class="text-sm text-gold mt-2 inline-block" wire:navigate>View inbox →</a>
         </div>
-        <div class="bg-white border border-sand-deep/30 p-5">
+        <div class="bg-cream border border-sand-deep/30 p-5">
             <p class="text-xs tracking-[0.15em] uppercase text-muted">Confirmed bookings</p>
             <p class="font-display text-4xl text-forest mt-2">{{ $confirmedBookings }}</p>
             <a href="{{ route('admin.bookings.index') }}" class="text-sm text-gold mt-2 inline-block" wire:navigate>View bookings →</a>
         </div>
-        <div class="bg-white border border-sand-deep/30 p-5">
+        <div class="bg-cream border border-sand-deep/30 p-5">
             <p class="text-xs tracking-[0.15em] uppercase text-muted">Quick actions</p>
             <div class="mt-4 flex flex-wrap gap-2">
                 <a href="{{ route('admin.enquiries.create') }}" class="btn-primary text-xs inline-block" wire:navigate>Log enquiry</a>
@@ -88,7 +88,7 @@
     </div>
 
     <h2 class="font-display text-2xl text-forest mb-4">Recent enquiries</h2>
-    <div class="bg-white border border-sand-deep/30 overflow-hidden">
+    <div class="bg-cream border border-sand-deep/30 overflow-hidden">
         <table class="min-w-full text-sm">
             <thead class="bg-cream text-left text-xs tracking-wider uppercase text-muted">
                 <tr>

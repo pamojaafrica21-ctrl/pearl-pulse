@@ -4,7 +4,7 @@
 @section('meta_description', \Illuminate\Support\Str::limit($article->seoDescription(), 160))
 
 @section('content')
-<article class="bg-white pt-16 pb-20">
+<article class="bg-beige pt-16 pb-20">
     <div class="mx-auto max-w-3xl px-5 lg:px-8">
         <x-breadcrumbs tone="dark" :items="[
             ['label' => 'Insiders', 'href' => route('insiders.index')],
@@ -22,7 +22,7 @@
     </div>
 </article>
 @if($more->isNotEmpty())
-<section class="bg-white pb-16">
+<section class="bg-beige pb-16">
     <div class="mx-auto max-w-3xl px-5 lg:px-8">
         <h2 class="font-display text-3xl text-charcoal mb-6">More from Insiders</h2>
         <div class="space-y-4">

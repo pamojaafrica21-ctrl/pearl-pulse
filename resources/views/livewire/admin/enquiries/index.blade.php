@@ -33,7 +33,7 @@
     </div>
 
     <div class="grid gap-6 lg:grid-cols-5">
-        <div class="lg:col-span-3 bg-white border border-sand-deep/30 overflow-hidden">
+        <div class="lg:col-span-3 bg-cream border border-sand-deep/30 overflow-hidden">
             <table class="min-w-full text-sm">
                 <thead class="bg-cream text-left text-xs tracking-wider uppercase text-muted">
                     <tr>
@@ -68,7 +68,7 @@
             <div class="p-4">{{ $enquiries->links() }}</div>
         </div>
 
-        <div class="lg:col-span-2 bg-white border border-sand-deep/30 p-5">
+        <div class="lg:col-span-2 bg-cream border border-sand-deep/30 p-5">
             @if($viewingEnquiry)
                 <h3 class="font-display text-2xl text-forest">{{ $viewingEnquiry->name }}</h3>
                 <p class="text-sm text-muted mt-1">

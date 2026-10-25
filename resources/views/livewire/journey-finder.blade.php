@@ -369,7 +369,7 @@
                                 in your account.
                             </p>
                         @else
-                            <p class="mt-4 text-sm text-muted bg-white border border-charcoal/10 px-4 py-3">
+                            <p class="mt-4 text-sm text-muted bg-cream border border-charcoal/10 px-4 py-3">
                                 <a href="{{ route('login') }}" class="text-forest underline underline-offset-2">Sign in</a>
                                 or
                                 <a href="{{ route('register') }}" class="text-forest underline underline-offset-2">register</a>

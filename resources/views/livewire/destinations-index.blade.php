@@ -21,7 +21,7 @@
                 type="search"
                 wire:model.live.debounce.300ms="search"
                 placeholder="Search destinations…"
-                class="w-full border-sand-deep/50 bg-white/70 text-sm focus:border-forest focus:ring-forest"
+                class="w-full border-sand-deep/50 bg-cream/70 text-sm focus:border-forest focus:ring-forest"
             >
         </div>
     </div>

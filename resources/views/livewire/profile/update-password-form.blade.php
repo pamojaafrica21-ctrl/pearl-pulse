@@ -49,19 +49,19 @@ new class extends Component
     <form wire:submit="updatePassword" class="mt-8 space-y-5">
         <div>
             <label for="update_password_current_password" class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Current password</label>
-            <input wire:model="current_password" id="update_password_current_password" name="current_password" type="password" autocomplete="current-password" class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest">
+            <input wire:model="current_password" id="update_password_current_password" name="current_password" type="password" autocomplete="current-password" class="w-full border-charcoal/15 bg-cream text-charcoal focus:border-forest focus:ring-forest">
             <x-input-error :messages="$errors->get('current_password')" class="mt-2" />
         </div>
 
         <div>
             <label for="update_password_password" class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">New password</label>
-            <input wire:model="password" id="update_password_password" name="password" type="password" autocomplete="new-password" class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest">
+            <input wire:model="password" id="update_password_password" name="password" type="password" autocomplete="new-password" class="w-full border-charcoal/15 bg-cream text-charcoal focus:border-forest focus:ring-forest">
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <div>
             <label for="update_password_password_confirmation" class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Confirm password</label>
-            <input wire:model="password_confirmation" id="update_password_password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest">
+            <input wire:model="password_confirmation" id="update_password_password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" class="w-full border-charcoal/15 bg-cream text-charcoal focus:border-forest focus:ring-forest">
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 

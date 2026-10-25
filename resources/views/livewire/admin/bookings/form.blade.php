@@ -35,7 +35,7 @@
 
     <div class="grid gap-8 {{ $booking?->exists ? 'xl:grid-cols-[minmax(0,1fr)_22rem] xl:items-start' : '' }}">
         <form wire:submit="save" class="space-y-8">
-            <section class="bg-white border border-sand-deep/30 p-5 sm:p-6">
+            <section class="bg-cream border border-sand-deep/30 p-5 sm:p-6">
                 <p class="text-[11px] tracking-[0.16em] uppercase text-muted mb-4">Guest</p>
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
@@ -72,7 +72,7 @@
                 @endif
             </section>
 
-            <section class="bg-white border border-sand-deep/30 p-5 sm:p-6">
+            <section class="bg-cream border border-sand-deep/30 p-5 sm:p-6">
                 <p class="text-[11px] tracking-[0.16em] uppercase text-muted mb-4">Journey</p>
                 <div class="grid gap-4 sm:grid-cols-2">
                     @if(! $booking?->exists)
@@ -145,7 +145,7 @@
         </form>
 
         @if($booking?->exists)
-            <aside class="bg-white border border-sand-deep/30 p-5 sm:p-6 xl:sticky xl:top-6">
+            <aside class="bg-cream border border-sand-deep/30 p-5 sm:p-6 xl:sticky xl:top-6">
                 <p class="text-[11px] tracking-[0.16em] uppercase text-muted mb-4">Notes</p>
                 <form wire:submit="addNote" class="space-y-2 mb-6">
                     <textarea wire:model="note" rows="4" class="{{ $field }}" placeholder="Lodge hold, permit, call…"></textarea>

@@ -10,7 +10,7 @@
     <meta name="description" content="@yield('meta_description', 'Private, tailor-made journeys across Uganda, Rwanda, Kenya, and Tanzania with Pearl Pulse Safaris.')">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=cormorant-garamond:400,500,600,700|outfit:300,400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=cormorant-garamond:400,500,600,700|great-vibes:400|outfit:300,400,500,600&display=swap" rel="stylesheet" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -155,7 +155,7 @@
     </div>
 
     <header
-        class="border-b border-charcoal/8 bg-white/95 backdrop-blur"
+        class="border-b border-charcoal/8 bg-cream/95 backdrop-blur"
         data-site-header
     >
         <div class="site-header-grid mx-auto max-w-7xl px-5 py-2 sm:py-2.5 lg:px-8 lg:py-3 xl:py-3.5">
@@ -443,80 +443,91 @@
         @yield('content')
     </main>
 
-    <div class="site-closer relative isolate overflow-hidden text-sand mt-auto">
-        <div class="site-closer__media" aria-hidden="true">
-            <img
-                src="{{ asset('images/footer-gorilla.jpg') }}"
-                alt=""
-                class="site-closer__image"
-                loading="lazy"
-                decoding="async"
-            >
-            <div class="site-closer__veil"></div>
-        </div>
+    @stack('before-footer')
 
+    <div class="footer-separator" aria-hidden="true">
+        <span class="footer-separator__script">Feel The Nature</span>
+    </div>
+
+    <div class="site-closer relative isolate overflow-hidden text-sand">
         <div class="relative z-10">
-            @stack('before-footer')
 
             <footer class="site-footer">
-                <div class="mx-auto max-w-7xl px-5 pb-12 lg:pb-16 lg:px-8">
-                    <div class="mb-12 max-w-md">
-                        <p class="font-display text-3xl text-white [text-shadow:0_1px_18px_rgb(0_0_0_/_0.45)]">Pearl Pulse Safaris</p>
-                        <p class="mt-3 text-white/85 text-sm leading-relaxed [text-shadow:0_1px_12px_rgb(0_0_0_/_0.4)]">{{ $footerBlurb ?? 'Private journeys through East Africa.' }}</p>
+                <div class="mx-auto max-w-7xl px-5 pb-14 pt-16 lg:px-8 lg:pb-16 lg:pt-20">
+                    {{-- Desktop columns --}}
+                    <div class="hidden gap-12 md:grid md:grid-cols-2 lg:grid-cols-12 lg:gap-10">
+                        <div class="lg:col-span-4">
+                            <p class="font-display text-4xl leading-none text-white">Pearl Pulse <span class="align-middle font-sans text-[0.38em] uppercase tracking-[0.24em] text-white/60">Safaris</span></p>
+                            <p class="mt-4 max-w-xs text-sm leading-relaxed text-white/75">{{ $footerBlurb ?? 'Private journeys through East Africa.' }}</p>
+                            <p class="mb-3 mt-8 text-[0.68rem] uppercase tracking-[0.26em] text-white/50">Follow us</p>
+                            <div class="flex flex-wrap gap-2.5">
+                                @foreach(($siteSocial ?? []) as $platform => $url)
+                                    @if(!empty($url))
+                                        <x-social-link :platform="$platform" :url="$url" />
+                                    @endif
+                                @endforeach
+                            </div>
+                            <div class="mt-8 max-w-sm">
+                                <livewire:newsletter-signup wire:key="newsletter-desktop" />
+                            </div>
+                        </div>
+                        <div class="lg:col-span-2">
+                            <p class="footer-heading">Explore</p>
+                            <div class="space-y-2.5 text-sm">
+                                <a href="{{ route('journeys.index') }}" class="footer-link">Journeys</a>
+                                <a href="{{ route('destinations.index') }}" class="footer-link">Destinations</a>
+                                <a href="{{ route('experiences.index') }}" class="footer-link">Experiences</a>
+                                <a href="{{ route('how-it-works') }}" class="footer-link">How it works</a>
+                                <a href="{{ route('stays.index') }}" class="footer-link">Preferred lodges</a>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-2">
+                            <p class="footer-heading">Company</p>
+                            <div class="space-y-2.5 text-sm">
+                                <a href="{{ route('about') }}" class="footer-link">About</a>
+                                <a href="{{ route('our-people') }}" class="footer-link">Our people</a>
+                                <a href="{{ route('reviews.index') }}" class="footer-link">Guest stories</a>
+                                <a href="{{ route('faqs.index') }}" class="footer-link">FAQs</a>
+                                <a href="{{ route('contact') }}" class="footer-link">Contact</a>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-4">
+                            <p class="footer-heading">Contact</p>
+                            <a href="{{ route('contact') }}" class="inline-flex items-center gap-2 border border-white/35 px-5 py-2.5 text-[0.72rem] uppercase tracking-[0.18em] text-white transition hover:border-[var(--color-brown)] hover:bg-[var(--color-brown)] hover:text-[#211a13]">
+                                Talk to a specialist
+                                <span aria-hidden="true">&rarr;</span>
+                            </a>
+                            <div class="mt-6 space-y-2.5 text-sm text-white/80">
+                                @if($siteContact['address'] ?? null)
+                                    <p class="whitespace-pre-line leading-relaxed text-white/75">{{ $siteContact['address'] }}</p>
+                                @endif
+                                @if($siteContact['phone'] ?? null)
+                                    <p><a class="footer-link" href="tel:{{ preg_replace('/\s+/', '', $siteContact['phone']) }}">{{ $siteContact['phone'] }}</a></p>
+                                @endif
+                                @if($siteContact['email'] ?? null)
+                                    <p><a class="footer-link" href="mailto:{{ $siteContact['email'] }}">{{ $siteContact['email'] }}</a></p>
+                                @endif
+                                @if(!empty($whatsappUrl))
+                                    <p><a class="footer-link" href="{{ $whatsappUrl }}" target="_blank" rel="noopener">WhatsApp</a></p>
+                                @endif
+                            </div>
+                        </div>
                     </div>
 
-                    {{-- Desktop columns --}}
-                    <div class="hidden md:grid gap-10 md:grid-cols-3">
-                        <div>
-                            <p class="text-[13px] tracking-[0.2em] uppercase text-white/60 mb-4">Explore</p>
-                            <div class="space-y-2 text-sm text-white/90">
-                                <a href="{{ route('journeys.index') }}" class="block hover:text-white transition">Journeys</a>
-                                <a href="{{ route('destinations.index') }}" class="block hover:text-white transition">Destinations</a>
-                                <a href="{{ route('experiences.index') }}" class="block hover:text-white transition">Experiences</a>
-                                <a href="{{ route('how-it-works') }}" class="block hover:text-white transition">How it works</a>
-                                <a href="{{ route('stays.index') }}" class="block hover:text-white transition">Preferred lodges</a>
-                                <a href="{{ route('faqs.index') }}" class="block hover:text-white transition">FAQs</a>
-                                <a href="{{ route('reviews.index') }}" class="block hover:text-white transition">Guest stories</a>
-                                <a href="{{ route('about') }}" class="block hover:text-white transition">About</a>
-                                <a href="{{ route('our-people') }}" class="block hover:text-white transition">Our people</a>
-                                <a href="{{ route('contact') }}" class="block hover:text-white transition">Contact</a>
-                            </div>
+                    {{-- Mobile brand block --}}
+                    <div class="mb-10 md:hidden">
+                        <p class="font-display text-3xl leading-none text-white">Pearl Pulse <span class="align-middle font-sans text-[0.38em] uppercase tracking-[0.24em] text-white/60">Safaris</span></p>
+                        <p class="mt-3 text-sm leading-relaxed text-white/75">{{ $footerBlurb ?? 'Private journeys through East Africa.' }}</p>
+                        <p class="mb-3 mt-6 text-[0.68rem] uppercase tracking-[0.26em] text-white/50">Follow us</p>
+                        <div class="flex flex-wrap gap-2.5">
+                            @foreach(($siteSocial ?? []) as $platform => $url)
+                                @if(!empty($url))
+                                    <x-social-link :platform="$platform" :url="$url" />
+                                @endif
+                            @endforeach
                         </div>
-                        <div>
-                            <p class="text-[13px] tracking-[0.2em] uppercase text-white/60 mb-4">Contact</p>
-                            <p class="mb-3 text-sm"><a class="text-white/90 hover:text-white transition" href="{{ route('contact') }}">Speak to a specialist</a></p>
-                            @if($siteContact['address'] ?? null)
-                                <p class="text-sm text-white/90 whitespace-pre-line">{{ $siteContact['address'] }}</p>
-                            @endif
-                            @if($siteContact['phone'] ?? null)
-                                <p class="mt-2 text-sm"><a class="text-white/90 hover:text-white transition" href="tel:{{ preg_replace('/\s+/', '', $siteContact['phone']) }}">{{ $siteContact['phone'] }}</a></p>
-                            @endif
-                            @if($siteContact['email'] ?? null)
-                                <p class="mt-2 text-sm"><a class="text-white/90 hover:text-white transition" href="mailto:{{ $siteContact['email'] }}">{{ $siteContact['email'] }}</a></p>
-                            @endif
-                            @if(!empty($whatsappUrl))
-                                <p class="mt-2 text-sm"><a class="text-white/90 hover:text-white transition" href="{{ $whatsappUrl }}" target="_blank" rel="noopener">WhatsApp</a></p>
-                            @endif
-                        </div>
-                        <div>
-                            <p class="text-[13px] tracking-[0.2em] uppercase text-white/60 mb-4">Follow</p>
-                            <div class="flex flex-wrap gap-4 text-sm text-white/90">
-                                @if(!empty($siteSocial['instagram']))
-                                    <a href="{{ $siteSocial['instagram'] }}" class="hover:text-white transition" target="_blank" rel="noopener">Instagram</a>
-                                @endif
-                                @if(!empty($siteSocial['facebook']))
-                                    <a href="{{ $siteSocial['facebook'] }}" class="hover:text-white transition" target="_blank" rel="noopener">Facebook</a>
-                                @endif
-                                @if(!empty($siteSocial['twitter']))
-                                    <a href="{{ $siteSocial['twitter'] }}" class="hover:text-white transition" target="_blank" rel="noopener">X</a>
-                                @endif
-                            </div>
-                            <div class="mt-6 space-y-2 text-xs text-white/55">
-                                <a href="{{ route('legal', 'privacy') }}" class="block hover:text-white transition">Privacy</a>
-                                <a href="{{ route('legal', 'terms') }}" class="block hover:text-white transition">Terms</a>
-                                <a href="{{ route('legal', 'cancellation') }}" class="block hover:text-white transition">Cancellation</a>
-                                <a href="{{ route('legal', 'cookies') }}" class="block hover:text-white transition">Cookies</a>
-                            </div>
+                        <div class="mt-8">
+                            <livewire:newsletter-signup wire:key="newsletter-mobile" />
                         </div>
                     </div>
 
@@ -533,10 +544,18 @@
                                 <a href="{{ route('experiences.index') }}" class="block hover:text-white">Experiences</a>
                                 <a href="{{ route('how-it-works') }}" class="block hover:text-white">How it works</a>
                                 <a href="{{ route('stays.index') }}" class="block hover:text-white">Preferred lodges</a>
-                                <a href="{{ route('faqs.index') }}" class="block hover:text-white">FAQs</a>
-                                <a href="{{ route('reviews.index') }}" class="block hover:text-white">Guest stories</a>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" class="flex w-full items-center justify-between py-4 text-[13px] tracking-[0.2em] uppercase text-white/80" @click="footerOpen = footerOpen === 'company' ? null : 'company'">
+                                Company
+                                <span x-text="footerOpen === 'company' ? '−' : '+'"></span>
+                            </button>
+                            <div x-show="footerOpen === 'company'" x-cloak class="pb-4 space-y-2 text-sm text-white/90">
                                 <a href="{{ route('about') }}" class="block hover:text-white">About</a>
                                 <a href="{{ route('our-people') }}" class="block hover:text-white">Our people</a>
+                                <a href="{{ route('reviews.index') }}" class="block hover:text-white">Guest stories</a>
+                                <a href="{{ route('faqs.index') }}" class="block hover:text-white">FAQs</a>
                                 <a href="{{ route('contact') }}" class="block hover:text-white">Contact</a>
                             </div>
                         </div>
@@ -560,13 +579,10 @@
                         </div>
                         <div>
                             <button type="button" class="flex w-full items-center justify-between py-4 text-[13px] tracking-[0.2em] uppercase text-white/80" @click="footerOpen = footerOpen === 'legal' ? null : 'legal'">
-                                Legal &amp; social
+                                Legal
                                 <span x-text="footerOpen === 'legal' ? '−' : '+'"></span>
                             </button>
                             <div x-show="footerOpen === 'legal'" x-cloak class="pb-4 space-y-2 text-sm text-white/90">
-                                @if(!empty($siteSocial['instagram']))
-                                    <a href="{{ $siteSocial['instagram'] }}" class="block hover:text-white" target="_blank" rel="noopener">Instagram</a>
-                                @endif
                                 <a href="{{ route('legal', 'privacy') }}" class="block hover:text-white">Privacy</a>
                                 <a href="{{ route('legal', 'terms') }}" class="block hover:text-white">Terms</a>
                                 <a href="{{ route('legal', 'cancellation') }}" class="block hover:text-white">Cancellation</a>
@@ -575,8 +591,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="border-t border-white/15 px-5 py-5 text-center text-xs text-white/55 tracking-wide">
-                    &copy; {{ date('Y') }} Pearl Pulse Safaris. All rights reserved.
+                <div class="border-t border-white/12">
+                    <div class="mx-auto flex max-w-7xl flex-col items-center gap-3 px-5 py-6 text-center text-xs tracking-wide text-white/55 md:flex-row md:justify-between md:text-left lg:px-8">
+                        <p>&copy; {{ date('Y') }} Pearl Pulse Safaris. All rights reserved.</p>
+                        <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2" aria-label="Legal">
+                            <a href="{{ route('legal', 'privacy') }}" class="footer-legal-link">Privacy</a>
+                            <a href="{{ route('legal', 'terms') }}" class="footer-legal-link">Terms</a>
+                            <a href="{{ route('legal', 'cancellation') }}" class="footer-legal-link">Cancellation</a>
+                            <a href="{{ route('legal', 'cookies') }}" class="footer-legal-link">Cookies</a>
+                        </nav>
+                    </div>
                 </div>
             </footer>
         </div>

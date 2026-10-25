@@ -28,7 +28,7 @@
             <div class="relative lg:w-[46%] min-h-[34vh] lg:min-h-screen bg-forest overflow-hidden flex items-end">
                 @if($guestHero)
                     <img src="{{ $guestHero }}" alt="" class="absolute inset-0 h-full w-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/45 to-charcoal/20"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent"></div>
                 @else
                     <div class="absolute inset-0 bg-gradient-to-br from-forest via-forest-light to-[#3d4f35]"></div>
                     <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(circle at 20% 20%, rgba(232,223,208,0.25), transparent 45%), radial-gradient(circle at 80% 80%, rgba(166,139,75,0.2), transparent 40%);"></div>
@@ -49,7 +49,7 @@
 
             {{-- Form panel --}}
             <div class="flex-1 flex items-center justify-center bg-cream px-5 py-12 lg:px-10">
-                <div class="w-full max-w-md bg-white border border-charcoal/10 p-6 sm:p-8">
+                <div class="w-full max-w-md bg-cream border border-charcoal/10 p-6 sm:p-8">
                     {{ $slot }}
                 </div>
             </div>

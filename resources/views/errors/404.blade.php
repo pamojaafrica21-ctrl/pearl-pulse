@@ -3,7 +3,7 @@
 @section('title', 'Page not found | Pearl Pulse Safaris')
 
 @section('content')
-<section class="bg-cream pt-16 pb-24">
+<section class="bg-beige pt-16 pb-24">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 text-center">
         <p class="text-xs tracking-[0.22em] uppercase text-gold mb-3">404</p>
         <h1 class="font-display text-5xl md:text-6xl text-forest">This path does not exist</h1>

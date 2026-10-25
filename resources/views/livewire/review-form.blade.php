@@ -1,4 +1,4 @@
-<div class="border border-sand-deep/40 bg-white/60 p-6 md:p-8">
+<div class="border border-sand-deep/40 bg-cream/60 p-6 md:p-8">
     @if($submitted)
         <div class="rounded-sm border border-sand/30 bg-sand/10 px-5 py-4 text-sm text-forest">
             Thank you — your review has been received. We’ll review it before it appears on the site.
@@ -16,19 +16,19 @@
             <div class="grid gap-5 sm:grid-cols-2">
                 <div>
                     <label for="review-name" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">Your name</label>
-                    <input id="review-name" type="text" wire:model="guest_name" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                    <input id="review-name" type="text" wire:model="guest_name" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                     @error('guest_name') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label for="review-country" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">Country <span class="normal-case tracking-normal">(optional)</span></label>
-                    <input id="review-country" type="text" wire:model="guest_country" placeholder="e.g. United Kingdom" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                    <input id="review-country" type="text" wire:model="guest_country" placeholder="e.g. United Kingdom" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                     @error('guest_country') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
             </div>
 
             <div>
                 <label for="review-quote" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">Your review</label>
-                <textarea id="review-quote" rows="5" wire:model="quote" placeholder="What stood out about the guiding, pacing, or places?" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest"></textarea>
+                <textarea id="review-quote" rows="5" wire:model="quote" placeholder="What stood out about the guiding, pacing, or places?" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest"></textarea>
                 @error('quote') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
             </div>
 

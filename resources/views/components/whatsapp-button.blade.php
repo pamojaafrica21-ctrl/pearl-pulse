@@ -5,7 +5,7 @@
     href="{{ $url }}"
     target="_blank"
     rel="noopener"
-    class="whatsapp-fab fixed bottom-5 right-5 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-white text-charcoal transition duration-300 hover:bg-charcoal hover:text-white"
+    class="whatsapp-fab fixed bottom-5 right-5 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-cream text-charcoal transition duration-300 hover:bg-charcoal hover:text-white"
     aria-label="Chat on WhatsApp"
 >
     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

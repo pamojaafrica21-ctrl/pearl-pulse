@@ -4,7 +4,7 @@
 @section('meta_description', 'Tell us what you are dreaming about. We will design a private proposal around you.')
 
 @section('content')
-<section class="surface surface--white pt-16 pb-10 lg:pt-20">
+<section class="surface surface--beige pt-16 pb-10 lg:pt-20">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 reveal">
         <p class="section-eyebrow">Plan your journey</p>
         <h1 class="font-display text-5xl md:text-6xl text-charcoal leading-tight">Tell us what you are dreaming about</h1>

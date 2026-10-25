@@ -113,11 +113,29 @@ class Edit extends Component
 
     public string $social_facebook = '';
 
+    public string $social_youtube = '';
+
+    public string $social_tiktok = '';
+
+    public string $social_linkedin = '';
+
     public string $social_twitter = '';
+
+    public string $social_pinterest = '';
+
+    public string $social_rednote = '';
 
     public string $review_google_url = '';
 
     public string $review_tripadvisor_url = '';
+
+    public string $review_google_place_id = '';
+
+    public string $review_google_api_key = '';
+
+    public string $review_tripadvisor_location_id = '';
+
+    public string $review_tripadvisor_api_key = '';
 
     public string $home_destinations_eyebrow = '';
 
@@ -144,6 +162,10 @@ class Edit extends Component
 
     public ?string $currentHeroPath = null;
 
+    public $home_intro_image;
+
+    public ?string $currentIntroImagePath = null;
+
     public function mount(SettingService $settings): void
     {
         $this->hero_headline = (string) $settings->get('hero_headline', '');
@@ -162,6 +184,7 @@ class Edit extends Component
         $this->home_intro_eyebrow = (string) $settings->get('home_intro_eyebrow', '');
         $this->home_intro_heading = (string) $settings->get('home_intro_heading', '');
         $this->home_intro_body = (string) $settings->get('home_intro_body', '');
+        $this->currentIntroImagePath = $settings->get('home_intro_image') ?: null;
         $this->home_pillars = $this->decodeList($settings->get('home_pillars'), 5);
         $this->home_destinations_eyebrow = (string) $settings->get('home_destinations_eyebrow', 'Destinations');
         $this->home_destinations_heading = (string) $settings->get('home_destinations_heading', 'Where do you want to go?');
@@ -208,9 +231,18 @@ class Edit extends Component
         $this->admin_email = (string) $settings->get('admin_email', '');
         $this->social_instagram = (string) $settings->get('social_instagram', '');
         $this->social_facebook = (string) $settings->get('social_facebook', '');
+        $this->social_youtube = (string) $settings->get('social_youtube', '');
+        $this->social_tiktok = (string) $settings->get('social_tiktok', '');
+        $this->social_linkedin = (string) $settings->get('social_linkedin', '');
         $this->social_twitter = (string) $settings->get('social_twitter', '');
+        $this->social_pinterest = (string) $settings->get('social_pinterest', '');
+        $this->social_rednote = (string) $settings->get('social_rednote', '');
         $this->review_google_url = (string) $settings->get('review_google_url', '');
         $this->review_tripadvisor_url = (string) $settings->get('review_tripadvisor_url', '');
+        $this->review_google_place_id = (string) $settings->get('review_google_place_id', '');
+        $this->review_google_api_key = (string) $settings->get('review_google_api_key', '');
+        $this->review_tripadvisor_location_id = (string) $settings->get('review_tripadvisor_location_id', '');
+        $this->review_tripadvisor_api_key = (string) $settings->get('review_tripadvisor_api_key', '');
         $this->currentHeroPath = $settings->get('hero_image');
     }
 
@@ -359,10 +391,20 @@ class Edit extends Component
             'admin_email' => ['nullable', 'email', 'max:255'],
             'social_instagram' => ['nullable', 'url', 'max:500'],
             'social_facebook' => ['nullable', 'url', 'max:500'],
+            'social_youtube' => ['nullable', 'url', 'max:500'],
+            'social_tiktok' => ['nullable', 'url', 'max:500'],
+            'social_linkedin' => ['nullable', 'url', 'max:500'],
             'social_twitter' => ['nullable', 'url', 'max:500'],
+            'social_pinterest' => ['nullable', 'url', 'max:500'],
+            'social_rednote' => ['nullable', 'url', 'max:500'],
             'review_google_url' => ['nullable', 'url', 'max:2000'],
             'review_tripadvisor_url' => ['nullable', 'url', 'max:2000'],
+            'review_google_place_id' => ['nullable', 'string', 'max:255'],
+            'review_google_api_key' => ['nullable', 'string', 'max:500'],
+            'review_tripadvisor_location_id' => ['nullable', 'string', 'max:255'],
+            'review_tripadvisor_api_key' => ['nullable', 'string', 'max:500'],
             'hero_image' => ['nullable', 'image', 'max:8192'],
+            'home_intro_image' => ['nullable', 'image', 'max:8192'],
         ];
     }
 
@@ -375,6 +417,13 @@ class Edit extends Component
             $this->currentHeroPath = $uploader->store($this->hero_image, 'site');
             $settings->set('hero_image', $this->currentHeroPath);
             $this->hero_image = null;
+        }
+
+        if ($this->home_intro_image) {
+            $uploader->delete($this->currentIntroImagePath);
+            $this->currentIntroImagePath = $uploader->store($this->home_intro_image, 'site');
+            $settings->set('home_intro_image', $this->currentIntroImagePath);
+            $this->home_intro_image = null;
         }
 
         if ($this->removeHeroVideoFile && $this->currentHeroVideoPath) {
@@ -410,8 +459,11 @@ class Edit extends Component
             'reason_cta_heading', 'reason_cta_text',
             'footer_blurb',
             'contact_address', 'contact_phone', 'contact_whatsapp', 'contact_email', 'contact_map_embed', 'admin_email',
-            'social_instagram', 'social_facebook', 'social_twitter',
+            'social_instagram', 'social_facebook', 'social_youtube', 'social_tiktok',
+            'social_linkedin', 'social_twitter', 'social_pinterest', 'social_rednote',
             'review_google_url', 'review_tripadvisor_url',
+            'review_google_place_id', 'review_google_api_key',
+            'review_tripadvisor_location_id', 'review_tripadvisor_api_key',
         ];
 
         foreach ($map as $key) {
@@ -465,6 +517,13 @@ class Edit extends Component
         $uploader->delete($this->currentHeroPath);
         $settings->set('hero_image', '');
         $this->currentHeroPath = null;
+    }
+
+    public function removeIntroImage(SettingService $settings, ImageUploader $uploader): void
+    {
+        $uploader->delete($this->currentIntroImagePath);
+        $settings->set('home_intro_image', '');
+        $this->currentIntroImagePath = null;
     }
 
     public function clearHeroVideo(): void

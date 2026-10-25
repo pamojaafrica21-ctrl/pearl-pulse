@@ -107,7 +107,7 @@
                         @foreach($destination->images as $image)
                             <div class="relative" wire:key="img-{{ $image->id }}">
                                 <img src="{{ $uploader->thumbUrl($image->path) }}" alt="" class="aspect-square object-cover w-full">
-                                <button type="button" wire:click="removeGalleryImage({{ $image->id }})" class="absolute top-1 right-1 bg-white/90 text-xs px-1.5 py-0.5 text-red-700">×</button>
+                                <button type="button" wire:click="removeGalleryImage({{ $image->id }})" class="absolute top-1 right-1 bg-cream/90 text-xs px-1.5 py-0.5 text-red-700">×</button>
                             </div>
                         @endforeach
                     </div>

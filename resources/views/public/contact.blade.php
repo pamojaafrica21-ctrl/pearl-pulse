@@ -4,7 +4,7 @@
 @section('meta_description', 'Contact Pearl Pulse Safaris in Kampala — enquiry form, WhatsApp, phone, and email. We typically reply within a few hours.')
 
 @section('content')
-<section class="surface surface--white pt-16 pb-10 lg:pt-20">
+<section class="surface surface--beige pt-16 pb-10 lg:pt-20">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 reveal">
         <p class="section-eyebrow">Speak to a specialist</p>
         <h1 class="font-display text-5xl md:text-6xl text-charcoal leading-tight">Let’s talk about your journey</h1>
@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            <div class="shrink-0 rounded-sm border border-forest/10 bg-white/50 px-5 py-4">
+            <div class="shrink-0 rounded-sm border border-forest/10 bg-cream/50 px-5 py-4">
                 <p class="text-sm text-charcoal leading-relaxed">
                     <span class="font-medium">We reply within a few hours</span>
                     <span class="text-muted"> during Uganda business hours — evenings and weekends when we can. Urgent permit or lodge questions are welcome anytime.</span>

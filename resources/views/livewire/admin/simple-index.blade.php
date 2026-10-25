@@ -28,7 +28,7 @@
     <div class="flex justify-end mb-6">
         <a href="{{ $createRoute }}" wire:navigate class="btn-primary text-xs">Add {{ $label }}</a>
     </div>
-    <div class="bg-white border border-sand-deep/30 overflow-x-auto">
+    <div class="bg-cream border border-sand-deep/30 overflow-x-auto">
         <table class="min-w-full text-sm">
             <thead class="bg-cream text-left text-xs tracking-wider uppercase text-muted">
                 <tr>
@@ -108,7 +108,7 @@
     <div class="mt-6">{{ $rows->links() }}</div>
     @if($confirmingDelete ?? false)
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-            <div class="bg-white p-6 max-w-md w-full border border-sand-deep/30">
+            <div class="bg-cream p-6 max-w-md w-full border border-sand-deep/30">
                 <h3 class="font-display text-2xl text-forest">Delete {{ $label }}?</h3>
                 <div class="mt-6 flex gap-3 justify-end">
                     <button type="button" wire:click="$set('confirmingDelete', null)" class="px-4 py-2 text-sm border">Cancel</button>

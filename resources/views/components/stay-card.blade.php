@@ -1,6 +1,9 @@
 @props(['stay'])
 
-@php $cover = $stay->coverThumbUrl() ?: $stay->coverUrl(); @endphp
+@php
+    $cover = $stay->coverThumbUrl() ?: $stay->coverUrl();
+    $countryName = $stay->destination?->country?->name;
+@endphp
 
 <a href="{{ route('stays.show', $stay) }}" {{ $attributes->class(['destination-card destination-card--overlay group']) }}>
     <div class="overflow-hidden bg-forest/10">
@@ -11,15 +14,15 @@
         @endif
     </div>
     <div class="destination-card-meta">
-        <p class="text-[13px] tracking-[0.18em] uppercase text-white/70">Selected stay</p>
+        @if($countryName)
+            <p class="text-[13px] tracking-[0.18em] uppercase text-white/70">{{ $countryName }}</p>
+        @endif
         <h3 class="font-display text-2xl md:text-3xl text-white mt-1">
             {{ $stay->name }}
         </h3>
         @if($stay->location)
             <p class="mt-1 text-sm text-white/75">{{ $stay->location }}</p>
         @endif
-        @if($stay->teaser)
-            <p class="mt-2 text-sm text-white/80 leading-relaxed line-clamp-2">{{ $stay->teaser }}</p>
-        @endif
+        <span class="destination-country-card__cta mt-4">Explore</span>
     </div>
 </a>

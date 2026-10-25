@@ -31,6 +31,7 @@ use App\Livewire\Admin\Faqs\Form as FaqForm;
 use App\Livewire\Admin\Faqs\Index as FaqsIndex;
 use App\Livewire\Admin\Journeys\Form as JourneyForm;
 use App\Livewire\Admin\Journeys\Index as JourneysIndex;
+use App\Livewire\Admin\Newsletter\Index as NewsletterIndex;
 use App\Livewire\Admin\Pages\Form as PageForm;
 use App\Livewire\Admin\Pages\Index as PagesIndex;
 use App\Livewire\Admin\PulseItems\Form as PulseForm;
@@ -148,6 +149,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/pages/{page}/edit', PageForm::class)->name('pages.edit');
     Route::get('/enquiries', EnquiriesIndex::class)->name('enquiries.index');
     Route::get('/enquiries/create', EnquiryCreate::class)->name('enquiries.create');
+    Route::get('/newsletter', NewsletterIndex::class)->name('newsletter.index');
     Route::get('/bookings', BookingsIndex::class)->name('bookings.index');
     Route::get('/bookings/create', BookingForm::class)->name('bookings.create');
     Route::get('/bookings/{booking}/edit', BookingForm::class)->name('bookings.edit');

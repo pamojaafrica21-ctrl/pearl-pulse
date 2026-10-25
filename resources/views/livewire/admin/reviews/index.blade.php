@@ -17,7 +17,7 @@
         <p class="mb-4 text-sm text-forest">{{ session('status') }}</p>
     @endif
 
-    <div class="bg-white border border-sand-deep/30 overflow-x-auto">
+    <div class="bg-cream border border-sand-deep/30 overflow-x-auto">
         <table class="min-w-full text-sm">
             <thead class="bg-cream text-left text-xs tracking-wider uppercase text-muted">
                 <tr>
@@ -71,7 +71,7 @@
 
     @if($confirmingDelete)
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-            <div class="bg-white p-6 max-w-md w-full border border-sand-deep/30">
+            <div class="bg-cream p-6 max-w-md w-full border border-sand-deep/30">
                 <h3 class="font-display text-2xl text-forest">Delete review?</h3>
                 <p class="mt-2 text-sm text-muted">This cannot be undone.</p>
                 <div class="mt-6 flex gap-3 justify-end">

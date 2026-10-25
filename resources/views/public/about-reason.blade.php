@@ -8,7 +8,7 @@
     @if(!empty($heroImage))
         <img src="{{ $heroImage }}" alt="" class="absolute inset-0 h-full w-full object-cover" fetchpriority="high">
     @endif
-    <div class="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/40 to-black/25"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
     <div class="relative z-10 mx-auto w-full max-w-7xl px-5 lg:px-8 pb-14 pt-28 reveal">
         <p class="section-eyebrow text-white/75">{{ $eyebrow }}</p>
         <h1 class="font-display text-5xl md:text-6xl text-white mt-3 leading-tight max-w-3xl">{{ $title }}</h1>
@@ -19,7 +19,7 @@
 </section>
 
 @if($intro)
-<section class="surface surface--white py-16 lg:py-20">
+<section class="surface surface--beige py-16 lg:py-20">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 reveal">
         <div class="prose-safari">
             @foreach(preg_split('/\n\s*\n/', trim($intro)) as $paragraph)
@@ -53,7 +53,7 @@
 @endif
 
 @if(!empty($partners))
-<section class="surface surface--white py-16 lg:py-24">
+<section class="surface surface--beige py-16 lg:py-24">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="reveal max-w-2xl mb-12">
             <p class="section-eyebrow">Partners & projects</p>

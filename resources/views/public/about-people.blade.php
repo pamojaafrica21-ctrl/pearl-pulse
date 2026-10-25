@@ -4,7 +4,7 @@
 @section('meta_description', 'Meet the guides and planners behind Pearl Pulse — local specialists who know the ground and shape your private journey.')
 
 @section('content')
-<section class="surface surface--white pt-16 pb-12 lg:pt-20">
+<section class="surface surface--beige pt-16 pb-12 lg:pt-20">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 reveal">
         <p class="section-eyebrow">Our people</p>
         <h1 class="font-display text-5xl md:text-6xl text-charcoal leading-tight">Your journey. Our people.</h1>

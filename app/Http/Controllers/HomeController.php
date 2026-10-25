@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
 use App\Models\Country;
 use App\Models\Experience;
 use App\Models\Faq;
@@ -12,12 +11,13 @@ use App\Models\Review;
 use App\Models\Specialist;
 use App\Models\Stay;
 use App\Models\TeamMember;
+use App\Services\PlatformReviewService;
 use App\Services\SettingService;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function __invoke(SettingService $settings): View
+    public function __invoke(SettingService $settings, PlatformReviewService $platformReviews): View
     {
         $countries = Country::query()
             ->published()
@@ -114,6 +114,30 @@ class HomeController extends Controller
                 ?: $countries->first()?->coverUrl();
         }
 
+        $whyImage = $settings->get('home_why_image');
+        $whyImageUrl = null;
+        if (is_string($whyImage) && $whyImage !== '') {
+            $whyImageUrl = str_starts_with($whyImage, 'http')
+                ? $whyImage
+                : asset('storage/'.$whyImage);
+        }
+        if (! $whyImageUrl) {
+            $whyImageUrl = $countries->firstWhere('slug', 'tanzania')?->coverUrl()
+                ?: $countries->first()?->coverUrl();
+        }
+
+        $introImage = $settings->get('home_intro_image');
+        $introImageUrl = null;
+        if (is_string($introImage) && $introImage !== '') {
+            $introImageUrl = str_starts_with($introImage, 'http')
+                ? $introImage
+                : asset('storage/'.$introImage);
+        }
+        if (! $introImageUrl) {
+            $introImageUrl = $countries->firstWhere('slug', 'uganda')?->coverUrl()
+                ?: $countries->first()?->coverUrl();
+        }
+
         $trustItems = $settings->listItems('home_trust_items', 6);
         if ($trustItems === []) {
             $trustItems = [
@@ -130,6 +154,7 @@ class HomeController extends Controller
             'homeIntroEyebrow' => $settings->get('home_intro_eyebrow', 'Africa, deeply personal'),
             'homeIntroHeading' => $settings->get('home_intro_heading', 'Local African specialists who design private journeys'),
             'homeIntroBody' => $settings->get('home_intro_body', "Pearl Pulse is a Uganda-based safari company. We design private journeys across Uganda, Rwanda, Kenya, and Tanzania — shaped around how you want to experience Africa, not a fixed catalogue."),
+            'homeIntroImage' => $introImageUrl,
             'homePillars' => $settings->listItems('home_pillars', 6),
             'destinationsEyebrow' => $settings->get('home_destinations_eyebrow', 'Destinations'),
             'destinationsHeading' => $settings->get('home_destinations_heading', 'Where do you want to go?'),
@@ -152,10 +177,32 @@ class HomeController extends Controller
             'experiences' => Experience::query()->published()->orderBy('sort_order')->get(),
             'specialists' => Specialist::query()->published()->orderBy('sort_order')->get(),
             'specialistsBg' => asset('storage/seed/specialist-section-bg.jpg'),
-            'team' => TeamMember::query()->published()->orderBy('sort_order')->take(4)->get(),
+            'team' => TeamMember::query()->published()->orderBy('sort_order')->take(3)->get(),
             'pulseItems' => PulseItem::query()->visible()->orderBy('sort_order')->take(4)->get(),
-            'stays' => Stay::query()->published()->orderBy('sort_order')->take(3)->get(),
-            'fieldNotes' => Article::query()->published()->orderByDesc('is_featured')->orderBy('sort_order')->take(3)->get(),
+            'stays' => Stay::query()->published()->with('destination.country')->orderBy('sort_order')->get(),
+            'stayCountries' => Stay::query()
+                ->published()
+                ->with('destination.country')
+                ->orderBy('sort_order')
+                ->get()
+                ->map(function (Stay $stay) {
+                    $country = $stay->destination?->country;
+                    if (! $country) {
+                        return null;
+                    }
+
+                    return [
+                        'key' => $country->slug,
+                        'name' => $country->name,
+                        'teaser' => $stay->teaser ?: ($country->teaser ?: null),
+                        'image' => $stay->coverThumbUrl() ?: $stay->coverUrl() ?: $country->coverUrl(),
+                        'href' => route('stays.index', ['country' => $country->slug]),
+                    ];
+                })
+                ->filter()
+                ->unique('key')
+                ->values()
+                ->take(4),
             'reviews' => Review::query()->published()->with('journey')->orderBy('sort_order')->take(3)->get(),
             'faqs' => Faq::query()
                 ->published()
@@ -165,8 +212,10 @@ class HomeController extends Controller
                 ->take(5)
                 ->get(),
             'reasonImage' => $reasonImageUrl,
+            'whyImage' => $whyImageUrl,
             'whatsappUrl' => $settings->whatsappUrl('Hello Pearl Pulse — I would like to plan a journey.'),
             'reviewLinks' => $settings->reviewLinks(),
+            'platformReviews' => $platformReviews->summary(),
         ]);
     }
 }

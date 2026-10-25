@@ -15,27 +15,27 @@
                 <form wire:submit="submit" class="mt-8 space-y-5 flex-1 flex flex-col">
                     <div>
                         <label for="contact-enquiry-name" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">Name</label>
-                        <input id="contact-enquiry-name" type="text" wire:model="name" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                        <input id="contact-enquiry-name" type="text" wire:model="name" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                         @error('name') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                     </div>
                     <div class="grid gap-5 sm:grid-cols-2">
                         <div>
                             <label for="contact-enquiry-email" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">Email</label>
-                            <input id="contact-enquiry-email" type="email" wire:model="email" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                            <input id="contact-enquiry-email" type="email" wire:model="email" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                             @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label for="contact-enquiry-phone" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">Phone</label>
-                            <input id="contact-enquiry-phone" type="text" wire:model="phone" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                            <input id="contact-enquiry-phone" type="text" wire:model="phone" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                         </div>
                     </div>
                     <div>
                         <label for="contact-enquiry-whatsapp" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">WhatsApp</label>
-                        <input id="contact-enquiry-whatsapp" type="text" wire:model="whatsapp" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                        <input id="contact-enquiry-whatsapp" type="text" wire:model="whatsapp" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                     </div>
                     <div class="flex-1 flex flex-col min-h-[10rem]">
                         <label for="contact-enquiry-message" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">How can we help?</label>
-                        <textarea id="contact-enquiry-message" rows="6" wire:model="message" class="w-full flex-1 min-h-[10rem] border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest" placeholder="Dates, travellers, destinations, or anything else on your mind…"></textarea>
+                        <textarea id="contact-enquiry-message" rows="6" wire:model="message" class="w-full flex-1 min-h-[10rem] border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest" placeholder="Dates, travellers, destinations, or anything else on your mind…"></textarea>
                         @error('message') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                     </div>
                     <div class="pt-2 mt-auto">
@@ -108,7 +108,7 @@
                             type="text"
                             wire:model="destinationOther"
                             placeholder="Tell us where else you have in mind"
-                            class="mt-5 w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest"
+                            class="mt-5 w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest"
                         >
                     @endif
                 </div>
@@ -119,11 +119,11 @@
                     <div class="mt-8 grid gap-5 sm:grid-cols-2">
                         <div>
                             <label class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">How many days?</label>
-                            <input type="text" wire:model="days" placeholder="e.g. 8–10" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                            <input type="text" wire:model="days" placeholder="e.g. 8–10" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                         </div>
                         <div>
                             <label class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">How many travellers?</label>
-                            <input type="text" wire:model="travellers" placeholder="e.g. 2" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                            <input type="text" wire:model="travellers" placeholder="e.g. 2" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                         </div>
                     </div>
                 </div>
@@ -148,7 +148,7 @@
                             type="text"
                             wire:model="experienceOther"
                             placeholder="Tell us what else you would like to experience"
-                            class="mt-5 w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest"
+                            class="mt-5 w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest"
                         >
                     @endif
                 </div>
@@ -158,7 +158,7 @@
                     <h2 class="font-display text-3xl text-charcoal">Accommodation preference</h2>
                     <p class="mt-2 text-muted text-sm">From essential comfort to signature exclusivity — or a considered mix.</p>
                     <div class="mt-8">
-                        <select wire:model.live="accommodation" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                        <select wire:model.live="accommodation" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                             <option value="">Select</option>
                             <option value="Comfortable">Essential</option>
                             <option value="Luxury">Premium</option>
@@ -171,7 +171,7 @@
                                 type="text"
                                 wire:model="accommodationOther"
                                 placeholder="Describe the stay you prefer"
-                                class="mt-4 w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest"
+                                class="mt-4 w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest"
                             >
                         @endif
                     </div>
@@ -182,7 +182,7 @@
                     <h2 class="font-display text-3xl text-charcoal">Approximate investment</h2>
                     <p class="mt-2 text-muted text-sm">Price never dominates the journey — this simply helps us propose the right shape.</p>
                     <div class="mt-8">
-                        <select wire:model.live="investment" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                        <select wire:model.live="investment" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                             <option value="">Select</option>
                             <option value="Mid-range">Essential quality</option>
                             <option value="Luxury">Premium</option>
@@ -195,7 +195,7 @@
                                 type="text"
                                 wire:model="investmentOther"
                                 placeholder="Share a budget range or notes"
-                                class="mt-4 w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest"
+                                class="mt-4 w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest"
                             >
                         @endif
                     </div>
@@ -211,7 +211,7 @@
                                 id="enquiry-date-from"
                                 type="date"
                                 wire:model="travelDateFrom"
-                                class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest"
+                                class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest"
                             >
                             @error('travelDateFrom') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                         </div>
@@ -221,7 +221,7 @@
                                 id="enquiry-date-to"
                                 type="date"
                                 wire:model="travelDateTo"
-                                class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest"
+                                class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest"
                             >
                             @error('travelDateTo') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                         </div>
@@ -234,23 +234,23 @@
                     <div class="mt-8 space-y-5">
                         <div>
                             <label for="enquiry-name" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">Name</label>
-                            <input id="enquiry-name" type="text" wire:model="name" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                            <input id="enquiry-name" type="text" wire:model="name" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                             @error('name') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                         </div>
                         <div class="grid gap-5 sm:grid-cols-2">
                             <div>
                                 <label for="enquiry-email" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">Email</label>
-                                <input id="enquiry-email" type="email" wire:model="email" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                                <input id="enquiry-email" type="email" wire:model="email" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                                 @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                             </div>
                             <div>
                                 <label for="enquiry-phone" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">Phone</label>
-                                <input id="enquiry-phone" type="text" wire:model="phone" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                                <input id="enquiry-phone" type="text" wire:model="phone" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                             </div>
                         </div>
                         <div>
                             <label class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">WhatsApp</label>
-                            <input type="text" wire:model="whatsapp" class="w-full border-sand-deep/40 bg-white text-charcoal focus:border-forest focus:ring-forest">
+                            <input type="text" wire:model="whatsapp" class="w-full border-sand-deep/40 bg-cream text-charcoal focus:border-forest focus:ring-forest">
                         </div>
                         <div>
                             <label for="enquiry-message-editor" class="block text-xs tracking-[0.14em] uppercase mb-2 text-muted">Tell us more</label>

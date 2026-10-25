@@ -4,7 +4,7 @@
 @section('meta_description', 'Travel guides, practical notes, and answers from the field — for planning an East African safari.')
 
 @section('content')
-<section class="bg-white pt-16 pb-16">
+<section class="bg-beige pt-16 pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <p class="text-xs tracking-[0.22em] uppercase text-muted mb-3">Insiders</p>
         <h1 class="font-display text-5xl md:text-6xl text-charcoal">Guides from the ground</h1>
@@ -16,7 +16,7 @@
         </div>
     </div>
 </section>
-<section class="bg-white pb-20">
+<section class="bg-beige pb-20">
     <div class="mx-auto max-w-7xl px-5 lg:px-8 grid gap-10 md:grid-cols-2">
         @foreach($articles as $article)
             <a href="{{ route('insiders.show', $article) }}" class="block group border-t border-charcoal/10 pt-6">

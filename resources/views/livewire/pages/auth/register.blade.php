@@ -53,25 +53,25 @@ new #[Layout('layouts.guest')] class extends Component
     <form wire:submit="register" class="space-y-5">
         <div>
             <label for="name" class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Name</label>
-            <input wire:model="name" id="name" type="text" required autofocus autocomplete="name" class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest">
+            <input wire:model="name" id="name" type="text" required autofocus autocomplete="name" class="w-full border-charcoal/15 bg-cream text-charcoal focus:border-forest focus:ring-forest">
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
         <div>
             <label for="email" class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Email</label>
-            <input wire:model="email" id="email" type="email" required autocomplete="username" class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest">
+            <input wire:model="email" id="email" type="email" required autocomplete="username" class="w-full border-charcoal/15 bg-cream text-charcoal focus:border-forest focus:ring-forest">
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
         <div>
             <label for="password" class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Password</label>
-            <input wire:model="password" id="password" type="password" required autocomplete="new-password" class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest">
+            <input wire:model="password" id="password" type="password" required autocomplete="new-password" class="w-full border-charcoal/15 bg-cream text-charcoal focus:border-forest focus:ring-forest">
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <div>
             <label for="password_confirmation" class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Confirm password</label>
-            <input wire:model="password_confirmation" id="password_confirmation" type="password" required autocomplete="new-password" class="w-full border-charcoal/15 bg-white text-charcoal focus:border-forest focus:ring-forest">
+            <input wire:model="password_confirmation" id="password_confirmation" type="password" required autocomplete="new-password" class="w-full border-charcoal/15 bg-cream text-charcoal focus:border-forest focus:ring-forest">
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 

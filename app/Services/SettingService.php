@@ -59,7 +59,12 @@ class SettingService
         return [
             'instagram' => $this->get('social_instagram', ''),
             'facebook' => $this->get('social_facebook', ''),
+            'youtube' => $this->get('social_youtube', ''),
+            'tiktok' => $this->get('social_tiktok', ''),
+            'linkedin' => $this->get('social_linkedin', ''),
             'twitter' => $this->get('social_twitter', ''),
+            'pinterest' => $this->get('social_pinterest', ''),
+            'rednote' => $this->get('social_rednote', ''),
         ];
     }
 

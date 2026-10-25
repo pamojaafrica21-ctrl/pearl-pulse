@@ -106,6 +106,19 @@
         <section class="space-y-5">
             <h2 class="font-display text-2xl text-forest">Homepage intro</h2>
             <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Intro image</label>
+                <p class="mb-3 text-xs text-muted">Shown on the left of the Discover Pearl Pulse section. Falls back to the Uganda cover if empty.</p>
+                @if($currentIntroImagePath)
+                    <div class="mb-3 flex items-start gap-3">
+                        <img src="{{ $uploader->url($currentIntroImagePath) }}" alt="" class="h-28 w-48 object-cover">
+                        <button type="button" wire:click="removeIntroImage" class="text-sm text-red-700">Remove</button>
+                    </div>
+                @endif
+                <input type="file" wire:model="home_intro_image" accept="image/*" class="text-sm">
+                <div wire:loading wire:target="home_intro_image" class="text-xs text-muted mt-1">Uploading…</div>
+                @error('home_intro_image') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+            </div>
+            <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Eyebrow</label>
                 <input type="text" wire:model="home_intro_eyebrow" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
             </div>
@@ -355,6 +368,7 @@
 
         <section class="space-y-5">
             <h2 class="font-display text-2xl text-forest">Social links</h2>
+            <p class="text-sm text-muted">Leave blank to hide an icon. Icons appear in black and white in the footer.</p>
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Instagram</label>
                 <input type="url" wire:model="social_instagram" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
@@ -364,13 +378,33 @@
                 <input type="url" wire:model="social_facebook" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
             </div>
             <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">YouTube</label>
+                <input type="url" wire:model="social_youtube" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">TikTok</label>
+                <input type="url" wire:model="social_tiktok" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">LinkedIn</label>
+                <input type="url" wire:model="social_linkedin" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">X / Twitter</label>
                 <input type="url" wire:model="social_twitter" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Pinterest</label>
+                <input type="url" wire:model="social_pinterest" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <div>
+                <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">RedNote (Xiaohongshu)</label>
+                <input type="url" wire:model="social_rednote" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
             </div>
         </section>
 
         <section class="space-y-5">
-            <h2 class="font-display text-2xl text-forest">Review links</h2>
+            <h2 class="font-display text-2xl text-forest">Reviews — Google &amp; Tripadvisor</h2>
             <p class="text-sm text-muted">Paste your Google Business and Tripadvisor profile URLs. They appear on Guest voices and the reviews page so travellers can read and leave reviews.</p>
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Google reviews URL</label>
@@ -379,6 +413,25 @@
             <div>
                 <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Tripadvisor URL</label>
                 <input type="url" wire:model="review_tripadvisor_url" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+            </div>
+            <p class="text-sm text-muted">To display <strong class="text-charcoal">actual reviews</strong> in Guest voices, add your listing IDs and API keys below. Google needs a Places API key and your Place ID; Tripadvisor needs a Content API key and your location ID. Reviews are fetched from the platforms and refreshed every six hours.</p>
+            <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                    <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Google Place ID</label>
+                    <input type="text" wire:model="review_google_place_id" autocomplete="off" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                </div>
+                <div>
+                    <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Google Places API key</label>
+                    <input type="password" wire:model="review_google_api_key" autocomplete="off" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                </div>
+                <div>
+                    <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Tripadvisor location ID</label>
+                    <input type="text" wire:model="review_tripadvisor_location_id" autocomplete="off" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                </div>
+                <div>
+                    <label class="block text-xs tracking-[0.14em] uppercase text-muted mb-2">Tripadvisor Content API key</label>
+                    <input type="password" wire:model="review_tripadvisor_api_key" autocomplete="off" class="w-full border-sand-deep/40 focus:border-forest focus:ring-forest">
+                </div>
             </div>
         </section>
 

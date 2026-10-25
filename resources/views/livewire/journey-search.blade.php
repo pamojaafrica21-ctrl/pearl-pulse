@@ -8,7 +8,7 @@
             <div class="absolute inset-0 bg-charcoal/50 backdrop-blur-sm" wire:click="closeSearch"></div>
 
             <div class="relative mx-auto mt-[8vh] w-full max-w-2xl px-5">
-                <div class="overflow-hidden border border-white/10 bg-white shadow-2xl">
+                <div class="overflow-hidden border border-white/10 bg-cream shadow-2xl">
                     <div class="flex items-center gap-3 border-b border-charcoal/10 px-5 py-4">
                         <svg class="h-5 w-5 text-muted shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.3-4.3M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/>

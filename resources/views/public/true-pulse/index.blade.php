@@ -4,7 +4,7 @@
 @section('meta_description', 'Africa through the eyes of our travellers — guest photography, stories, and moments shared with permission.')
 
 @section('content')
-<section class="bg-white pt-16 pb-16">
+<section class="bg-beige pt-16 pb-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <p class="section-eyebrow">True Pulse</p>
         <h1 class="font-display text-5xl md:text-6xl text-charcoal">Africa through the eyes of our travellers</h1>
@@ -18,7 +18,7 @@
 </section>
 
 @if($items->isNotEmpty())
-<section class="bg-cream pb-20">
+<section class="bg-beige pb-20">
     <div class="mx-auto max-w-7xl px-5 lg:px-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         @foreach($items as $item)
             <figure>
@@ -44,7 +44,7 @@
     </div>
 </section>
 @else
-<section class="bg-cream pb-20">
+<section class="bg-beige pb-20">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <p class="text-muted">Stories are being gathered. Follow along on Instagram in the meantime.</p>
     </div>

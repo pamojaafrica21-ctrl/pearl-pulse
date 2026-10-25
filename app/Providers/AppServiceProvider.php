@@ -29,7 +29,16 @@ class AppServiceProvider extends ServiceProvider
                 PublicNav::forget();
                 $view->with([
                     'siteContact' => ['address' => '', 'phone' => '', 'email' => '', 'admin_email' => '', 'whatsapp' => ''],
-                    'siteSocial' => ['instagram' => '', 'facebook' => '', 'twitter' => ''],
+                    'siteSocial' => [
+                        'instagram' => '',
+                        'facebook' => '',
+                        'youtube' => '',
+                        'tiktok' => '',
+                        'linkedin' => '',
+                        'twitter' => '',
+                        'pinterest' => '',
+                        'rednote' => '',
+                    ],
                     'reviewLinks' => ['google' => '', 'tripadvisor' => ''],
                     'footerBlurb' => 'Private journeys through East Africa.',
                     'whatsappUrl' => null,

@@ -9,7 +9,7 @@
     @if($cover)
         <img src="{{ $cover }}" alt="{{ $experience->name }}" class="absolute inset-0 h-full w-full object-cover scale-105" data-parallax="0.1">
     @endif
-    <div class="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/30 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
     <div class="relative z-10 mx-auto w-full max-w-7xl px-5 pb-16 pt-12 lg:px-8">
         <x-breadcrumbs :items="[
             ['label' => 'Experiences', 'href' => route('experiences.index')],
@@ -22,7 +22,7 @@
     </div>
 </section>
 
-<section class="surface surface--white py-16 lg:py-24">
+<section class="surface surface--beige py-16 lg:py-24">
     <div class="mx-auto max-w-7xl px-5 lg:px-8 split-editorial reveal">
         <div>
             @if($experience->teaser)
@@ -61,7 +61,7 @@
 @endif
 
 @if($experience->journeys->isNotEmpty())
-<section class="surface surface--white py-16 lg:py-20 overflow-hidden">
+<section class="surface surface--beige py-16 lg:py-20 overflow-hidden">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <h2 class="font-display text-4xl text-charcoal mb-8 reveal">Journeys</h2>
         <div class="filmstrip reveal-stagger">

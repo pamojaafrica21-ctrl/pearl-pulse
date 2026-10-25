@@ -9,7 +9,7 @@
 @endphp
 <section class="relative min-h-[60svh] flex items-end overflow-hidden bg-forest">
     <x-hero-media :image="$cover" :alt="$specialist->name" />
-    <div class="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/35 to-black/20"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent"></div>
     <div class="relative z-10 mx-auto w-full max-w-7xl px-5 lg:px-8 pb-14 pt-28">
         @if($specialist->subtitle)
             <p class="text-[13px] tracking-[0.22em] uppercase text-white/75">{{ $specialist->subtitle }}</p>
@@ -21,7 +21,7 @@
     </div>
 </section>
 
-<section class="surface surface--white py-16 lg:py-24">
+<section class="surface surface--beige py-16 lg:py-24">
     <div class="mx-auto max-w-3xl px-5 lg:px-8 reveal">
         <div class="prose-safari">
             {!! $specialist->description !!}
@@ -49,7 +49,7 @@
 @endif
 
 @if($others->isNotEmpty())
-<section class="surface surface--white py-16 lg:py-20">
+<section class="surface surface--beige py-16 lg:py-20">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <p class="section-eyebrow reveal">Also consider</p>
         <h2 class="font-display text-3xl md:text-4xl text-charcoal reveal">Other specialist journeys</h2>
@@ -60,7 +60,7 @@
                         @if($other->coverUrl())
                             <img src="{{ $other->coverThumbUrl() ?: $other->coverUrl() }}" alt="{{ $other->name }}" class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" loading="lazy">
                         @endif
-                        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-transparent to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                         <div class="absolute inset-x-0 bottom-0 p-5">
                             <h3 class="font-display text-2xl text-white">{{ $other->name }}</h3>
                         </div>

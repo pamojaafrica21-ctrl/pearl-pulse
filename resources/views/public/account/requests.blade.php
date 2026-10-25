@@ -4,11 +4,11 @@
 @section('meta_description', 'Your Journey Finder and planning requests with Pearl Pulse Safaris.')
 
 @section('content')
-<section class="bg-white">
+<section class="bg-beige">
     <x-account-nav active="requests" />
 </section>
 
-<section class="bg-cream py-14 lg:py-20">
+<section class="bg-beige py-14 lg:py-20">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         @if($enquiries->isEmpty())
             <div class="max-w-xl">
@@ -32,7 +32,7 @@
 
             <div class="space-y-4">
                 @foreach($enquiries as $enquiry)
-                    <article class="bg-white border border-charcoal/10 p-5 sm:p-6">
+                    <article class="bg-cream border border-charcoal/10 p-5 sm:p-6">
                         <div class="flex flex-wrap items-start justify-between gap-3">
                             <div>
                                 <p class="text-[13px] tracking-[0.14em] uppercase text-muted">

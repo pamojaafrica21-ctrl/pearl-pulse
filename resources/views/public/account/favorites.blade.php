@@ -4,11 +4,11 @@
 @section('meta_description', 'Your saved Pearl Pulse Safaris journeys.')
 
 @section('content')
-<section class="bg-white">
+<section class="bg-beige">
     <x-account-nav active="favorites" />
 </section>
 
-<section class="bg-cream py-14 lg:py-20">
+<section class="bg-beige py-14 lg:py-20">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         @if($journeys->isEmpty())
             <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
@@ -19,7 +19,7 @@
                         @else
                             <div class="absolute inset-0 bg-gradient-to-br from-forest via-forest-light to-[#3d4f35]"></div>
                         @endif
-                        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/20 to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent"></div>
                         <div class="absolute inset-x-0 bottom-0 p-6 sm:p-8">
                             <p class="text-[13px] tracking-[0.18em] uppercase text-white/70">Start here</p>
                             <p class="font-display text-3xl text-white mt-2 leading-tight">Save journeys that speak to you</p>
@@ -73,7 +73,7 @@
                 @endforeach
             </div>
 
-            <div class="mt-16 border border-charcoal/10 bg-white p-8 sm:p-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div class="mt-16 border border-charcoal/10 bg-cream p-8 sm:p-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <p class="text-[13px] tracking-[0.18em] uppercase text-muted">Next step</p>
                     <h2 class="font-display text-3xl text-charcoal mt-2">Ready to shape a private proposal?</h2>

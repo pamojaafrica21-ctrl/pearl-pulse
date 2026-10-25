@@ -13,7 +13,7 @@
     @if($cover)
         <img src="{{ $cover }}" alt="{{ $country->name }}" class="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async">
     @endif
-    <div class="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/40 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent"></div>
     <div class="relative z-10 mx-auto w-full max-w-7xl px-5 pb-14 pt-20 lg:px-8">
         <x-breadcrumbs :items="[
             ['label' => 'Journeys', 'href' => route('journeys.index')],
@@ -30,7 +30,7 @@
     </div>
 </section>
 
-<section class="surface surface--white pt-10 pb-6">
+<section class="surface surface--beige pt-10 pb-6">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="journeys-filters">
             <a href="{{ route('journeys.index') }}" class="journeys-filters__link">All journeys</a>
